@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.1.72, for Win64 (unknown)
+-- MySQL dump 10.13  Distrib 5.6.25, for Win64 (x86_64)
 --
 -- Host: localhost    Database: jsdb
 -- ------------------------------------------------------
--- Server version	5.1.72-community
+-- Server version	5.6.25-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -151,7 +151,7 @@ CREATE TABLE `usuarios` (
   `nombreUsuario` varchar(20) NOT NULL,
   `password` varchar(20) NOT NULL,
   PRIMARY KEY (`idUsuario`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -160,7 +160,7 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (1,'Luis Federico','Carrillo','Ayala','luisin','pass');
+INSERT INTO `usuarios` VALUES (1,'Luis Federico','Carrillo','Ayala','luisin','pass'),(2,'Luis Raúl','Martínez','Sáenz','Rols','roolspass');
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -173,4 +173,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-07-20 22:22:23
+-- Dump completed on 2015-07-21  0:40:32
