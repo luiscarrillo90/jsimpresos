@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.6.25, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 5.1.72, for Win64 (unknown)
 --
 -- Host: localhost    Database: jsdb
 -- ------------------------------------------------------
--- Server version	5.6.25-log
+-- Server version	5.1.72-community
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -111,9 +111,9 @@ CREATE TABLE `notas` (
   `nombres` varchar(25) NOT NULL DEFAULT 'no',
   `apPaterno` varchar(20) NOT NULL DEFAULT 'no',
   `apMaterno` varchar(20) DEFAULT NULL,
-  `telefono` varchar(10) NOT NULL DEFAULT 'no',
+  `telefono` varchar(30) DEFAULT NULL,
   `fecha` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `fechaEntrega` varchar(10) DEFAULT NULL,
+  `fechaentrega` varchar(30) DEFAULT NULL,
   `abonado` double NOT NULL,
   `observaciones` varchar(100) DEFAULT NULL,
   `contabilizado` varchar(3) NOT NULL DEFAULT 'no',
@@ -124,7 +124,7 @@ CREATE TABLE `notas` (
   KEY `idMiembro` (`idMiembro`),
   CONSTRAINT `notas_ibfk_1` FOREIGN KEY (`idDocumento`) REFERENCES `documentosdepedido` (`idDocumento`),
   CONSTRAINT `notas_ibfk_2` FOREIGN KEY (`idMiembro`) REFERENCES `miembros` (`idMiembro`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -151,7 +151,7 @@ CREATE TABLE `usuarios` (
   `nombreUsuario` varchar(20) NOT NULL,
   `password` varchar(20) NOT NULL,
   PRIMARY KEY (`idUsuario`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -160,7 +160,7 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (1,'Luis Federico','Carrillo','Ayala','luisin','pass'),(2,'Luis Raúl','Martínez','Sáenz','Rols','roolspass');
+INSERT INTO `usuarios` VALUES (1,'Luis Federico','Carrillo','Ayala','luisin','pass');
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -173,4 +173,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-07-21  0:40:32
+-- Dump completed on 2015-07-21 20:50:25
