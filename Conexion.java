@@ -22,9 +22,6 @@ public class Conexion {
     private Connection conexion;
     
     public Conexion(){
-        configurar();
-    }
-    public void configurar() {
         try {
             Class.forName(driver);
             conexion = (Connection) DriverManager.getConnection(servidor, usuario, pass);
@@ -34,6 +31,7 @@ public class Conexion {
             JOptionPane.showMessageDialog(null, "Error al conectar a la base de datos");
         }
     }
+
     public String cerrarConexion() {
         try {
             if (conexion != null) {
