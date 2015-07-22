@@ -19,8 +19,8 @@ public class Conexion {
     private String usuario = "root";
     private String pass = "root";
     private String driver = "com.mysql.jdbc.Driver";
-    public Connection getConexion() {
-        Connection conexion = null;
+    private Connection conexion;
+    public Conexion(){
         try {
             Class.forName(driver);
             conexion = (Connection) DriverManager.getConnection(servidor, usuario, pass);
@@ -29,6 +29,9 @@ public class Conexion {
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Error al conectar a la base de datos");
         }
+    }
+    public Connection getConexion() {
         return conexion;
     }
+    
 }

@@ -7,6 +7,7 @@ package jsimpresos;
 
 import com.mysql.jdbc.Connection;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import javax.swing.JOptionPane;
 
 /**
@@ -14,13 +15,35 @@ import javax.swing.JOptionPane;
  * @author luis-pc
  */
 public class Login extends javax.swing.JFrame {
+
     private Connection conexion;
     private Usuario user;
+
     public Login() {
         initComponents();
-        Conexion c  = new Conexion();
+        Conexion c = new Conexion();
         conexion = c.getConexion();
         this.setLocationRelativeTo(null);
+        
+    }
+
+    public void iniciarSesion() {
+        char c[] = txtPassword.getPassword();
+        String pass = new String(c);
+        String nombre = txtUsuario.getText();
+        if (nombre == null || pass == null || nombre.equals("") || pass.equals("")) {
+            JOptionPane.showMessageDialog(null, "Datos incompletos, por favor llena todos los campos");
+        } else {
+            user = (new ConexionUsuario()).getUsuario(nombre, pass);
+            if (user == null || !nombre.equals(user.getNombreUsuario()) || !pass.equals(user.getPassword())) {
+                JOptionPane.showMessageDialog(null, "El usuario y/o contraseña son incorrectos");
+            } else {
+                Main nuevo = new Main("Usuario: " + user.getNombres() + " " + user.getApPaterno() + " " + user.getApMaterno());
+                nuevo.setVisible(true);
+                this.dispose();
+            }
+        }
+        btnLogin.requestFocus();
     }
 
     /**
@@ -60,6 +83,11 @@ public class Login extends javax.swing.JFrame {
         txtPassword.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtPasswordActionPerformed(evt);
+            }
+        });
+        txtPassword.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtPasswordKeyReleased(evt);
             }
         });
 
@@ -113,35 +141,31 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_txtPasswordActionPerformed
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-        char c [] = txtPassword.getPassword();
-        String pass = new String(c);
-        String nombre = txtUsuario.getText();
-        if(nombre==null||pass ==null||nombre.equals("")||pass.equals("")){
-            JOptionPane.showMessageDialog(null, "Datos incompletos, por favor llena todos los campos");
-        }else{
-            user = (new loggear()).getUsuario(conexion, nombre, pass);
-            if(user==null||!nombre.equals(user.getNombreUsuario())||!pass.equals(user.getPassword())){
-                JOptionPane.showMessageDialog(null, "El usuario y/o contraseña son incorrectos");
-            }else{
-                Main nuevo = new Main("Usuario: "+user.getNombres()+" "+user.getApPaterno()+" "+ user.getApMaterno());
-                nuevo.setVisible(true);
-                this.dispose();
-            }
-        }
-        
+        iniciarSesion();
+
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void txtUsuarioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUsuarioKeyPressed
-        
+
     }//GEN-LAST:event_txtUsuarioKeyPressed
 
     private void txtUsuarioKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUsuarioKeyReleased
-        if(evt.getKeyCode()==KeyEvent.VK_BACK_SPACE){
-            if(txtUsuario.getText().equals("")){
+        if (evt.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+            if (txtUsuario.getText().equals("")) {
                 txtPassword.setText("");
             }
+        } else if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            iniciarSesion();
+
         }
     }//GEN-LAST:event_txtUsuarioKeyReleased
+
+    private void txtPasswordKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPasswordKeyReleased
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            iniciarSesion();
+
+        }
+    }//GEN-LAST:event_txtPasswordKeyReleased
 
     /**
      * @param args the command line arguments
