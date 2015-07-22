@@ -17,13 +17,12 @@ import javax.swing.JOptionPane;
  */
 public class Login extends javax.swing.JFrame {
 
-    private Connection conexion;
+    private Conexion conn = new Conexion();
     private Usuario user;
 
     public Login() {
         initComponents();
-        Conexion c = new Conexion();
-        conexion = c.getConexion();
+        conn.getConexion();
         this.setLocationRelativeTo(null);
         
     }
@@ -48,13 +47,7 @@ public class Login extends javax.swing.JFrame {
     }
     
     public void cerrarVentana(){
-        try {
-            if (conexion != null) {
-                conexion.close();
-            }
-        } catch (SQLException e) {
-             JOptionPane.showMessageDialog(null, "Error al cerrar la conexión SQL");
-        }
+        conn.cerrarConexion();
         System.exit(0);
     }
     
