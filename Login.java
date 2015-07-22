@@ -8,6 +8,7 @@ package jsimpresos;
 import com.mysql.jdbc.Connection;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
 /**
@@ -44,6 +45,17 @@ public class Login extends javax.swing.JFrame {
             }
         }
         btnLogin.requestFocus();
+    }
+    
+    public void cerrarVentana(){
+        try {
+            if (conexion != null) {
+                conexion.close();
+            }
+        } catch (SQLException e) {
+             JOptionPane.showMessageDialog(null, "Error al cerrar la conexión SQL");
+        }
+        System.exit(0);
     }
     
     /**
@@ -200,7 +212,7 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_txtPasswordKeyReleased
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
-        // TODO add your handling code here:
+        cerrarVentana();
     }//GEN-LAST:event_btnSalirActionPerformed
 
     /**

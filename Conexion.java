@@ -20,7 +20,11 @@ public class Conexion {
     private String pass = "root";
     private String driver = "com.mysql.jdbc.Driver";
     private Connection conexion;
+    
     public Conexion(){
+        configurar();
+    }
+    public void configurar() {
         try {
             Class.forName(driver);
             conexion = (Connection) DriverManager.getConnection(servidor, usuario, pass);
@@ -28,6 +32,16 @@ public class Conexion {
             JOptionPane.showMessageDialog(null, "No se encontró el driver");
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Error al conectar a la base de datos");
+        }
+    }
+    public String cerrarConexion() {
+        try {
+            if (conexion != null) {
+                conexion.close();
+            }
+            return "Conexión cerrada con éxito";
+        } catch (SQLException e) {
+            return e.getMessage();
         }
     }
     public Connection getConexion() {
