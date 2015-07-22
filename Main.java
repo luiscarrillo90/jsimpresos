@@ -224,6 +224,33 @@ public class Main extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         txtAreaObservaciones = new javax.swing.JTextArea();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        menuArchivo = new javax.swing.JMenu();
+        sMenuRegNota = new javax.swing.JMenuItem();
+        sMenuCancelNota = new javax.swing.JMenuItem();
+        jSeparator1 = new javax.swing.JPopupMenu.Separator();
+        sMenuLogOut = new javax.swing.JMenuItem();
+        menuOpciones = new javax.swing.JMenu();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        jSeparator2 = new javax.swing.JPopupMenu.Separator();
+        jMenu4 = new javax.swing.JMenu();
+        sMenuSeleccCliente = new javax.swing.JMenuItem();
+        sMenuQuitCliente = new javax.swing.JMenuItem();
+        jMenu5 = new javax.swing.JMenu();
+        jMenuItem10 = new javax.swing.JMenuItem();
+        jMenuItem11 = new javax.swing.JMenuItem();
+        menuNotas = new javax.swing.JMenu();
+        sMenuConsulNota = new javax.swing.JMenuItem();
+        sMenuModNota = new javax.swing.JMenuItem();
+        menuCliente = new javax.swing.JMenu();
+        sMenuCargSaldo = new javax.swing.JMenuItem();
+        sMenuAddCliente = new javax.swing.JMenuItem();
+        sMenuModCliente = new javax.swing.JMenuItem();
+        sMenuElimCliente = new javax.swing.JMenuItem();
+        menuAyuda = new javax.swing.JMenu();
+        sMenuAcerca = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -291,6 +318,7 @@ public class Main extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tableArticulos);
 
         btnQuitarArticulo.setText("Quitar artículo");
+        btnQuitarArticulo.setEnabled(false);
         btnQuitarArticulo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnQuitarArticuloActionPerformed(evt);
@@ -307,6 +335,7 @@ public class Main extends javax.swing.JFrame {
         });
 
         btnQuitarCliente.setText("Quitar cliente");
+        btnQuitarCliente.setEnabled(false);
         btnQuitarCliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnQuitarClienteActionPerformed(evt);
@@ -333,6 +362,103 @@ public class Main extends javax.swing.JFrame {
         txtAreaObservaciones.setRows(5);
         jScrollPane2.setViewportView(txtAreaObservaciones);
 
+        menuArchivo.setText("Archivo");
+
+        sMenuRegNota.setText("Registrar Nota");
+        menuArchivo.add(sMenuRegNota);
+
+        sMenuCancelNota.setText("Cancelar Nota");
+        menuArchivo.add(sMenuCancelNota);
+        menuArchivo.add(jSeparator1);
+
+        sMenuLogOut.setText("Cerrar Sesión");
+        sMenuLogOut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sMenuLogOutActionPerformed(evt);
+            }
+        });
+        menuArchivo.add(sMenuLogOut);
+
+        jMenuBar1.add(menuArchivo);
+
+        menuOpciones.setText("Opciones");
+
+        jMenu1.setText("Corte de Caja");
+
+        jMenuItem1.setText("Realizar corte de caja del día");
+        jMenu1.add(jMenuItem1);
+
+        jMenuItem2.setText("Consultar cortes de caja");
+        jMenu1.add(jMenuItem2);
+
+        menuOpciones.add(jMenu1);
+        menuOpciones.add(jSeparator2);
+
+        jMenu4.setText("Clientes");
+
+        sMenuSeleccCliente.setText("Seleccionar Cliente");
+        jMenu4.add(sMenuSeleccCliente);
+
+        sMenuQuitCliente.setText("Quitar Cliente");
+        sMenuQuitCliente.setEnabled(false);
+        jMenu4.add(sMenuQuitCliente);
+
+        menuOpciones.add(jMenu4);
+
+        jMenu5.setText("Artículos");
+
+        jMenuItem10.setText("Agregar Articulo");
+        jMenu5.add(jMenuItem10);
+
+        jMenuItem11.setText("Quitar Artículo");
+        jMenuItem11.setEnabled(false);
+        jMenu5.add(jMenuItem11);
+
+        menuOpciones.add(jMenu5);
+
+        jMenuBar1.add(menuOpciones);
+
+        menuNotas.setText("Notas");
+
+        sMenuConsulNota.setText("Consultar Nota");
+        menuNotas.add(sMenuConsulNota);
+
+        sMenuModNota.setText("Modificar Nota");
+        sMenuModNota.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sMenuModNotaActionPerformed(evt);
+            }
+        });
+        menuNotas.add(sMenuModNota);
+
+        jMenuBar1.add(menuNotas);
+
+        menuCliente.setText("Cliente");
+        menuCliente.setEnabled(false);
+
+        sMenuCargSaldo.setText("Cargar Saldo");
+        menuCliente.add(sMenuCargSaldo);
+
+        sMenuAddCliente.setText("Agregar Cliente");
+        menuCliente.add(sMenuAddCliente);
+
+        sMenuModCliente.setText("Modificar Cliente");
+        menuCliente.add(sMenuModCliente);
+
+        sMenuElimCliente.setText("Eliminar Cliente");
+        menuCliente.add(sMenuElimCliente);
+
+        jMenuBar1.add(menuCliente);
+
+        menuAyuda.setText("Ayuda");
+
+        sMenuAcerca.setText("Acerca De...");
+        menuAyuda.add(sMenuAcerca);
+
+        jMenuBar1.add(menuAyuda);
+
+        setJMenuBar(jMenuBar1);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -356,7 +482,7 @@ public class Main extends javax.swing.JFrame {
                             .addComponent(jLabel10)
                             .addComponent(btnQuitarArticulo)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(0, 213, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -397,7 +523,7 @@ public class Main extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(26, 26, 26)
                         .addComponent(btnRegistrar)))
-                .addContainerGap(626, Short.MAX_VALUE))
+                .addContainerGap(617, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -455,7 +581,7 @@ public class Main extends javax.swing.JFrame {
                         .addGap(26, 26, 26)
                         .addComponent(btnRegistrar))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(97, Short.MAX_VALUE))
+                .addContainerGap(76, Short.MAX_VALUE))
         );
 
         pack();
@@ -515,6 +641,14 @@ public class Main extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
+    private void sMenuLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sMenuLogOutActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_sMenuLogOutActionPerformed
+
+    private void sMenuModNotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sMenuModNotaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_sMenuModNotaActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -566,10 +700,37 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu4;
+    private javax.swing.JMenu jMenu5;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem10;
+    private javax.swing.JMenuItem jMenuItem11;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JPopupMenu.Separator jSeparator1;
+    private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JLabel lblNombreUsuario;
     private javax.swing.JLabel lblTotal;
+    private javax.swing.JMenu menuArchivo;
+    private javax.swing.JMenu menuAyuda;
+    private javax.swing.JMenu menuCliente;
+    private javax.swing.JMenu menuNotas;
+    private javax.swing.JMenu menuOpciones;
+    private javax.swing.JMenuItem sMenuAcerca;
+    private javax.swing.JMenuItem sMenuAddCliente;
+    private javax.swing.JMenuItem sMenuCancelNota;
+    private javax.swing.JMenuItem sMenuCargSaldo;
+    private javax.swing.JMenuItem sMenuConsulNota;
+    private javax.swing.JMenuItem sMenuElimCliente;
+    private javax.swing.JMenuItem sMenuLogOut;
+    private javax.swing.JMenuItem sMenuModCliente;
+    private javax.swing.JMenuItem sMenuModNota;
+    private javax.swing.JMenuItem sMenuQuitCliente;
+    private javax.swing.JMenuItem sMenuRegNota;
+    private javax.swing.JMenuItem sMenuSeleccCliente;
     private javax.swing.JTable tableArticulos;
     private javax.swing.JTextField txtAbono;
     private javax.swing.JTextField txtApMaterno;
