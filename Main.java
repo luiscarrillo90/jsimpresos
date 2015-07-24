@@ -6,6 +6,8 @@
 package jsimpresos;
 
 import com.mysql.jdbc.Connection;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
@@ -28,6 +30,8 @@ public class Main extends javax.swing.JFrame {
     //miembro del sistema(con tarjeta) y el usuario escribirá los datos del mismo
     Miembro cliente = null;
     ArrayList<Articulo> listaArticulos = new ArrayList();
+    String[] columnas = {"Artículo", "Precio Unitario", "Cantidad", "Total"};
+    String[][] datos;
     //para dar formato a la fecha que nos de el "JCalendar"
     DateFormat df = DateFormat.getDateInstance();
     //número de artículos en la nota
@@ -35,6 +39,11 @@ public class Main extends javax.swing.JFrame {
     //bandera del escuchador de la tabla de artículos de la nota
     boolean bandera = true;
     ConexionNotas conexionNota;
+    DefaultTableModel model;
+    //para saber que tecla es presionada en el escuchador de la tabla
+    int key;
+    //para saber si estamos en la columna del total (bandera)
+    boolean columnaFinal = false;
     /*
      Recibimos en el constructor un nombre, solo se usa para saber el nombre de quién inició sesión
      */
@@ -60,15 +69,45 @@ public class Main extends javax.swing.JFrame {
                  invocaremos este método, que va a hacer todo el jale
                  */
                 actualizarTotal(e, bandera);
+                
             }
-
+            
         });
-
+        tableArticulos.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                key = e.getKeyCode();
+//                    if(key == KeyEvent.VK_ENTER){
+//                        System.out.println("columna: "+tableArticulos.getSelectedColumn());
+//                        System.out.println("Renglon: "+tableArticulos.getSelectedRow());
+//                        System.out.println("-------");
+//                    }
+                    if (key == KeyEvent.VK_ENTER && columnaFinal) {
+                         model = (DefaultTableModel) tableArticulos.getModel();
+                         if (Double.parseDouble(model.getValueAt(tableArticulos.getRowCount()-1, 3)+"") != 0) {
+                         model.addRow(new Object[]{null,null,null,0});
+                         columnaFinal = false;
+                         ponerFocoEnCeldaNueva();
+                         }else{
+                             ponerFocoEnCeldaNueva();
+                         }
+                    }
+                    else if(key == KeyEvent.VK_ENTER && tableArticulos.getSelectedColumn() == 0 && tableArticulos.getSelectedRow() == 0){
+                        ponerFocoEnCeldaNueva();
+                    }else if(key == KeyEvent.VK_ENTER && tableArticulos.getSelectedColumn() == 3){
+                        ponerFocoEnCeldaNueva();
+                    }
+            }
+        });
     }
     /*
      Para cambiar el usuario de la nota
      */
-
+    
+    public void ponerFocoEnCeldaNueva(){
+        tableArticulos.changeSelection(model.getRowCount()-1, 0, false, false);
+        tableArticulos.requestFocus();
+    }
     public void cambiarCliente(Miembro cliente) {
         if (cliente != null) {
             this.cliente = cliente;
@@ -107,13 +146,17 @@ public class Main extends javax.swing.JFrame {
      */
 
     public void actualizarTotal(TableModelEvent e, boolean bandera) {
+        
         if (bandera) {
-
             if (e.getType() == TableModelEvent.UPDATE) {
                 TableModel modelo = ((TableModel) (e.getSource()));
                 int fila = e.getFirstRow();
                 int columna = e.getColumn();
-                if (columna == 0 || columna == 3) {
+                if (columna == 3){
+                    columnaFinal = true;
+                    return;
+                }
+                if (columna == 0) {
                     return;
                 }
                 try {
@@ -125,7 +168,7 @@ public class Main extends javax.swing.JFrame {
                             fila, 3);
                     double total = 0;
                     numeroArticulos = 0;
-                    for (int i = 0; i < 6; i++) {
+                    for (int i = 0; i < modelo.getRowCount(); i++) {
                         if (modelo.getValueAt(i, 3) != null) {
                             total += ((Number) modelo.getValueAt(i, 3)).doubleValue();
                             numeroArticulos++;
@@ -154,11 +197,14 @@ public class Main extends javax.swing.JFrame {
         double total = 0;
         listaArticulos = new <Articulo>ArrayList();
         for (int i = 0; i < numeroArticulos; i++) {
+            if (modelo.getValueAt(i, 1) != null || modelo.getValueAt(i, 2) != null) {
             total += ((Number) modelo.getValueAt(i, 3)).doubleValue();
             listaArticulos.add(new Articulo(1, modelo.getValueAt(i, 0).toString(), ((Number) modelo.getValueAt(i, 1)).doubleValue(), ((Number) modelo.getValueAt(i, 2)).intValue()));
-
+            }
         }
         lblTotal.setText("Total: $" + total);
+        btnQuitarArticulo.setEnabled(true);
+       
     }
     /*
      Borra artículos (renglones) de la tabla de artículos, recibe el índice
@@ -167,23 +213,24 @@ public class Main extends javax.swing.JFrame {
 
     public void quitarArticulo(int cual) {
 
-        if (cual + 1 <= numeroArticulos) {
-
-            TableModel modelo = (TableModel) tableArticulos.getModel();
-            for (int i = cual; i <= numeroArticulos - 2; i++) {
-
-                modelo.setValueAt(modelo.getValueAt(i + 1, 0), i, 0);
-                modelo.setValueAt(modelo.getValueAt(i + 1, 1), i, 1);
-                modelo.setValueAt(modelo.getValueAt(i + 1, 2), i, 2);
-                modelo.setValueAt(modelo.getValueAt(i + 1, 3), i, 3);
-
-            }
-            modelo.setValueAt(null, numeroArticulos - 1, 0);
-            modelo.setValueAt(null, numeroArticulos - 1, 1);
-            modelo.setValueAt(null, numeroArticulos - 1, 2);
-            modelo.setValueAt(null, numeroArticulos - 1, 3);
-
-        }
+//        if (cual + 1 <= numeroArticulos) {
+//
+//            TableModel modelo = (TableModel) tableArticulos.getModel();
+//            for (int i = cual; i <= numeroArticulos - 2; i++) {
+//
+//                modelo.setValueAt(modelo.getValueAt(i + 1, 0), i, 0);
+//                modelo.setValueAt(modelo.getValueAt(i + 1, 1), i, 1);
+//                modelo.setValueAt(modelo.getValueAt(i + 1, 2), i, 2);
+//                modelo.setValueAt(modelo.getValueAt(i + 1, 3), i, 3);
+//
+//            }
+//            modelo.setValueAt(null, numeroArticulos - 1, 0);
+//            modelo.setValueAt(null, numeroArticulos - 1, 1);
+//            modelo.setValueAt(null, numeroArticulos - 1, 2);
+//            modelo.setValueAt(null, numeroArticulos - 1, 3);
+//
+//        }
+        listaArticulos.remove(cual);
         numeroArticulos--;
         cambiarTotal();
         bandera = true;
@@ -283,12 +330,7 @@ public class Main extends javax.swing.JFrame {
 
         tableArticulos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null,  new Double(0.0)}
             },
             new String [] {
                 "Artículo", "Precio Unitario", "Cantidad", "Total"
@@ -309,6 +351,7 @@ public class Main extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tableArticulos.setCellSelectionEnabled(true);
         tableArticulos.addHierarchyBoundsListener(new java.awt.event.HierarchyBoundsListener() {
             public void ancestorMoved(java.awt.event.HierarchyEvent evt) {
                 tableArticulosAncestorMoved(evt);
@@ -319,6 +362,7 @@ public class Main extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tableArticulos);
 
         btnQuitarArticulo.setText("Quitar artículo");
+        btnQuitarArticulo.setEnabled(false);
         btnQuitarArticulo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnQuitarArticuloActionPerformed(evt);
@@ -480,9 +524,9 @@ public class Main extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel10)
-                            .addComponent(btnQuitarArticulo)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnQuitarArticulo))))
+                .addGap(0, 204, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -563,12 +607,9 @@ public class Main extends javax.swing.JFrame {
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnQuitarArticulo)
-                                .addGap(111, 111, 111))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)))
+                            .addComponent(btnQuitarArticulo)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
                         .addComponent(lblTotal)
                         .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -599,13 +640,18 @@ public class Main extends javax.swing.JFrame {
      la cual se utiliza en el evento de la tabla de artículos.
      */
     private void btnQuitarArticuloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuitarArticuloActionPerformed
-        if (tableArticulos.getSelectedRow() != -1) {
-
-            int borrar = JOptionPane.showConfirmDialog(null, "¿Estás seguro que deseas quitar el artículo de la lista?");
-            if (borrar == 0) {
-                bandera = false;
-                quitarArticulo(tableArticulos.getSelectedRow());
-            }
+        if(tableArticulos.getRowCount() == 1){
+        JOptionPane.showMessageDialog(null, "No puedes eliminar el producto por que aun no ha sido añadido, intenta editarlo");
+        }else if(tableArticulos.getSelectedRow()+1 == tableArticulos.getRowCount()){
+            JOptionPane.showMessageDialog(null, "No puedes eliminar el producto por que aun no ha sido añadido, intenta editarlo");
+        }else if (tableArticulos.getSelectedRow() != -1) {  
+                int borrar = JOptionPane.showConfirmDialog(null, "¿Estás seguro que deseas quitar el artículo de la lista?");
+                if (borrar == 0) {
+                    bandera = false;
+                    quitarArticulo(tableArticulos.getSelectedRow());
+                    model.removeRow(tableArticulos.getSelectedRow());
+                    ponerFocoEnCeldaNueva();
+                }
         }
     }//GEN-LAST:event_btnQuitarArticuloActionPerformed
 
