@@ -75,6 +75,7 @@ public class Login extends javax.swing.JFrame {
 
         jLabel2.setText("Usuario:");
 
+        txtUsuario.setText("rols.mart");
         txtUsuario.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtUsuarioKeyPressed(evt);
@@ -84,6 +85,7 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
+        txtPassword.setText("pass");
         txtPassword.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtPasswordActionPerformed(evt);

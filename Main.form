@@ -459,7 +459,6 @@
     <Component class="javax.swing.JButton" name="btnQuitarArticulo">
       <Properties>
         <Property name="text" type="java.lang.String" value="Quitar art&#xed;culo"/>
-        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnQuitarArticuloActionPerformed"/>
@@ -486,6 +485,9 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnQuitarClienteActionPerformed"/>
       </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel8">
       <Properties>

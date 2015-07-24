@@ -98,6 +98,7 @@ public class Main extends javax.swing.JFrame {
         txtTelefono.setEnabled(true);
         txtDomicilio.setText("");
         txtDomicilio.setEnabled(true);
+        btnQuitarCliente.setEnabled(false);
     }
     /*
      Recibe de parámetro un evento de un modelo de una tabla y una "bandera". 
@@ -318,7 +319,6 @@ public class Main extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tableArticulos);
 
         btnQuitarArticulo.setText("Quitar artículo");
-        btnQuitarArticulo.setEnabled(false);
         btnQuitarArticulo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnQuitarArticuloActionPerformed(evt);
@@ -687,7 +687,7 @@ public class Main extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCliente;
     private javax.swing.JButton btnQuitarArticulo;
-    private javax.swing.JButton btnQuitarCliente;
+    public javax.swing.JButton btnQuitarCliente;
     private javax.swing.JButton btnRegistrar;
     private com.toedter.calendar.JDateChooser fechaEntrega;
     private javax.swing.JLabel jLabel1;

@@ -256,6 +256,7 @@ public class SeleccionarCliente extends javax.swing.JFrame {
     private void btnSeleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeleccionarActionPerformed
         if (cliente != null) {
             frameAnterior.cambiarCliente(cliente);
+            frameAnterior.btnQuitarCliente.setEnabled(true);
             this.dispose();
         } else {
             JOptionPane.showMessageDialog(null, "No ha seleccionado ningún cliente");

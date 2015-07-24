@@ -71,7 +71,6 @@ public class ConexionNotas extends Conexion {
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al conectar al servidor");
             System.out.println(ex.getMessage());
-
         }
     }
 
