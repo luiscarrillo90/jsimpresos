@@ -16,6 +16,32 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `detalleabono`
+--
+
+DROP TABLE IF EXISTS `detalleabono`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `detalleabono` (
+  `idNota` int(11) NOT NULL,
+  `monto` double NOT NULL,
+  `tipoPago` varchar(10) DEFAULT 'Efectivo',
+  `contabilizado` varchar(4) DEFAULT 'no',
+  KEY `idNota` (`idNota`),
+  CONSTRAINT `detalleabono_ibfk_1` FOREIGN KEY (`idNota`) REFERENCES `notas` (`idNota`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `detalleabono`
+--
+
+LOCK TABLES `detalleabono` WRITE;
+/*!40000 ALTER TABLE `detalleabono` DISABLE KEYS */;
+/*!40000 ALTER TABLE `detalleabono` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `detalleservicios`
 --
 
@@ -114,9 +140,7 @@ CREATE TABLE `notas` (
   `telefono` varchar(30) DEFAULT NULL,
   `fecha` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `fechaentrega` varchar(30) DEFAULT NULL,
-  `abonado` double NOT NULL,
-  `observaciones` varchar(100) DEFAULT NULL,
-  `contabilizado` varchar(3) NOT NULL DEFAULT 'no',
+  `observaciones` varchar(200) DEFAULT NULL,
   `idDocumento` int(11) NOT NULL,
   `idMiembro` int(11) NOT NULL,
   PRIMARY KEY (`idNota`),
@@ -124,7 +148,7 @@ CREATE TABLE `notas` (
   KEY `idMiembro` (`idMiembro`),
   CONSTRAINT `notas_ibfk_1` FOREIGN KEY (`idDocumento`) REFERENCES `documentosdepedido` (`idDocumento`),
   CONSTRAINT `notas_ibfk_2` FOREIGN KEY (`idMiembro`) REFERENCES `miembros` (`idMiembro`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -173,4 +197,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-07-21 20:50:25
+-- Dump completed on 2015-07-24 10:19:19
