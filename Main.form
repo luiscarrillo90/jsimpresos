@@ -450,6 +450,7 @@
           </Properties>
           <Events>
             <EventHandler event="ancestorMoved" listener="java.awt.event.HierarchyBoundsListener" parameters="java.awt.event.HierarchyEvent" handler="tableArticulosAncestorMoved"/>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tableArticulosMouseClicked"/>
           </Events>
         </Component>
       </SubComponents>

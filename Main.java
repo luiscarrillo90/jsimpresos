@@ -15,6 +15,7 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import static oracle.jrockit.jfr.events.Bits.intValue;
 
 /**
  *
@@ -44,6 +45,9 @@ public class Main extends javax.swing.JFrame {
     int key;
     //para saber si estamos en la columna del total (bandera)
     boolean columnaFinal = false;
+    //bandera de click del mouse sobre la tabla
+    boolean clickEnTabla = false;
+    
     /*
      Recibimos en el constructor un nombre, solo se usa para saber el nombre de quién inició sesión
      */
@@ -69,20 +73,17 @@ public class Main extends javax.swing.JFrame {
                  invocaremos este método, que va a hacer todo el jale
                  */
                 actualizarTotal(e, bandera);
-                
             }
-            
         });
         tableArticulos.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
                 key = e.getKeyCode();
-//                    if(key == KeyEvent.VK_ENTER){
-//                        System.out.println("columna: "+tableArticulos.getSelectedColumn());
-//                        System.out.println("Renglon: "+tableArticulos.getSelectedRow());
-//                        System.out.println("-------");
-//                    }
-                    if (key == KeyEvent.VK_ENTER && columnaFinal) {
+//                   
+                if (key == KeyEvent.VK_LEFT || key == KeyEvent.VK_RIGHT || key == KeyEvent.VK_UP || key == KeyEvent.VK_DOWN) {
+                    clickEnTabla = true;
+                }
+                if (key == KeyEvent.VK_ENTER && columnaFinal) {
                          model = (DefaultTableModel) tableArticulos.getModel();
                          if (Double.parseDouble(model.getValueAt(tableArticulos.getRowCount()-1, 3)+"") != 0) {
                          model.addRow(new Object[]{null,null,null,0});
@@ -99,6 +100,7 @@ public class Main extends javax.swing.JFrame {
                     }
             }
         });
+        
     }
     /*
      Para cambiar el usuario de la nota
@@ -107,6 +109,7 @@ public class Main extends javax.swing.JFrame {
     public void ponerFocoEnCeldaNueva(){
         tableArticulos.changeSelection(model.getRowCount()-1, 0, false, false);
         tableArticulos.requestFocus();
+        clickEnTabla = false;
     }
     public void cambiarCliente(Miembro cliente) {
         if (cliente != null) {
@@ -148,6 +151,7 @@ public class Main extends javax.swing.JFrame {
     public void actualizarTotal(TableModelEvent e, boolean bandera) {
         
         if (bandera) {
+            
             if (e.getType() == TableModelEvent.UPDATE) {
                 TableModel modelo = ((TableModel) (e.getSource()));
                 int fila = e.getFirstRow();
@@ -157,8 +161,10 @@ public class Main extends javax.swing.JFrame {
                     return;
                 }
                 if (columna == 0) {
+                    columnaFinal = false;
                     return;
                 }
+                
                 try {
                     double valorPrimeraColumna = ((Number) modelo.getValueAt(fila,
                             1)).doubleValue();
@@ -181,9 +187,10 @@ public class Main extends javax.swing.JFrame {
                 } catch (NullPointerException ex) {
 
                 }
-            }
+            
+        }
 
-            cambiarTotal();
+            cambiarTotal(clickEnTabla);
         }
     }
     /*
@@ -192,8 +199,10 @@ public class Main extends javax.swing.JFrame {
      lblTotal
      */
 
-    public void cambiarTotal() {
+    public void cambiarTotal(boolean clickEnTabla) {
         TableModel modelo = (TableModel) tableArticulos.getModel();
+        if (!clickEnTabla || intValue(modelo.getValueAt(modelo.getRowCount()-1, 3)) != 0) {
+            
         double total = 0;
         listaArticulos = new <Articulo>ArrayList();
         for (int i = 0; i < numeroArticulos; i++) {
@@ -204,7 +213,28 @@ public class Main extends javax.swing.JFrame {
         }
         lblTotal.setText("Total: $" + total);
         btnQuitarArticulo.setEnabled(true);
-       
+        }else if (clickEnTabla) {
+           numeroArticulos--;
+        double total = 0;
+        listaArticulos = new <Articulo>ArrayList();
+        for (int i = 0; i < numeroArticulos; i++) {
+            if (modelo.getValueAt(i, 1) != null || modelo.getValueAt(i, 2) != null) {
+            total += ((Number) modelo.getValueAt(i, 3)).doubleValue();
+            listaArticulos.add(new Articulo(1, modelo.getValueAt(i, 0).toString(), ((Number) modelo.getValueAt(i, 1)).doubleValue(), ((Number) modelo.getValueAt(i, 2)).intValue()));
+                
+            }
+        }
+        lblTotal.setText("Total: $" + total);
+        btnQuitarArticulo.setEnabled(true); 
+        }
+        
+        this.clickEnTabla = false;
+        //para simular limpiar la pantalla (en realidad no lo hace, solo en aparencia)
+        for (int i = 0; i < 50; ++i) System.out.println();
+        for (int i = 0; i < listaArticulos.size(); i++) {
+            System.out.println(i+".- "+listaArticulos.get(i));
+        }
+        System.out.println("----");
     }
     /*
      Borra artículos (renglones) de la tabla de artículos, recibe el índice
@@ -232,7 +262,7 @@ public class Main extends javax.swing.JFrame {
 //        }
         listaArticulos.remove(cual);
         numeroArticulos--;
-        cambiarTotal();
+        cambiarTotal(false);
         bandera = true;
     }
 
@@ -357,6 +387,11 @@ public class Main extends javax.swing.JFrame {
                 tableArticulosAncestorMoved(evt);
             }
             public void ancestorResized(java.awt.event.HierarchyEvent evt) {
+            }
+        });
+        tableArticulos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableArticulosMouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(tableArticulos);
@@ -694,6 +729,10 @@ public class Main extends javax.swing.JFrame {
     private void sMenuModNotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sMenuModNotaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_sMenuModNotaActionPerformed
+
+    private void tableArticulosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableArticulosMouseClicked
+        clickEnTabla = true;
+    }//GEN-LAST:event_tableArticulosMouseClicked
 
     /**
      * @param args the command line arguments
