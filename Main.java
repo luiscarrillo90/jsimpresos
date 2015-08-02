@@ -15,6 +15,7 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import static oracle.jrockit.jfr.events.Bits.doubleValue;
 import static oracle.jrockit.jfr.events.Bits.intValue;
 
 /**
@@ -85,7 +86,7 @@ public class Main extends javax.swing.JFrame {
                 }
                 if (key == KeyEvent.VK_ENTER && columnaFinal) {
                          model = (DefaultTableModel) tableArticulos.getModel();
-                         if (Double.parseDouble(model.getValueAt(tableArticulos.getRowCount()-1, 3)+"") != 0) {
+                         if (((Number)model.getValueAt(tableArticulos.getRowCount()-1, 3)).doubleValue() != 0.0) {
                          model.addRow(new Object[]{null,null,null,0});
                          columnaFinal = false;
                          ponerFocoEnCeldaNueva();
@@ -107,8 +108,10 @@ public class Main extends javax.swing.JFrame {
      */
     
     public void ponerFocoEnCeldaNueva(){
+        TableModel modelo = (TableModel) tableArticulos.getModel();
         tableArticulos.changeSelection(model.getRowCount()-1, 0, false, false);
         tableArticulos.requestFocus();
+        calcularTotal(modelo, numeroArticulos);
         clickEnTabla = false;
     }
     public void cambiarCliente(Miembro cliente) {
@@ -201,47 +204,20 @@ public class Main extends javax.swing.JFrame {
 
     public void cambiarTotal(boolean clickEnTabla) {
         TableModel modelo = (TableModel) tableArticulos.getModel();
-        if (!clickEnTabla || intValue(modelo.getValueAt(modelo.getRowCount()-1, 3)) != 0) {
-            
-        double total = 0;
-        listaArticulos = new <Articulo>ArrayList();
-        for (int i = 0; i < numeroArticulos; i++) {
-            if (modelo.getValueAt(i, 1) != null || modelo.getValueAt(i, 2) != null) {
-            total += ((Number) modelo.getValueAt(i, 3)).doubleValue();
-            listaArticulos.add(new Articulo(1, modelo.getValueAt(i, 0).toString(), ((Number) modelo.getValueAt(i, 1)).doubleValue(), ((Number) modelo.getValueAt(i, 2)).intValue()));
-            }
-        }
-        lblTotal.setText("Total: $" + total);
-        btnQuitarArticulo.setEnabled(true);
+        if (!clickEnTabla || ((Number) modelo.getValueAt(modelo.getRowCount()-1, 3)).doubleValue() != 0.0) {
+        lblTotal.setText("Total: $" + calcularTotal(modelo, numeroArticulos));
         }else if (clickEnTabla) {
            numeroArticulos--;
-        double total = 0;
-        listaArticulos = new <Articulo>ArrayList();
-        for (int i = 0; i < numeroArticulos; i++) {
-            if (modelo.getValueAt(i, 1) != null || modelo.getValueAt(i, 2) != null) {
-            total += ((Number) modelo.getValueAt(i, 3)).doubleValue();
-            listaArticulos.add(new Articulo(1, modelo.getValueAt(i, 0).toString(), ((Number) modelo.getValueAt(i, 1)).doubleValue(), ((Number) modelo.getValueAt(i, 2)).intValue()));
-                
-            }
+        lblTotal.setText("Total: $" + calcularTotal(modelo, numeroArticulos));
         }
-        lblTotal.setText("Total: $" + total);
-        btnQuitarArticulo.setEnabled(true); 
-        }
-        
         this.clickEnTabla = false;
-        //para simular limpiar la pantalla (en realidad no lo hace, solo en aparencia)
-        for (int i = 0; i < 50; ++i) System.out.println();
-        for (int i = 0; i < listaArticulos.size(); i++) {
-            System.out.println(i+".- "+listaArticulos.get(i));
-        }
-        System.out.println("----");
     }
     /*
      Borra artículos (renglones) de la tabla de artículos, recibe el índice
      del renglón a borrar. 
      */
 
-    public void quitarArticulo(int cual) {
+    public void quitarArticulo(TableModel modelo, int cual) {
 
 //        if (cual + 1 <= numeroArticulos) {
 //
@@ -260,10 +236,40 @@ public class Main extends javax.swing.JFrame {
 //            modelo.setValueAt(null, numeroArticulos - 1, 3);
 //
 //        }
-        listaArticulos.remove(cual);
+//        listaArticulos.remove(cual);
         numeroArticulos--;
         cambiarTotal(false);
         bandera = true;
+        if (modelo.getRowCount() == 1) {
+            btnQuitarArticulo.setEnabled(false);
+        }
+    }
+    
+    public double calcularTotal(TableModel modelo, int numeroArticulos){
+        double total = 0;
+        for (int i = 0; i < numeroArticulos; i++) {
+            if (modelo.getValueAt(i, 1) != null || modelo.getValueAt(i, 2) != null) {
+            total += ((Number) modelo.getValueAt(i, 3)).doubleValue();
+            }
+        }
+        btnQuitarArticulo.setEnabled(true); 
+        return total;
+    }
+    
+    public ArrayList actualizarListaArticulos(TableModel modelo, int numeroArticulos){
+        listaArticulos = new <Articulo>ArrayList();
+        for (int i = 0; i < numeroArticulos; i++) {
+            if (modelo.getValueAt(i, 1) != null || modelo.getValueAt(i, 2) != null) {
+                listaArticulos.add(new Articulo(1, modelo.getValueAt(i, 0).toString(), ((Number) modelo.getValueAt(i, 1)).doubleValue(), ((Number) modelo.getValueAt(i, 2)).intValue()));
+            }
+        }
+        //para simular limpiar la pantalla (en realidad no lo hace, solo en aparencia)
+//        for (int i = 0; i < 50; ++i) System.out.println();
+//        for (int i = 0; i < listaArticulos.size(); i++) {
+//            System.out.println(i+".- "+listaArticulos.get(i));
+//        }
+//        System.out.println("----");
+        return listaArticulos;
     }
 
     /**
@@ -675,15 +681,20 @@ public class Main extends javax.swing.JFrame {
      la cual se utiliza en el evento de la tabla de artículos.
      */
     private void btnQuitarArticuloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuitarArticuloActionPerformed
-        if(tableArticulos.getRowCount() == 1){
-        JOptionPane.showMessageDialog(null, "No puedes eliminar el producto por que aun no ha sido añadido, intenta editarlo");
-        }else if(tableArticulos.getSelectedRow()+1 == tableArticulos.getRowCount()){
-            JOptionPane.showMessageDialog(null, "No puedes eliminar el producto por que aun no ha sido añadido, intenta editarlo");
-        }else if (tableArticulos.getSelectedRow() != -1) {  
+        TableModel modelo = (TableModel) tableArticulos.getModel();
+        
+        if(tableArticulos.getSelectedRow()+1 == tableArticulos.getRowCount()){
+            JOptionPane.showMessageDialog(null, "No puedes eliminar el articulo por que aun no ha sido añadido, intenta editarlo");
+            ponerFocoEnCeldaNueva();
+        }else if (((Number)modelo.getValueAt(tableArticulos.getRowCount()-1, 3)).doubleValue() != 0.0) {
+            JOptionPane.showMessageDialog(null, "No puedes eliminar el articulo seleccionado porque aun no ha sido añadido. Termina de agregarlo para poder eliminar articulos.");
+            ponerFocoEnCeldaNueva();
+        }
+        else{  
                 int borrar = JOptionPane.showConfirmDialog(null, "¿Estás seguro que deseas quitar el artículo de la lista?");
                 if (borrar == 0) {
                     bandera = false;
-                    quitarArticulo(tableArticulos.getSelectedRow());
+                    quitarArticulo(modelo, tableArticulos.getSelectedRow());
                     model.removeRow(tableArticulos.getSelectedRow());
                     ponerFocoEnCeldaNueva();
                 }
@@ -703,6 +714,8 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_btnQuitarClienteActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
+        TableModel modelo = (TableModel) tableArticulos.getModel();
+        listaArticulos = actualizarListaArticulos(modelo, numeroArticulos);
         conexionNota = new ConexionNotas();
         String fecha=null;
         if(fechaEntrega.getDate()!=null){
@@ -710,10 +723,19 @@ public class Main extends javax.swing.JFrame {
         }
         
         if (!listaArticulos.isEmpty()) {
+            
             if (cliente != null) {
-                conexionNota.guardarNota(txtNombres.getText(), txtApPaterno.getText(), txtApMaterno.getText(), txtTelefono.getText(), fecha, Double.parseDouble(txtAbono.getText()), txtAreaObservaciones.getText(), cliente.getId(), listaArticulos);
+                 for (int i = 0; i < listaArticulos.size(); i++) {
+                     System.out.println(i+1+".- "+listaArticulos.get(i));
+                     System.out.println(doubleValue(modelo.getValueAt(modelo.getRowCount()-1, 3)));
+                }
+//                conexionNota.guardarNota(txtNombres.getText(), txtApPaterno.getText(), txtApMaterno.getText(), txtTelefono.getText(), fecha, Double.parseDouble(txtAbono.getText()), txtAreaObservaciones.getText(), cliente.getId(), actualizarListaArticulos(modelo, numeroArticulos));
             } else {
-                conexionNota.guardarNota(txtNombres.getText(), txtApPaterno.getText(), txtApMaterno.getText(), txtTelefono.getText(), fecha, Double.parseDouble(txtAbono.getText()), txtAreaObservaciones.getText(), 1, listaArticulos);
+                for (int i = 0; i < listaArticulos.size(); i++) {
+                     System.out.println(i+1+".- "+listaArticulos.get(i));
+                     System.out.println(doubleValue(modelo.getValueAt(modelo.getRowCount()-1, 3)));
+                }
+//                conexionNota.guardarNota(txtNombres.getText(), txtApPaterno.getText(), txtApMaterno.getText(), txtTelefono.getText(), fecha, Double.parseDouble(txtAbono.getText()), txtAreaObservaciones.getText(), 1, actualizarListaArticulos(modelo, numeroArticulos));
             }
         } else {
             JOptionPane.showMessageDialog(null, "Tienes que agregar al menos un artículo a la nota");
