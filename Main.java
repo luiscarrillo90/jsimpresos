@@ -16,7 +16,6 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import static oracle.jrockit.jfr.events.Bits.doubleValue;
-import static oracle.jrockit.jfr.events.Bits.intValue;
 
 /**
  *
@@ -54,54 +53,13 @@ public class Main extends javax.swing.JFrame {
      */
 
     public Main(String nombre) {
-        usuario = nombre;
         this.setResizable(false);
         initComponents();
-        //asigna nombre a etiqueta
+        this.setLocationRelativeTo(null); 
+        usuario = nombre;
+        //asigna nombre a etiqueta        
         lblNombreUsuario.setText(nombre);
-        this.setLocationRelativeTo(null);
-        /*
-         Agregué un eschador a la tabla de los artículos que vamos a poner en la nota. tales como,
-         impresiones, engargolados, etc. Lo hice para que ahí escriban el artículo, el precio y la
-         cantidad, esta madre llenará el campo de "total" en diccha tabla.
-         */
-        tableArticulos.getModel().addTableModelListener(new TableModelListener() {
-
-            @Override
-            public void tableChanged(TableModelEvent e) {
-                /*
-                 Cuando una de las celdas de la tabla cambie, osea se escriba sobre ella,
-                 invocaremos este método, que va a hacer todo el jale
-                 */
-                actualizarTotal(e, bandera);
-            }
-        });
-        tableArticulos.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyReleased(KeyEvent e) {
-                key = e.getKeyCode();
-//                   
-                if (key == KeyEvent.VK_LEFT || key == KeyEvent.VK_RIGHT || key == KeyEvent.VK_UP || key == KeyEvent.VK_DOWN) {
-                    clickEnTabla = true;
-                }
-                if (key == KeyEvent.VK_ENTER && columnaFinal) {
-                         model = (DefaultTableModel) tableArticulos.getModel();
-                         if (((Number)model.getValueAt(tableArticulos.getRowCount()-1, 3)).doubleValue() != 0.0) {
-                         model.addRow(new Object[]{null,null,null,0});
-                         columnaFinal = false;
-                         ponerFocoEnCeldaNueva();
-                         }else{
-                             ponerFocoEnCeldaNueva();
-                         }
-                    }
-                    else if(key == KeyEvent.VK_ENTER && tableArticulos.getSelectedColumn() == 0 && tableArticulos.getSelectedRow() == 0){
-                        ponerFocoEnCeldaNueva();
-                    }else if(key == KeyEvent.VK_ENTER && tableArticulos.getSelectedColumn() == 3){
-                        ponerFocoEnCeldaNueva();
-                    }
-            }
-        });
-        
+        iniciarNota();
     }
     /*
      Para cambiar el usuario de la nota
@@ -109,7 +67,11 @@ public class Main extends javax.swing.JFrame {
     
     public void ponerFocoEnCeldaNueva(){
         TableModel modelo = (TableModel) tableArticulos.getModel();
-        tableArticulos.changeSelection(model.getRowCount()-1, 0, false, false);
+        if (numeroArticulos > 0) {
+           tableArticulos.changeSelection(model.getRowCount()-1, 0, false, false); 
+        }else{
+            tableArticulos.changeSelection(0, 0, false, false); 
+        }
         tableArticulos.requestFocus();
         calcularTotal(modelo, numeroArticulos);
         clickEnTabla = false;
@@ -127,6 +89,7 @@ public class Main extends javax.swing.JFrame {
             txtTelefono.setEnabled(false);
             txtDomicilio.setText(cliente.getDomicilio());
             txtDomicilio.setEnabled(false);
+            ponerFocoEnCeldaNueva();
 
         }
     }
@@ -246,14 +209,18 @@ public class Main extends javax.swing.JFrame {
     }
     
     public double calcularTotal(TableModel modelo, int numeroArticulos){
+        if (numeroArticulos > 0) {
         double total = 0;
         for (int i = 0; i < numeroArticulos; i++) {
             if (modelo.getValueAt(i, 1) != null || modelo.getValueAt(i, 2) != null) {
             total += ((Number) modelo.getValueAt(i, 3)).doubleValue();
             }
         }
-        btnQuitarArticulo.setEnabled(true); 
+            btnQuitarArticulo.setEnabled(true); 
+        
         return total;
+        }
+        return 0;
     }
     
     public ArrayList actualizarListaArticulos(TableModel modelo, int numeroArticulos){
@@ -270,6 +237,88 @@ public class Main extends javax.swing.JFrame {
 //        }
 //        System.out.println("----");
         return listaArticulos;
+    }
+    
+    public void limpiarTablaArticulos(){
+        tableArticulos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null,  new Double(0.0)}
+            },
+            new String [] {
+                "Artículo", "Precio Unitario", "Cantidad", "Total"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Double.class, java.lang.Integer.class, java.lang.Double.class
+            };
+            boolean[] canEdit = new boolean [] {
+                true, true, true, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        iniciarNota();
+    }
+    
+    public void iniciarNota(){
+        txtNombres.requestFocus();
+        
+        /*
+         Agregué un eschador a la tabla de los artículos que vamos a poner en la nota. tales como,
+         impresiones, engargolados, etc. Lo hice para que ahí escriban el artículo, el precio y la
+         cantidad, esta madre llenará el campo de "total" en diccha tabla.
+         */
+        tableArticulos.getModel().addTableModelListener(new TableModelListener() {
+
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                /*
+                 Cuando una de las celdas de la tabla cambie, osea se escriba sobre ella,
+                 invocaremos este método, que va a hacer todo el jale
+                 */
+                actualizarTotal(e, bandera);
+            }
+        });
+        tableArticulos.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                key = e.getKeyCode();
+//                   
+                if (key == KeyEvent.VK_LEFT || key == KeyEvent.VK_RIGHT || key == KeyEvent.VK_UP || key == KeyEvent.VK_DOWN) {
+                    clickEnTabla = true;
+                }
+                if (key == KeyEvent.VK_ENTER && columnaFinal) {
+                         model = (DefaultTableModel) tableArticulos.getModel();
+                         if (((Number)model.getValueAt(tableArticulos.getRowCount()-1, 3)).doubleValue() != 0.0) {
+                         model.addRow(new Object[]{null,null,null,0});
+                         columnaFinal = false;
+                         ponerFocoEnCeldaNueva();
+                         }else{
+                             ponerFocoEnCeldaNueva();
+                         }
+                    }
+                    else if(key == KeyEvent.VK_ENTER && tableArticulos.getSelectedColumn() == 0 && tableArticulos.getSelectedRow() == 0){
+                        ponerFocoEnCeldaNueva();
+                    }else if(key == KeyEvent.VK_ENTER && tableArticulos.getSelectedColumn() == 3){
+                        ponerFocoEnCeldaNueva();
+                    }
+            }
+        });
+    }
+    
+    public void cancelarNotaActual(){
+        listaArticulos = new <Articulo>ArrayList();
+        numeroArticulos = 0;
+        columnaFinal = false;
+        clickEnTabla = false;
+        quitarCliente();
+        limpiarTablaArticulos();
     }
 
     /**
@@ -308,6 +357,7 @@ public class Main extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         txtAreaObservaciones = new javax.swing.JTextArea();
+        jButton1 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         menuArchivo = new javax.swing.JMenu();
         sMenuRegNota = new javax.swing.JMenuItem();
@@ -340,7 +390,7 @@ public class Main extends javax.swing.JFrame {
 
         lblNombreUsuario.setText("jLabel1");
 
-        btnCliente.setText("Seleccionar cliente");
+        btnCliente.setText("Seleccionar cliente miembro");
         btnCliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnClienteActionPerformed(evt);
@@ -419,7 +469,7 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
-        btnQuitarCliente.setText("Quitar cliente");
+        btnQuitarCliente.setText("Insertar nuevo cliente");
         btnQuitarCliente.setEnabled(false);
         btnQuitarCliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -446,6 +496,13 @@ public class Main extends javax.swing.JFrame {
         txtAreaObservaciones.setColumns(20);
         txtAreaObservaciones.setRows(5);
         jScrollPane2.setViewportView(txtAreaObservaciones);
+
+        jButton1.setText("jButton1");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         menuArchivo.setText("Archivo");
 
@@ -493,6 +550,11 @@ public class Main extends javax.swing.JFrame {
         jMenu5.setText("Artículos");
 
         jMenuItem10.setText("Agregar Articulo");
+        jMenuItem10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem10ActionPerformed(evt);
+            }
+        });
         jMenu5.add(jMenuItem10);
 
         jMenuItem11.setText("Quitar Artículo");
@@ -562,11 +624,16 @@ public class Main extends javax.swing.JFrame {
                         .addComponent(fechaEntrega, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 444, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel10)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnQuitarArticulo))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel10)
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnQuitarArticulo)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(91, 91, 91)
+                                .addComponent(jButton1)))))
                 .addGap(0, 85, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -592,7 +659,7 @@ public class Main extends javax.swing.JFrame {
                             .addComponent(lblNombreUsuario)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(btnCliente)
-                                .addGap(18, 18, 18)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnQuitarCliente))
                             .addComponent(jLabel1)
                             .addGroup(layout.createSequentialGroup()
@@ -608,7 +675,7 @@ public class Main extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(26, 26, 26)
                         .addComponent(btnRegistrar)))
-                .addContainerGap(498, Short.MAX_VALUE))
+                .addContainerGap(489, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -647,9 +714,12 @@ public class Main extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnQuitarArticulo)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnQuitarArticulo)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton1))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addComponent(lblTotal)
                         .addGap(10, 10, 10)
@@ -711,6 +781,7 @@ public class Main extends javax.swing.JFrame {
 
     private void btnQuitarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuitarClienteActionPerformed
         quitarCliente();
+        txtNombres.requestFocus();
     }//GEN-LAST:event_btnQuitarClienteActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
@@ -756,6 +827,14 @@ public class Main extends javax.swing.JFrame {
         clickEnTabla = true;
     }//GEN-LAST:event_tableArticulosMouseClicked
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        cancelarNotaActual();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
+        ponerFocoEnCeldaNueva();
+    }//GEN-LAST:event_jMenuItem10ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -797,6 +876,7 @@ public class Main extends javax.swing.JFrame {
     public javax.swing.JButton btnQuitarCliente;
     private javax.swing.JButton btnRegistrar;
     private com.toedter.calendar.JDateChooser fechaEntrega;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
