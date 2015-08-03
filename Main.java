@@ -357,7 +357,13 @@ public class Main extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         txtAreaObservaciones = new javax.swing.JTextArea();
+        jToolBar1 = new javax.swing.JToolBar();
         jButton1 = new javax.swing.JButton();
+        tBtnRegistrar = new javax.swing.JButton();
+        tBtnCancelNota = new javax.swing.JButton();
+        jToolBar2 = new javax.swing.JToolBar();
+        tBtnAddArt = new javax.swing.JButton();
+        tBtnQuitarArticulo = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         menuArchivo = new javax.swing.JMenu();
         sMenuRegNota = new javax.swing.JMenuItem();
@@ -377,7 +383,6 @@ public class Main extends javax.swing.JFrame {
         jMenuItem11 = new javax.swing.JMenuItem();
         menuNotas = new javax.swing.JMenu();
         sMenuConsulNota = new javax.swing.JMenuItem();
-        sMenuModNota = new javax.swing.JMenuItem();
         menuCliente = new javax.swing.JMenu();
         sMenuCargSaldo = new javax.swing.JMenuItem();
         sMenuAddCliente = new javax.swing.JMenuItem();
@@ -390,6 +395,7 @@ public class Main extends javax.swing.JFrame {
 
         lblNombreUsuario.setText("jLabel1");
 
+        btnCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/buscar cliente.png"))); // NOI18N
         btnCliente.setText("Seleccionar cliente miembro");
         btnCliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -452,6 +458,7 @@ public class Main extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tableArticulos);
 
+        btnQuitarArticulo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/quitar.png"))); // NOI18N
         btnQuitarArticulo.setText("Quitar artículo");
         btnQuitarArticulo.setEnabled(false);
         btnQuitarArticulo.addActionListener(new java.awt.event.ActionListener() {
@@ -469,6 +476,7 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
+        btnQuitarCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/insertar cliente.png"))); // NOI18N
         btnQuitarCliente.setText("Insertar nuevo cliente");
         btnQuitarCliente.setEnabled(false);
         btnQuitarCliente.addActionListener(new java.awt.event.ActionListener() {
@@ -497,22 +505,61 @@ public class Main extends javax.swing.JFrame {
         txtAreaObservaciones.setRows(5);
         jScrollPane2.setViewportView(txtAreaObservaciones);
 
-        jButton1.setText("jButton1");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
+        jToolBar1.setRollover(true);
+
+        jButton1.setFocusable(false);
+        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(jButton1);
+
+        tBtnRegistrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/registrar.png"))); // NOI18N
+        tBtnRegistrar.setToolTipText("Registrar Nota");
+        tBtnRegistrar.setFocusable(false);
+        tBtnRegistrar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        tBtnRegistrar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(tBtnRegistrar);
+
+        tBtnCancelNota.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/cancelar.png"))); // NOI18N
+        tBtnCancelNota.setToolTipText("Cancelar Nota");
+        tBtnCancelNota.setFocusable(false);
+        tBtnCancelNota.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        tBtnCancelNota.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(tBtnCancelNota);
+
+        jToolBar2.setRollover(true);
+
+        tBtnAddArt.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/agregar.png"))); // NOI18N
+        tBtnAddArt.setToolTipText("Agregar Articulo");
+        tBtnAddArt.setFocusable(false);
+        tBtnAddArt.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        tBtnAddArt.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar2.add(tBtnAddArt);
+
+        tBtnQuitarArticulo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/quitar.png"))); // NOI18N
+        tBtnQuitarArticulo.setToolTipText("Quitar Articulo");
+        tBtnQuitarArticulo.setEnabled(false);
+        tBtnQuitarArticulo.setFocusable(false);
+        tBtnQuitarArticulo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        tBtnQuitarArticulo.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar2.add(tBtnQuitarArticulo);
 
         menuArchivo.setText("Archivo");
 
+        sMenuRegNota.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/registrar icono.png"))); // NOI18N
         sMenuRegNota.setText("Registrar Nota");
         menuArchivo.add(sMenuRegNota);
 
+        sMenuCancelNota.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/cancelar icono.png"))); // NOI18N
         sMenuCancelNota.setText("Cancelar Nota");
+        sMenuCancelNota.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sMenuCancelNotaActionPerformed(evt);
+            }
+        });
         menuArchivo.add(sMenuCancelNota);
         menuArchivo.add(jSeparator1);
 
+        sMenuLogOut.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/sesion icono.png"))); // NOI18N
         sMenuLogOut.setText("Cerrar Sesión");
         sMenuLogOut.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -525,30 +572,38 @@ public class Main extends javax.swing.JFrame {
 
         menuOpciones.setText("Opciones");
 
+        jMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/caja icono.png"))); // NOI18N
         jMenu1.setText("Corte de Caja");
 
+        jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/corte icono.png"))); // NOI18N
         jMenuItem1.setText("Realizar corte de caja del día");
         jMenu1.add(jMenuItem1);
 
+        jMenuItem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/consultar cortes icono.png"))); // NOI18N
         jMenuItem2.setText("Consultar cortes de caja");
         jMenu1.add(jMenuItem2);
 
         menuOpciones.add(jMenu1);
         menuOpciones.add(jSeparator2);
 
+        jMenu4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/cliente icono.png"))); // NOI18N
         jMenu4.setText("Clientes");
 
+        sMenuSeleccCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/buscar cliente icono.png"))); // NOI18N
         sMenuSeleccCliente.setText("Seleccionar Cliente");
         jMenu4.add(sMenuSeleccCliente);
 
-        sMenuQuitCliente.setText("Quitar Cliente");
+        sMenuQuitCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/insertar cliente icono.png"))); // NOI18N
+        sMenuQuitCliente.setText("Insertar nuevo cliente");
         sMenuQuitCliente.setEnabled(false);
         jMenu4.add(sMenuQuitCliente);
 
         menuOpciones.add(jMenu4);
 
+        jMenu5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/articulos icono.png"))); // NOI18N
         jMenu5.setText("Artículos");
 
+        jMenuItem10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/agregar icono.png"))); // NOI18N
         jMenuItem10.setText("Agregar Articulo");
         jMenuItem10.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -557,6 +612,7 @@ public class Main extends javax.swing.JFrame {
         });
         jMenu5.add(jMenuItem10);
 
+        jMenuItem11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/quitar icono.png"))); // NOI18N
         jMenuItem11.setText("Quitar Artículo");
         jMenuItem11.setEnabled(false);
         jMenu5.add(jMenuItem11);
@@ -567,31 +623,27 @@ public class Main extends javax.swing.JFrame {
 
         menuNotas.setText("Notas");
 
+        sMenuConsulNota.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/consultar notas icono.png"))); // NOI18N
         sMenuConsulNota.setText("Consultar Nota");
         menuNotas.add(sMenuConsulNota);
-
-        sMenuModNota.setText("Modificar Nota");
-        sMenuModNota.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sMenuModNotaActionPerformed(evt);
-            }
-        });
-        menuNotas.add(sMenuModNota);
 
         jMenuBar1.add(menuNotas);
 
         menuCliente.setText("Cliente");
-        menuCliente.setEnabled(false);
 
+        sMenuCargSaldo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/cargar saldo cliente icono.png"))); // NOI18N
         sMenuCargSaldo.setText("Cargar Saldo");
         menuCliente.add(sMenuCargSaldo);
 
+        sMenuAddCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/agregar cliente icono.png"))); // NOI18N
         sMenuAddCliente.setText("Agregar Cliente");
         menuCliente.add(sMenuAddCliente);
 
+        sMenuModCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/maodificar cliene icono.png"))); // NOI18N
         sMenuModCliente.setText("Modificar Cliente");
         menuCliente.add(sMenuModCliente);
 
+        sMenuElimCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/eliminar cliente icono.png"))); // NOI18N
         sMenuElimCliente.setText("Eliminar Cliente");
         menuCliente.add(sMenuElimCliente);
 
@@ -599,6 +651,7 @@ public class Main extends javax.swing.JFrame {
 
         menuAyuda.setText("Ayuda");
 
+        sMenuAcerca.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/ayuda icono.png"))); // NOI18N
         sMenuAcerca.setText("Acerca De...");
         menuAyuda.add(sMenuAcerca);
 
@@ -614,78 +667,88 @@ public class Main extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel9)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtAbono, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(lblTotal)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel8)
-                        .addGap(46, 46, 46)
-                        .addComponent(fechaEntrega, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 444, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel10)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnQuitarArticulo)
+                            .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 85, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel9)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel10)
-                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnQuitarArticulo)))
+                                .addComponent(txtAbono, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(91, 91, 91)
-                                .addComponent(jButton1)))))
-                .addGap(0, 85, Short.MAX_VALUE))
+                                .addComponent(jLabel8)
+                                .addGap(46, 46, 46)
+                                .addComponent(fechaEntrega, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(lblTotal))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(11, 11, 11)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(jLabel5)
-                                            .addComponent(jLabel6)))
-                                    .addComponent(jLabel4))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                        .addGap(15, 15, 15)
-                                        .addComponent(jLabel7))
-                                    .addComponent(txtApMaterno, javax.swing.GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)
-                                    .addComponent(txtTelefono, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtDomicilio, javax.swing.GroupLayout.Alignment.LEADING)))
-                            .addComponent(lblNombreUsuario)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnCliente)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnQuitarCliente))
-                            .addComponent(jLabel1)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(36, 36, 36)
-                                        .addComponent(jLabel2))
-                                    .addComponent(jLabel3))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txtNombres)
-                                    .addComponent(txtApPaterno, javax.swing.GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)))))
+                        .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblNombreUsuario))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(26, 26, 26)
-                        .addComponent(btnRegistrar)))
-                .addContainerGap(489, Short.MAX_VALUE))
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnQuitarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addGap(11, 11, 11)
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                .addComponent(jLabel5)
+                                                .addComponent(jLabel6)))
+                                        .addComponent(jLabel4))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                            .addGap(15, 15, 15)
+                                            .addComponent(jLabel7))
+                                        .addComponent(txtApMaterno, javax.swing.GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)
+                                        .addComponent(txtTelefono, javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(txtDomicilio, javax.swing.GroupLayout.Alignment.LEADING)))
+                                .addComponent(jLabel1)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addGap(36, 36, 36)
+                                            .addComponent(jLabel2))
+                                        .addComponent(jLabel3))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(txtNombres)
+                                        .addComponent(txtApPaterno, javax.swing.GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGap(181, 181, 181)
+                                    .addComponent(btnCliente))))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblNombreUsuario)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
+                            .addComponent(jToolBar2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(32, 32, 32)
+                        .addComponent(btnQuitarCliente))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblNombreUsuario)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(btnCliente)
-                    .addComponent(btnQuitarCliente)
                     .addComponent(jLabel10))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -715,10 +778,10 @@ public class Main extends javax.swing.JFrame {
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(layout.createSequentialGroup()
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addComponent(btnQuitarArticulo)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton1))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnRegistrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addComponent(lblTotal)
@@ -729,11 +792,9 @@ public class Main extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(fechaEntrega, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(26, 26, 26)
-                        .addComponent(btnRegistrar))
+                            .addComponent(fechaEntrega, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(37, Short.MAX_VALUE))
+                .addGap(48, 48, 48))
         );
 
         pack();
@@ -819,21 +880,17 @@ public class Main extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_sMenuLogOutActionPerformed
 
-    private void sMenuModNotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sMenuModNotaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_sMenuModNotaActionPerformed
-
     private void tableArticulosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableArticulosMouseClicked
         clickEnTabla = true;
     }//GEN-LAST:event_tableArticulosMouseClicked
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        cancelarNotaActual();
-    }//GEN-LAST:event_jButton1ActionPerformed
-
     private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
         ponerFocoEnCeldaNueva();
     }//GEN-LAST:event_jMenuItem10ActionPerformed
+
+    private void sMenuCancelNotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sMenuCancelNotaActionPerformed
+        cancelarNotaActual();
+    }//GEN-LAST:event_sMenuCancelNotaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -899,6 +956,8 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
+    private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JToolBar jToolBar2;
     private javax.swing.JLabel lblNombreUsuario;
     private javax.swing.JLabel lblTotal;
     private javax.swing.JMenu menuArchivo;
@@ -914,10 +973,13 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JMenuItem sMenuElimCliente;
     private javax.swing.JMenuItem sMenuLogOut;
     private javax.swing.JMenuItem sMenuModCliente;
-    private javax.swing.JMenuItem sMenuModNota;
     private javax.swing.JMenuItem sMenuQuitCliente;
     private javax.swing.JMenuItem sMenuRegNota;
     private javax.swing.JMenuItem sMenuSeleccCliente;
+    private javax.swing.JButton tBtnAddArt;
+    private javax.swing.JButton tBtnCancelNota;
+    private javax.swing.JButton tBtnQuitarArticulo;
+    private javax.swing.JButton tBtnRegistrar;
     private javax.swing.JTable tableArticulos;
     private javax.swing.JTextField txtAbono;
     private javax.swing.JTextField txtApMaterno;
