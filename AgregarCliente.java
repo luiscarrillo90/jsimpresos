@@ -16,6 +16,7 @@ public class AgregarCliente extends javax.swing.JFrame {
     ConexionMiembro conexion = new ConexionMiembro();
     VerMiembros anterior;
     Miembro miembro;
+    int idMiembro;
 
     /**
      * Creates new form AgregarCliente
@@ -39,6 +40,7 @@ public class AgregarCliente extends javax.swing.JFrame {
             txtPassword.setText(miembro.getPassword());
             txtPasswordConf.setText(miembro.getPassword());
             btnAceptar.setText("Guardar cambios");
+            idMiembro = miembro.getId();
         }
     }
 
@@ -281,8 +283,8 @@ public class AgregarCliente extends javax.swing.JFrame {
                     anterior.actualizarMiembros(conexion.obtenerMiembros());
                     
                 }else{
-                    conexion.guardarMiembro(new Miembro(miembro.getId(), txtTarjeta.getText(), txtNombres.getText(), txtApPaterno.getText(), txtApMaterno.getText(),
-                            txtDomicilio.getText(), txtTelefono.getText(), 0, "", txtNombreUsuario.getText(), new String(txtPassword.getPassword())));
+                    conexion.actualizarMiembro(new Miembro(miembro.getId(), txtTarjeta.getText(), txtNombres.getText(), txtApPaterno.getText(), txtApMaterno.getText() ,
+                            txtDomicilio.getText(), txtTelefono.getText(), 0, "", txtNombreUsuario.getText(), new String(txtPassword.getPassword())), idMiembro);
                     anterior.actualizarMiembros(conexion.obtenerMiembros());
                 }
                 this.dispose();

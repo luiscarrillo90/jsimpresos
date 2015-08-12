@@ -49,8 +49,8 @@ public class ConexionMiembro extends Conexion{
             JOptionPane.showMessageDialog(null, "Error al guardar al cliente");
         }
     }
-    public void actualizarMiembro(Miembro miembro){
-        String query = "update miembros set nombres=?, appaterno=?, apmaterno=?, domicilio=?, telefono=?, nombreusuario=?, password=?";
+    public void actualizarMiembro(Miembro miembro, int id){
+        String query = "update miembros set nombres=?, appaterno=?, apmaterno=?, domicilio=?, telefono=?, nombreusuario=?, password=? where idMiembro=?";
         try {
             PreparedStatement st = this.getConexion().prepareStatement(query);
             st.setString(1, miembro.getNombres());
@@ -59,7 +59,8 @@ public class ConexionMiembro extends Conexion{
             st.setString(4, miembro.getDomicilio());
             st.setString(5, miembro.getTelefono());
             st.setString(6, miembro.getNombreUsuario());
-            st.setString(6, miembro.getPassword());
+            st.setString(7, miembro.getPassword());
+            st.setInt(8, id);
             st.executeUpdate();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al actualizar la base de datos.");
