@@ -15,7 +15,6 @@ public class Miembro {
     private String nombres;
     private String apPaterno;
     private String apMaterno;
-    private String rfc;
     private String domicilio;
     private String telefono;
     private double saldo;
@@ -23,13 +22,12 @@ public class Miembro {
     private String nombreUsuario;
     private String password;
 
-    public Miembro(int id, String numeroTarjeta, String nombres, String apPaterno, String apMaterno, String rfc, String domicilio, String telefono, double saldo, String fechaRegistro, String nombreUsuario, String password) {
+    public Miembro(int id, String numeroTarjeta, String nombres, String apPaterno, String apMaterno,String domicilio, String telefono, double saldo, String fechaRegistro, String nombreUsuario, String password) {
         this.id = id;
         this.numeroTarjeta = numeroTarjeta;
         this.nombres = nombres;
         this.apPaterno = apPaterno;
         this.apMaterno = apMaterno;
-        this.rfc = rfc;
         this.domicilio = domicilio;
         this.telefono = telefono;
         this.saldo = saldo;
@@ -76,14 +74,6 @@ public class Miembro {
 
     public void setApMaterno(String apMaterno) {
         this.apMaterno = apMaterno;
-    }
-
-    public String getRfc() {
-        return rfc;
-    }
-
-    public void setRfc(String rfc) {
-        this.rfc = rfc;
     }
 
     public String getDomicilio() {
