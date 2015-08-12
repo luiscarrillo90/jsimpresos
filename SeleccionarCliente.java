@@ -36,7 +36,7 @@ public class SeleccionarCliente extends javax.swing.JFrame {
         Conexion c = new Conexion();
         conexion = c.getConexion();
         String[] columnas = {"Nombre", "Domicilio"};
-        todos = (new ConexionClientes()).obtenerClientes(conexion);
+        todos = (new ConexionMiembro()).obtenerMiembros();
         Collections.sort(todos, new Comparator() {
             @Override
             public int compare(Object p1, Object p2) {
