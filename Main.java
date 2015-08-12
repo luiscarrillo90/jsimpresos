@@ -450,6 +450,11 @@ public class Main extends javax.swing.JFrame {
         tBtnSeleccCliente.setFocusable(false);
         tBtnSeleccCliente.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         tBtnSeleccCliente.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        tBtnSeleccCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tBtnSeleccClienteActionPerformed(evt);
+            }
+        });
         jToolBar1.add(tBtnSeleccCliente);
 
         tBtnQuitarCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/insertar cliente.png"))); // NOI18N
@@ -762,7 +767,7 @@ public class Main extends javax.swing.JFrame {
         jMenu1.setText("Corte de Caja");
 
         jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/corte icono.png"))); // NOI18N
-        jMenuItem1.setText("Realizar corte de caja del día");
+        jMenuItem1.setText("Realizar corte de caja");
         jMenu1.add(jMenuItem1);
 
         jMenuItem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/consultar cortes icono.png"))); // NOI18N
@@ -977,6 +982,11 @@ public class Main extends javax.swing.JFrame {
     private void tBtnAddArtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tBtnAddArtActionPerformed
         ponerFocoEnCeldaNueva();
     }//GEN-LAST:event_tBtnAddArtActionPerformed
+
+    private void tBtnSeleccClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tBtnSeleccClienteActionPerformed
+        SeleccionarCliente nuevo = new SeleccionarCliente(this);
+        nuevo.setVisible(true);
+    }//GEN-LAST:event_tBtnSeleccClienteActionPerformed
 
     /**
      * @param args the command line arguments
