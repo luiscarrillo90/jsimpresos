@@ -170,6 +170,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Agregar Cliente"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="sMenuAddClienteActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="sMenuModCliente">
               <Properties>
@@ -178,6 +181,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Modificar Cliente"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="sMenuModClienteActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="sMenuElimCliente">
               <Properties>
@@ -186,6 +192,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Eliminar Cliente"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="sMenuElimClienteActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>

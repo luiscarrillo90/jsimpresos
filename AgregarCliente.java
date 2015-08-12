@@ -16,6 +16,7 @@ public class AgregarCliente extends javax.swing.JFrame {
     ConexionMiembro conexion = new ConexionMiembro();
     VerMiembros anterior;
     Miembro miembro;
+    Main anteriorMain;
     int idMiembro;
 
     /**
@@ -27,7 +28,7 @@ public class AgregarCliente extends javax.swing.JFrame {
         this.anterior = anterior;
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        if (this.miembro != null) {
+        
             lblTitulo.setText("Editar miembro");
             txtTarjeta.setText(miembro.getNumeroTarjeta());
             txtTarjeta.setEnabled(false);
@@ -41,7 +42,14 @@ public class AgregarCliente extends javax.swing.JFrame {
             txtPasswordConf.setText(miembro.getPassword());
             btnAceptar.setText("Guardar cambios");
             idMiembro = miembro.getId();
-        }
+        
+    }
+    public AgregarCliente(Main anterior, Miembro miembro) {
+        initComponents();
+        this.miembro = miembro;
+        this.anteriorMain = anterior;
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
     public boolean comprobarDatos() {
@@ -279,8 +287,8 @@ public class AgregarCliente extends javax.swing.JFrame {
             if (comprobarPassword()) {
                 if (miembro == null) {
                     conexion.guardarMiembro(new Miembro(1, txtTarjeta.getText(), txtNombres.getText(), txtApPaterno.getText(), txtApMaterno.getText(),
-                            txtDomicilio.getText(), txtTelefono.getText(), 0, "", txtNombreUsuario.getText(), new String(txtPassword.getPassword())));
-                    anterior.actualizarMiembros(conexion.obtenerMiembros());
+                    txtDomicilio.getText(), txtTelefono.getText(), 0, "", txtNombreUsuario.getText(), new String(txtPassword.getPassword())));
+                    
                     
                 }else{
                     conexion.actualizarMiembro(new Miembro(miembro.getId(), txtTarjeta.getText(), txtNombres.getText(), txtApPaterno.getText(), txtApMaterno.getText() ,

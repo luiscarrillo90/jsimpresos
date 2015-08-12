@@ -828,14 +828,29 @@ public class Main extends javax.swing.JFrame {
 
         sMenuAddCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/agregar cliente icono.png"))); // NOI18N
         sMenuAddCliente.setText("Agregar Cliente");
+        sMenuAddCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sMenuAddClienteActionPerformed(evt);
+            }
+        });
         menuCliente.add(sMenuAddCliente);
 
         sMenuModCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/maodificar cliene icono.png"))); // NOI18N
         sMenuModCliente.setText("Modificar Cliente");
+        sMenuModCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sMenuModClienteActionPerformed(evt);
+            }
+        });
         menuCliente.add(sMenuModCliente);
 
         sMenuElimCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/eliminar cliente icono.png"))); // NOI18N
         sMenuElimCliente.setText("Eliminar Cliente");
+        sMenuElimCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sMenuElimClienteActionPerformed(evt);
+            }
+        });
         menuCliente.add(sMenuElimCliente);
 
         jMenuBar1.add(menuCliente);
@@ -987,6 +1002,21 @@ public class Main extends javax.swing.JFrame {
         SeleccionarCliente nuevo = new SeleccionarCliente(this);
         nuevo.setVisible(true);
     }//GEN-LAST:event_tBtnSeleccClienteActionPerformed
+
+    private void sMenuAddClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sMenuAddClienteActionPerformed
+        AgregarCliente nuevo = new AgregarCliente(this, null);
+        nuevo.setVisible(true);
+    }//GEN-LAST:event_sMenuAddClienteActionPerformed
+
+    private void sMenuModClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sMenuModClienteActionPerformed
+        VerMiembros nuevo = new VerMiembros("editar");
+        nuevo.setVisible(true);
+    }//GEN-LAST:event_sMenuModClienteActionPerformed
+
+    private void sMenuElimClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sMenuElimClienteActionPerformed
+        VerMiembros nuevo = new VerMiembros("eliminar");
+        nuevo.setVisible(true);
+    }//GEN-LAST:event_sMenuElimClienteActionPerformed
 
     /**
      * @param args the command line arguments
