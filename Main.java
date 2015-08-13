@@ -400,6 +400,7 @@ public class Main extends javax.swing.JFrame {
         sMenuAcerca = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("JS Impresos y Diseños - Punto de Venta");
 
         lblNombreUsuario.setText("jLabel1");
 
