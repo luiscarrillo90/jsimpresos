@@ -6,8 +6,11 @@
 package jsimpresos;
 
 import com.mysql.jdbc.Connection;
+import java.awt.Desktop;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
@@ -47,6 +50,7 @@ public class Main extends javax.swing.JFrame {
     boolean columnaFinal = false;
     //bandera de click del mouse sobre la tabla
     boolean clickEnTabla = false;
+    Abono anticipo;
     
     /*
      Recibimos en el constructor un nombre, solo se usa para saber el nombre de quién inició sesión
@@ -372,6 +376,9 @@ public class Main extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         txtAreaObservaciones = new javax.swing.JTextArea();
         btnRegistrar = new javax.swing.JButton();
+        cmbTipoPago = new javax.swing.JComboBox();
+        jLabel11 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         menuArchivo = new javax.swing.JMenu();
         sMenuRegNota = new javax.swing.JMenuItem();
@@ -690,6 +697,18 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
+        cmbTipoPago.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Efectivo" }));
+
+        jLabel11.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel11.setText("Tipo de pago :");
+
+        jButton2.setText("jButton2");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -707,13 +726,19 @@ public class Main extends javax.swing.JFrame {
                         .addComponent(txtAbono, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(134, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addComponent(btnRegistrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(28, 28, 28))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel10)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnRegistrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel10)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane2)))
-                        .addGap(28, 28, 28))))
+                            .addComponent(jLabel11)
+                            .addComponent(jButton2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cmbTipoPago, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(22, 22, 22))))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -726,11 +751,21 @@ public class Main extends javax.swing.JFrame {
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(fechaEntrega, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(22, 22, 22)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel10)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel10)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(32, 32, 32)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel11)
+                            .addComponent(cmbTipoPago, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton2)
+                        .addGap(22, 22, 22)))
                 .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -951,32 +986,67 @@ public class Main extends javax.swing.JFrame {
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
         TableModel modelo = (TableModel) tableArticulos.getModel();
         listaArticulos = actualizarListaArticulos(modelo, numeroArticulos);
-        conexionNota = new ConexionNotas();
-        String fecha=null;
-        if(fechaEntrega.getDate()!=null){
-        fecha = df.format(fechaEntrega.getDate());
-        }
-        
-        if (!listaArticulos.isEmpty()) {
-            
-            if (cliente != null) {
-                 for (int i = 0; i < listaArticulos.size(); i++) {
-                     System.out.println(i+1+".- "+listaArticulos.get(i));
-                     System.out.println(doubleValue(modelo.getValueAt(modelo.getRowCount()-1, 3)));
-                }
-//                conexionNota.guardarNota(txtNombres.getText(), txtApPaterno.getText(), txtApMaterno.getText(), txtTelefono.getText(), fecha, Double.parseDouble(txtAbono.getText()), txtAreaObservaciones.getText(), cliente.getId(), actualizarListaArticulos(modelo, numeroArticulos));
-            } else {
-                for (int i = 0; i < listaArticulos.size(); i++) {
-                     System.out.println(i+1+".- "+listaArticulos.get(i));
-                     System.out.println(doubleValue(modelo.getValueAt(modelo.getRowCount()-1, 3)));
-                }
-//                conexionNota.guardarNota(txtNombres.getText(), txtApPaterno.getText(), txtApMaterno.getText(), txtTelefono.getText(), fecha, Double.parseDouble(txtAbono.getText()), txtAreaObservaciones.getText(), 1, actualizarListaArticulos(modelo, numeroArticulos));
+        if (txtAbono.getText() != null && !txtAbono.getText().equals("")) {
+            anticipo = new Abono(1, Double.parseDouble(txtAbono.getText()), "","no", "");
+            conexionNota = new ConexionNotas();
+            String fecha = null;
+            if (fechaEntrega.getDate() != null) {
+                fecha = df.format(fechaEntrega.getDate());
             }
+
+            if (!listaArticulos.isEmpty()) {
+                if (cliente != null) {
+                    conexionNota.guardarNota(txtNombres.getText(), txtApPaterno.getText(), txtApMaterno.getText(), txtTelefono.getText(), fecha, anticipo, cmbTipoPago.getSelectedIndex(),txtAreaObservaciones.getText(), cliente.getId(), listaArticulos);
+                } else {
+                    conexionNota.guardarNota(txtNombres.getText(), txtApPaterno.getText(), txtApMaterno.getText(), txtTelefono.getText(), fecha, anticipo, cmbTipoPago.getSelectedIndex(),txtAreaObservaciones.getText(), 1, listaArticulos);
+                }
+                try {
+                    //Runtime.getRuntime().exec("c:/Users/luis-pc/Documents/NetBeansProjects/js/fichero.pdf");
+                    File obj = new File("c:/Users/Toshiba/Documents/NetBeansProjects/js/fichero.pdf");
+                    Desktop.getDesktop().open(obj);
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(null, "No se pudo abrir el archivo");
+                    System.out.println(ex.getMessage());
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Tienes que agregar al menos un artículo a la nota");
+            }
+
         } else {
-            JOptionPane.showMessageDialog(null, "Tienes que agregar al menos un artículo a la nota");
+            JOptionPane.showMessageDialog(null, "Debes ingresar un anticipo antes de continuar");
         }
-
-
+//        conexionNota = new ConexionNotas();
+//        String fecha=null;
+//        if(fechaEntrega.getDate()!=null){
+//        fecha = df.format(fechaEntrega.getDate());
+//        }
+//        
+//        if (!listaArticulos.isEmpty()) {
+//            
+//            if (cliente != null) {
+//                 for (int i = 0; i < listaArticulos.size(); i++) {
+//                     System.out.println(i+1+".- "+listaArticulos.get(i));
+//                     System.out.println(doubleValue(modelo.getValueAt(modelo.getRowCount()-1, 3)));
+//                }
+////                conexionNota.guardarNota(txtNombres.getText(), txtApPaterno.getText(), txtApMaterno.getText(), txtTelefono.getText(), fecha, Double.parseDouble(txtAbono.getText()), txtAreaObservaciones.getText(), cliente.getId(), actualizarListaArticulos(modelo, numeroArticulos));
+//            } else {
+//                for (int i = 0; i < listaArticulos.size(); i++) {
+//                     System.out.println(i+1+".- "+listaArticulos.get(i));
+//                     System.out.println(doubleValue(modelo.getValueAt(modelo.getRowCount()-1, 3)));
+//                }
+////                conexionNota.guardarNota(txtNombres.getText(), txtApPaterno.getText(), txtApMaterno.getText(), txtTelefono.getText(), fecha, Double.parseDouble(txtAbono.getText()), txtAreaObservaciones.getText(), 1, actualizarListaArticulos(modelo, numeroArticulos));
+//            }
+//            try {
+//                    //Runtime.getRuntime().exec("c:/Users/luis-pc/Documents/NetBeansProjects/js/fichero.pdf");
+//                    File obj = new File("c:/Users/luis-pc/Documents/NetBeansProjects/js/fichero.pdf");
+//                    Desktop.getDesktop().open(obj);
+//                } catch (IOException ex) {
+//                    JOptionPane.showMessageDialog(null, "No se pudo abrir el archivo");
+//                    System.out.println(ex.getMessage());
+//                }
+//        } else {
+//            JOptionPane.showMessageDialog(null, "Tienes que agregar al menos un artículo a la nota");
+//        }
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private void sMenuLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sMenuLogOutActionPerformed
@@ -1019,6 +1089,14 @@ public class Main extends javax.swing.JFrame {
         nuevo.setVisible(true);
     }//GEN-LAST:event_sMenuElimClienteActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        System.out.println(txtNombres.getText());
+        System.out.println(txtApPaterno.getText());
+        System.out.println(txtApMaterno.getText());
+        System.out.println(txtTelefono.getText());
+        System.out.println(txtDomicilio.getText());
+    }//GEN-LAST:event_jButton2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1059,10 +1137,13 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JButton btnQuitarArticulo;
     public javax.swing.JButton btnQuitarCliente;
     private javax.swing.JButton btnRegistrar;
+    private javax.swing.JComboBox cmbTipoPago;
     private com.toedter.calendar.JDateChooser fechaEntrega;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
