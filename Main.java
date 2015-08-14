@@ -982,6 +982,7 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_fechaEntregaMouseReleased
 
     private void btnQuitarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuitarClienteActionPerformed
+        cliente = null;
         quitarCliente();
         txtNombres.requestFocus();
     }//GEN-LAST:event_btnQuitarClienteActionPerformed
@@ -999,9 +1000,10 @@ public class Main extends javax.swing.JFrame {
 
             if (!listaArticulos.isEmpty()) {
                 if (cliente != null) {
-                    conexionNota.guardarNota(txtNombres.getText(), txtApPaterno.getText(), txtApMaterno.getText(), txtTelefono.getText(), fecha, anticipo, cmbTipoPago.getSelectedIndex(),txtAreaObservaciones.getText(), cliente.getId(), listaArticulos);
+                    conexionNota.guardarNota(txtNombres.getText(), txtApPaterno.getText(), txtApMaterno.getText(), txtTelefono.getText(), fecha, anticipo, cmbTipoPago.getSelectedIndex(),txtAreaObservaciones.getText(), cliente.getId(), listaArticulos, txtDomicilio.getText());
                 } else {
-                    conexionNota.guardarNota(txtNombres.getText(), txtApPaterno.getText(), txtApMaterno.getText(), txtTelefono.getText(), fecha, anticipo, cmbTipoPago.getSelectedIndex(),txtAreaObservaciones.getText(), 1, listaArticulos);
+                    System.out.println("aqui");
+                    conexionNota.guardarNota(txtNombres.getText(), txtApPaterno.getText(), txtApMaterno.getText(), txtTelefono.getText(), fecha, anticipo, cmbTipoPago.getSelectedIndex(),txtAreaObservaciones.getText(), 1, listaArticulos, txtDomicilio.getText());
                 }
                 try {
                     //Runtime.getRuntime().exec("c:/Users/luis-pc/Documents/NetBeansProjects/js/fichero.pdf");

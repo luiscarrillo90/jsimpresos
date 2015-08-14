@@ -36,7 +36,7 @@ import javax.swing.JOptionPane;
  */
 public class ConexionNotas extends Conexion {
 
-     public void guardarNota(String nombres, String apPaterno, String apMaterno, String telefono, String fechaEntrega, Abono anticipo, int tipoAbono, String observaciones, int idMiembro, ArrayList<Articulo> articulos) {
+     public void guardarNota(String nombres, String apPaterno, String apMaterno, String telefono, String fechaEntrega, Abono anticipo, int tipoAbono, String observaciones, int idMiembro, ArrayList<Articulo> articulos, String domicilio) {
         boolean guardar = true;
         double resto = 0;
         String tipoPago = "Efectivo";
@@ -64,7 +64,7 @@ public class ConexionNotas extends Conexion {
 
             }
             if (guardar) {
-                String query = "insert into notas values(default,?,?,?,?, default, ?, ?, 1,?,'no', 'cualquier calle')";
+                String query = "insert into notas values(default,?,?,?,?, default, ?, ?, 1,?,'no', ?)";
                 PreparedStatement st;
                 int clave = 0;
                 st = this.getConexion().prepareStatement(query);
@@ -76,6 +76,7 @@ public class ConexionNotas extends Conexion {
                     st.setString(5, fechaEntrega);
                     st.setString(6, observaciones);
                     st.setInt(7, idMiembro);
+                    st.setString(8, domicilio);
                     st.executeUpdate();
                     st = this.getConexion().prepareStatement("select last_insert_id()");
                     ResultSet rs = st.executeQuery();
@@ -91,6 +92,7 @@ public class ConexionNotas extends Conexion {
                     st.setString(5, fechaEntrega);
                     st.setString(6, observaciones);
                     st.setInt(7, idMiembro);
+                    st.setString(8, domicilio);
                     st.executeUpdate();
                     st = this.getConexion().prepareStatement("select last_insert_id()");
                     ResultSet rs = st.executeQuery();
@@ -130,7 +132,7 @@ public class ConexionNotas extends Conexion {
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
-                nota = new Nota(rs.getInt(1), rs.getString(2), null, rs.getString(3), rs.getString(4), rs.getString(5), Fechas.convertirFecha(rs.getString(6)), rs.getString(7), rs.getString(8), null, null, rs.getString(11));
+                nota = new Nota(rs.getInt(1), rs.getString(2), null, rs.getString(3), rs.getString(4), rs.getString(5), Fechas.convertirFecha(rs.getString(6)), rs.getString(7), rs.getString(8), null, null, rs.getString(11), rs.getString(12));
                 if (rs.getInt(10) != 1) {
                     query = "select * from miembros where idmiembro = ?";
                     PreparedStatement auxst = this.getConexion().prepareStatement(query);
@@ -176,14 +178,14 @@ public class ConexionNotas extends Conexion {
             ResultSet rs = st.executeQuery();
             while(rs.next()){
                 if(rs.getInt(10)==1){
-                    notas.add(new Nota(rs.getInt(1), rs.getString(2), null,rs.getString(3), rs.getString(4), rs.getString(5), Fechas.convertirFecha(rs.getString(6)), rs.getString(7), rs.getString(8), null, null, rs.getString(11)));
+                    notas.add(new Nota(rs.getInt(1), rs.getString(2), null,rs.getString(3), rs.getString(4), rs.getString(5), Fechas.convertirFecha(rs.getString(6)), rs.getString(7), rs.getString(8), null, null, rs.getString(11),rs.getString(12)));
                 }else{
                     String query2 = "select * from miembros where idmiembro=?";
                     PreparedStatement st2 = this.getConexion().prepareStatement(query2);
                     st2.setInt(1, rs.getInt(10));
                     ResultSet rs2 = st2.executeQuery();
                     while(rs2.next()){
-                        notas.add(new Nota(rs.getInt(1), rs2.getString(3), null,rs2.getString(4), rs2.getString(5), rs.getString(5), Fechas.convertirFecha(rs.getString(6)), rs.getString(7), rs.getString(8), null, null, rs.getString(11)));
+                        notas.add(new Nota(rs.getInt(1), rs2.getString(3), null,rs2.getString(4), rs2.getString(5), rs.getString(5), Fechas.convertirFecha(rs.getString(6)), rs.getString(7), rs.getString(8), null, null, rs.getString(11),rs.getString(12)));
                     }
                 }
             }
@@ -307,7 +309,7 @@ public class ConexionNotas extends Conexion {
                 PdfPCell celdanueva4 = new PdfPCell(new Phrase(" ", FontFactory.getFont("Arial", 10, Font.BOLD, BaseColor.BLACK)));
                 celdanueva4.setBorder(Rectangle.NO_BORDER);
                 tabla.addCell(celdanueva4);
-                PdfPCell celda7 = new PdfPCell(new Phrase("Domicilio:       Roble No.9", FontFactory.getFont("Arial", 10, Font.BOLD, BaseColor.BLACK)));
+                PdfPCell celda7 = new PdfPCell(new Phrase("Domicilio:       "+nota.getDomicilio(), FontFactory.getFont("Arial", 10, Font.BOLD, BaseColor.BLACK)));
                 celda7.setBorder(Rectangle.NO_BORDER);
                 celda7.setColspan(2);
                 tabla.addCell(celda7);

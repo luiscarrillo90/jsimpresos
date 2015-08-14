@@ -23,10 +23,11 @@ public class Nota {
     private String fechaEntrega;
     private String observaciones;
     private String terminado;
+    private String domicilio;
     ArrayList<Articulo> articulos;
     ArrayList<Abono> abonos;
     
-    public Nota(int idNota, String nombres, Miembro cliente, String apPaterno, String apMaterno, String telefono, String fecha,String fechaEntrega, String observaciones, ArrayList<Articulo> articulos, ArrayList<Abono> abonos, String terminado) {
+    public Nota(int idNota, String nombres, Miembro cliente, String apPaterno, String apMaterno, String telefono, String fecha,String fechaEntrega, String observaciones, ArrayList<Articulo> articulos, ArrayList<Abono> abonos, String terminado, String domicilio) {
         this.idNota = idNota;
         this.nombres = nombres;
         this.cliente = cliente;
@@ -39,6 +40,7 @@ public class Nota {
         this.articulos = articulos;
         this.abonos = abonos;
         this.terminado= terminado;
+        this.domicilio = domicilio;
     }
     public String getTerminado(){
         return terminado;
@@ -77,6 +79,10 @@ public class Nota {
 
     public String getObservaciones() {
         return observaciones;
+    }
+    
+    public String getDomicilio(){
+        return domicilio;
     }
 
     public ArrayList<Articulo> getArticulos() {
@@ -129,6 +135,10 @@ public class Nota {
 
     public void setAbonos(ArrayList<Abono> abonos) {
         this.abonos = abonos;
+    }
+    
+    public void setDomicilio(String domicilio){
+        this.domicilio = domicilio;
     }
     
 }
