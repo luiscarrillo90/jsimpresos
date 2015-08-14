@@ -20,7 +20,7 @@ import javax.swing.JOptionPane;
 public class ConexionMiembro extends Conexion{
     public ArrayList<Miembro> obtenerMiembros(){
         ArrayList miembros = new ArrayList();
-        String query = "select * from miembros where idmiembro<>1";
+        String query = "select * from miembros where idmiembro<>1 and idmiembro<>2";
         try {
             PreparedStatement st = this.getConexion().prepareStatement(query);
             ResultSet rs = st.executeQuery();
@@ -78,5 +78,20 @@ public class ConexionMiembro extends Conexion{
             return false;
         }
         
+    }
+    
+    public Miembro obtenerMiembroGenerico(){
+        Miembro miembro = null;
+        String query = "select * from miembros where idmiembro=2";
+        try{
+            PreparedStatement st = this.getConexion().prepareStatement(query);
+            ResultSet rs = st.executeQuery();
+            while(rs.next()){
+                miembro = new Miembro(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getDouble(8), Fechas.convertirFecha(rs.getString(9)),rs.getString(10), rs.getString(11));
+            }
+        }catch (SQLException ex){
+            JOptionPane.showMessageDialog(null, "Error al obtener el cliente generico");
+        }
+        return miembro;
     }
 }
