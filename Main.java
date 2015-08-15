@@ -872,14 +872,13 @@ public class Main extends javax.swing.JFrame {
                         .addGap(22, 22, 22)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel10)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(32, 32, 32)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel11)
-                            .addComponent(cmbTipoPago, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(25, 25, 25)))
+                            .addComponent(cmbTipoPago, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -1024,6 +1023,11 @@ public class Main extends javax.swing.JFrame {
 
         sMenuAcerca.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/ayuda icono.png"))); // NOI18N
         sMenuAcerca.setText("Acerca De...");
+        sMenuAcerca.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sMenuAcercaActionPerformed(evt);
+            }
+        });
         menuAyuda.add(sMenuAcerca);
 
         jMenuBar1.add(menuAyuda);
@@ -1188,6 +1192,11 @@ public class Main extends javax.swing.JFrame {
     private void sMenuQuitClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sMenuQuitClienteActionPerformed
         insertarNuevoCliente();
     }//GEN-LAST:event_sMenuQuitClienteActionPerformed
+
+    private void sMenuAcercaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sMenuAcercaActionPerformed
+        jdAcercaDe a = new jdAcercaDe(this, true);
+        a.setVisible(true);
+    }//GEN-LAST:event_sMenuAcercaActionPerformed
 
     /**
      * @param args the command line arguments
