@@ -5,8 +5,10 @@
  */
 package jsimpresos;
 
+import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.border.TitledBorder;
 
 /**
  *
@@ -25,20 +27,29 @@ public class HacerPago extends javax.swing.JFrame {
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setLocationRelativeTo(null);
         this.nota = nota;
-        lblNota.setText("No. de nota : "+nota.getIdNota());
+        TitledBorder tb = BorderFactory.createTitledBorder("Nota No. "+nota.getIdNota());
+        pnlTitulo.setBorder(tb);
+//        lblNota.setText("No. de nota : "+nota.getIdNota());
         if(nota.getCliente()!=null){
-            Miembro aux = nota.getCliente();
-            lblUsuario.setText("Cliente : "+aux.getNombres()+ " "+aux.getApPaterno());
-            lblMiembro.setText("Miembro : si");
-            lblTarjeta.setText("No. de tarjeta : "+ aux.getNumeroTarjeta());
-            lblSaldoTarjeta.setText("Saldo en tarjeta : $"+aux.getSaldo());
-            DefaultComboBoxModel modelo = (DefaultComboBoxModel) cmbTipoPago.getModel();
-            modelo.addElement("Tarjeta miembro");
+            if (nota.getCliente().getId() != 2) {
+                Miembro aux = nota.getCliente();
+                lblUsuario.setText("Cliente : "+aux.getNombres()+ " "+aux.getApPaterno()+" " + nota.getCliente().getApMaterno());
+                lblMiembro.setText("Miembro : si");
+                lblTarjeta.setText("No. de tarjeta : "+ aux.getNumeroTarjeta());
+                lblSaldoTarjeta.setText("Saldo en tarjeta : $"+aux.getSaldo());
+                DefaultComboBoxModel modelo = (DefaultComboBoxModel) cmbTipoPago.getModel();
+                modelo.addElement("Tarjeta miembro");
+            }else{
+                lblUsuario.setText("Cliente : "+nota.getCliente().getNombres()+ " "+nota.getCliente().getApPaterno()+" " + nota.getCliente().getApMaterno());
+                lblMiembro.setText("Este cliente no es un miembro");
+                lblTarjeta.setText("Sin número de tarjeta");
+                lblSaldoTarjeta.setText("Saldo inexistente");
+            }
         }else{
-            lblUsuario.setText("Cliente : "+nota.getNombres()+ " "+nota.getApPaterno());
-            lblMiembro.setText("Miembro : no");
-            lblTarjeta.setText("No. de tarjeta : ");
-            lblSaldoTarjeta.setText("Saldo en tarjeta : ");
+            lblUsuario.setText("Cliente : "+nota.getNombres()+ " "+nota.getApPaterno()+" " + nota.getApMaterno());
+            lblMiembro.setText("Este cliente no es un miembro");
+            lblTarjeta.setText("Sin número de tarjeta");
+            lblSaldoTarjeta.setText("Saldo inexistente");
         }
         double totalCuenta =0;
         for (int i = 0; i < nota.getArticulos().size(); i++) {
@@ -78,36 +89,23 @@ public class HacerPago extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        lblNota = new javax.swing.JLabel();
-        lblUsuario = new javax.swing.JLabel();
-        lblTarjeta = new javax.swing.JLabel();
-        lblSaldoTarjeta = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        cmbTipoPago = new javax.swing.JComboBox();
-        lblSaldoCuenta = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        txtCantidad = new javax.swing.JTextField();
         btnAceptar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
+        pnlTitulo = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
+        lblTarjeta = new javax.swing.JLabel();
+        lblUsuario = new javax.swing.JLabel();
+        lblSaldoTarjeta = new javax.swing.JLabel();
+        lblSaldoCuenta = new javax.swing.JLabel();
         lblMiembro = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        cmbTipoPago = new javax.swing.JComboBox();
+        jLabel2 = new javax.swing.JLabel();
+        txtCantidad = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        lblNota.setText("jLabel1");
-
-        lblUsuario.setText("jLabel1");
-
-        lblTarjeta.setText("jLabel1");
-
-        lblSaldoTarjeta.setText("jLabel1");
-
-        jLabel1.setText("Tipo de pago :");
-
-        cmbTipoPago.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Efectivo" }));
-
-        lblSaldoCuenta.setText("jLabel2");
-
-        jLabel2.setText("Cantidad :");
+        setTitle("Registro de pagos");
 
         btnAceptar.setText("Aceptar");
         btnAceptar.addActionListener(new java.awt.event.ActionListener() {
@@ -123,41 +121,38 @@ public class HacerPago extends javax.swing.JFrame {
             }
         });
 
+        pnlTitulo.setBorder(javax.swing.BorderFactory.createTitledBorder("Nota no. x"));
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Datos del cliente"));
+
+        lblTarjeta.setText("jLabel1");
+
+        lblUsuario.setText("jLabel1");
+
+        lblSaldoTarjeta.setText("jLabel1");
+
+        lblSaldoCuenta.setText("jLabel2");
+
         lblMiembro.setText("jLabel3");
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(60, 60, 60)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblMiembro)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnAceptar)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnCancelar))
                     .addComponent(lblSaldoCuenta)
                     .addComponent(lblSaldoTarjeta)
                     .addComponent(lblTarjeta)
-                    .addComponent(lblUsuario)
-                    .addComponent(lblNota)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(cmbTipoPago, 0, 143, Short.MAX_VALUE)
-                            .addComponent(txtCantidad))))
-                .addContainerGap(36, Short.MAX_VALUE))
+                    .addComponent(lblUsuario))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(lblNota)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblUsuario)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblMiembro)
@@ -167,19 +162,89 @@ public class HacerPago extends javax.swing.JFrame {
                 .addComponent(lblSaldoTarjeta)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblSaldoCuenta)
-                .addGap(31, 31, 31)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Pago"));
+
+        jLabel1.setText("Tipo de pago :");
+
+        cmbTipoPago.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Efectivo" }));
+
+        jLabel2.setText("Cantidad :");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(cmbTipoPago, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(cmbTipoPago, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30)
+                .addContainerGap(38, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout pnlTituloLayout = new javax.swing.GroupLayout(pnlTitulo);
+        pnlTitulo.setLayout(pnlTituloLayout);
+        pnlTituloLayout.setHorizontalGroup(
+            pnlTituloLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlTituloLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlTituloLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        pnlTituloLayout.setVerticalGroup(
+            pnlTituloLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlTituloLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(47, 47, 47)
+                .addComponent(btnAceptar)
+                .addGap(18, 18, 18)
+                .addComponent(btnCancelar))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(pnlTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addComponent(pnlTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAceptar)
                     .addComponent(btnCancelar))
-                .addContainerGap(40, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -192,19 +257,24 @@ public class HacerPago extends javax.swing.JFrame {
                     if(cmbTipoPago.getSelectedIndex()==1){
                         if(nota.getCliente().getSaldo()>=saldoCuenta){
                             nuevo = new Abono(nota.getIdNota(), Double.parseDouble(txtCantidad.getText()),"Tarjeta","no","");
-                            
                         }else{
                             JOptionPane.showMessageDialog(null, "El saldo de la tarjeta no es suficiente");
                         }
-                        
                     }else{
                         nuevo = new Abono(nota.getIdNota(), Double.parseDouble(txtCantidad.getText()),"Efectivo","no","");
                     }
                     ConexionNotas conexion = new ConexionNotas();
-                    conexion.guardarAbono(nuevo);
-                    frameAnterior.actualizarPagos(conexion.obtenerAbonosPorId(nuevo.getId()));
+                    if (conexion.guardarAbono(nuevo)) {
+                     frameAnterior.actualizarPagos(conexion.obtenerAbonosPorId(nuevo.getId()));
+                     JOptionPane.showMessageDialog(null, "El pago fue registrado con exito");
+                     nota = (new ConexionNotas()).getNotaPorId(nota.getIdNota());
+                     frameAnterior.setNota(nota);
+                    }
                     if(terminar){
-                        conexion.terminarNota(nota);
+                        if (conexion.terminarNota(nota)) {
+                            JOptionPane.showMessageDialog(null, "La nota fue terminada con exito");
+                            frameAnterior.dispose();
+                        }
                     }
                     this.dispose();
                 }else{
@@ -225,38 +295,38 @@ public class HacerPago extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(HacerPago.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(HacerPago.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(HacerPago.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(HacerPago.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                
-            }
-        });
-    }
+//    public static void main(String args[]) {
+//        /* Set the Nimbus look and feel */
+//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+//         */
+//        try {
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                if ("Nimbus".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
+//            }
+//        } catch (ClassNotFoundException ex) {
+//            java.util.logging.Logger.getLogger(HacerPago.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (InstantiationException ex) {
+//            java.util.logging.Logger.getLogger(HacerPago.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (IllegalAccessException ex) {
+//            java.util.logging.Logger.getLogger(HacerPago.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+//            java.util.logging.Logger.getLogger(HacerPago.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+//        //</editor-fold>
+//        //</editor-fold>
+//
+//        /* Create and display the form */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                
+//            }
+//        });
+//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
@@ -264,12 +334,14 @@ public class HacerPago extends javax.swing.JFrame {
     private javax.swing.JComboBox cmbTipoPago;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lblMiembro;
-    private javax.swing.JLabel lblNota;
     private javax.swing.JLabel lblSaldoCuenta;
     private javax.swing.JLabel lblSaldoTarjeta;
     private javax.swing.JLabel lblTarjeta;
     private javax.swing.JLabel lblUsuario;
+    private javax.swing.JPanel pnlTitulo;
     private javax.swing.JTextField txtCantidad;
     // End of variables declaration//GEN-END:variables
 }

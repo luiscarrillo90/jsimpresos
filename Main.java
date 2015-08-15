@@ -13,6 +13,8 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
@@ -63,6 +65,7 @@ public class Main extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null); 
         usuario = nombre;
+        fechaEntrega.setDate(new Date());
         //asigna nombre a etiqueta        
         lblNombreUsuario.setText(nombre);
         miembroGenerico = new ConexionMiembro().obtenerMiembroGenerico();
@@ -97,8 +100,25 @@ public class Main extends javax.swing.JFrame {
             txtDomicilio.setText(cliente.getDomicilio());
             txtDomicilio.setEnabled(false);
             ponerFocoEnCeldaNueva();
-
+            if (cliente.getId() != 2) {
+                cambiarCmbTipoPago(true);
+            }else{
+                cambiarCmbTipoPago(false);
+            }
+        }else{
+            cambiarCmbTipoPago(false);
         }
+        activarBtnQuitarCliente(true);
+    }
+    
+    public void cambiarCmbTipoPago(boolean esMiembro){
+        if (esMiembro) {
+            DefaultComboBoxModel modelo = (DefaultComboBoxModel) cmbTipoPago.getModel();
+            modelo.insertElementAt("Tarjeta miembro", 1);
+        }else{
+            cmbTipoPago.setSelectedIndex(0);
+            cmbTipoPago.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Efectivo" }));
+    }
     }
 
     public void quitarCliente() {
@@ -114,6 +134,8 @@ public class Main extends javax.swing.JFrame {
         txtDomicilio.setText("");
         txtDomicilio.setEnabled(true);
         btnQuitarCliente.setEnabled(false);
+        cambiarCmbTipoPago(false);
+        activarBtnQuitarCliente(false);
     }
     /*
      Recibe de parámetro un evento de un modelo de una tabla y una "bandera". 
@@ -211,7 +233,7 @@ public class Main extends javax.swing.JFrame {
         cambiarTotal(false);
         bandera = true;
         if (modelo.getRowCount() == 1) {
-            btnQuitarArticulo.setEnabled(false);
+            activarQuitarArticulo(false);
         }
     }
     
@@ -223,7 +245,7 @@ public class Main extends javax.swing.JFrame {
             total += ((Number) modelo.getValueAt(i, 3)).doubleValue();
             }
         }
-            btnQuitarArticulo.setEnabled(true); 
+            activarQuitarArticulo(true); 
         
         return total;
         }
@@ -317,17 +339,91 @@ public class Main extends javax.swing.JFrame {
                     }
             }
         });
+        activarQuitarArticulo(false);
     }
     
     public void cancelarNotaActual(){
-        listaArticulos = new <Articulo>ArrayList();
-        numeroArticulos = 0;
-        columnaFinal = false;
-        clickEnTabla = false;
-        quitarCliente();
-        limpiarTablaArticulos();
+        if (JOptionPane.showConfirmDialog(null, "¿Esta seguro que desea cancelar la nota actual?") == 0) {
+            listaArticulos = new <Articulo>ArrayList();
+            numeroArticulos = 0;
+            columnaFinal = false;
+            clickEnTabla = false;
+            quitarCliente();
+            limpiarTablaArticulos();
+            limpiarDatosExtraDeLaNota();
+        }
     }
+    
+    public void activarQuitarArticulo(boolean activar){
+        if (activar) {
+            btnQuitarArticulo.setEnabled(true);
+            tBtnQuitarArticulo.setEnabled(true);
+            miBtnQuitarArticulo.setEnabled(true);
+        }else{
+            btnQuitarArticulo.setEnabled(false);
+            tBtnQuitarArticulo.setEnabled(false);
+            miBtnQuitarArticulo.setEnabled(false);
+        }
+    }
+    
+    public void activarBtnQuitarCliente(boolean activar){
+        if (activar) {
+            btnQuitarCliente.setEnabled(true);
+            tBtnQuitarCliente.setEnabled(true);
+            sMenuQuitCliente.setEnabled(true);
+        }else{
+            btnQuitarCliente.setEnabled(false);
+            tBtnQuitarCliente.setEnabled(false);
+            sMenuQuitCliente.setEnabled(false);
+        }
+    }
+    
+    public void limpiarDatosExtraDeLaNota(){
+        fechaEntrega.setDate(new Date());
+        txtAbono.setText("");
+        txtAreaObservaciones.setText("");
+    }
+    
+    public void registrarNota(){
+        if (txtAbono.getText() != null && !txtAbono.getText().equals("")) {
+            anticipo = new Abono(1, Double.parseDouble(txtAbono.getText()), "","no", "");
+            conexionNota = new ConexionNotas();
+            String fecha = null;
+            if (fechaEntrega.getDate() != null) {
+                fecha = df.format(fechaEntrega.getDate());
+            }
+            TableModel modelo = (TableModel) tableArticulos.getModel();
+            listaArticulos = actualizarListaArticulos(modelo, numeroArticulos); 
+            if (!listaArticulos.isEmpty()) {
+                if (cliente != null) {
+                    conexionNota.guardarNota(txtNombres.getText(), txtApPaterno.getText(), txtApMaterno.getText(), txtTelefono.getText(), fecha, anticipo, cmbTipoPago.getSelectedIndex(),txtAreaObservaciones.getText(), cliente.getId(), listaArticulos, txtDomicilio.getText());
+                    cancelarNotaActual();
+                } else {
+                    conexionNota.guardarNota(txtNombres.getText(), txtApPaterno.getText(), txtApMaterno.getText(), txtTelefono.getText(), fecha, anticipo, cmbTipoPago.getSelectedIndex(),txtAreaObservaciones.getText(), 1, listaArticulos, txtDomicilio.getText());
+                    cancelarNotaActual();
+                }
+                try {
+                    //Runtime.getRuntime().exec("c:/Users/luis-pc/Documents/NetBeansProjects/js/fichero.pdf");
+                    File obj = new File("c:/Users/Toshiba/Documents/NetBeansProjects/js/fichero.pdf");
+                    Desktop.getDesktop().open(obj);
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(null, "No se pudo abrir el archivo");
+                    System.out.println(ex.getMessage());
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Tienes que agregar al menos un artículo a la nota");
+            }
 
+        } else {
+            JOptionPane.showMessageDialog(null, "Debes ingresar un anticipo antes de continuar");
+        }
+    }
+    
+    public void insertarNuevoCliente(){
+        cliente = null;
+        quitarCliente();
+        txtNombres.requestFocus();
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -397,8 +493,8 @@ public class Main extends javax.swing.JFrame {
         sMenuSeleccCliente = new javax.swing.JMenuItem();
         sMenuQuitCliente = new javax.swing.JMenuItem();
         jMenu5 = new javax.swing.JMenu();
-        jMenuItem10 = new javax.swing.JMenuItem();
-        jMenuItem11 = new javax.swing.JMenuItem();
+        miBtnAddArticulo = new javax.swing.JMenuItem();
+        miBtnQuitarArticulo = new javax.swing.JMenuItem();
         menuNotas = new javax.swing.JMenu();
         sMenuConsulNota = new javax.swing.JMenuItem();
         menuCliente = new javax.swing.JMenu();
@@ -426,6 +522,11 @@ public class Main extends javax.swing.JFrame {
         tBtnRegistrar.setFocusable(false);
         tBtnRegistrar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         tBtnRegistrar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        tBtnRegistrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tBtnRegistrarActionPerformed(evt);
+            }
+        });
         jToolBar1.add(tBtnRegistrar);
 
         tBtnCancelNota.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/cancelar.png"))); // NOI18N
@@ -433,6 +534,11 @@ public class Main extends javax.swing.JFrame {
         tBtnCancelNota.setFocusable(false);
         tBtnCancelNota.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         tBtnCancelNota.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        tBtnCancelNota.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tBtnCancelNotaActionPerformed(evt);
+            }
+        });
         jToolBar1.add(tBtnCancelNota);
         jToolBar1.add(jSeparator3);
 
@@ -474,6 +580,11 @@ public class Main extends javax.swing.JFrame {
         tBtnQuitarCliente.setFocusable(false);
         tBtnQuitarCliente.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         tBtnQuitarCliente.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        tBtnQuitarCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tBtnQuitarClienteActionPerformed(evt);
+            }
+        });
         jToolBar1.add(tBtnQuitarCliente);
         jToolBar1.add(jSeparator4);
 
@@ -768,7 +879,7 @@ public class Main extends javax.swing.JFrame {
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel11)
                             .addComponent(cmbTipoPago, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(22, 22, 22)))
+                        .addGap(25, 25, 25)))
                 .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -777,6 +888,11 @@ public class Main extends javax.swing.JFrame {
 
         sMenuRegNota.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/registrar icono.png"))); // NOI18N
         sMenuRegNota.setText("Registrar Nota");
+        sMenuRegNota.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sMenuRegNotaActionPerformed(evt);
+            }
+        });
         menuArchivo.add(sMenuRegNota);
 
         sMenuCancelNota.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/cancelar icono.png"))); // NOI18N
@@ -826,6 +942,11 @@ public class Main extends javax.swing.JFrame {
         sMenuQuitCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/insertar cliente icono.png"))); // NOI18N
         sMenuQuitCliente.setText("Insertar nuevo cliente");
         sMenuQuitCliente.setEnabled(false);
+        sMenuQuitCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sMenuQuitClienteActionPerformed(evt);
+            }
+        });
         jMenu4.add(sMenuQuitCliente);
 
         menuOpciones.add(jMenu4);
@@ -833,19 +954,19 @@ public class Main extends javax.swing.JFrame {
         jMenu5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/articulos icono.png"))); // NOI18N
         jMenu5.setText("Artículos");
 
-        jMenuItem10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/agregar icono.png"))); // NOI18N
-        jMenuItem10.setText("Agregar Articulo");
-        jMenuItem10.addActionListener(new java.awt.event.ActionListener() {
+        miBtnAddArticulo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/agregar icono.png"))); // NOI18N
+        miBtnAddArticulo.setText("Agregar Articulo");
+        miBtnAddArticulo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem10ActionPerformed(evt);
+                miBtnAddArticuloActionPerformed(evt);
             }
         });
-        jMenu5.add(jMenuItem10);
+        jMenu5.add(miBtnAddArticulo);
 
-        jMenuItem11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/quitar icono.png"))); // NOI18N
-        jMenuItem11.setText("Quitar Artículo");
-        jMenuItem11.setEnabled(false);
-        jMenu5.add(jMenuItem11);
+        miBtnQuitarArticulo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/quitar icono.png"))); // NOI18N
+        miBtnQuitarArticulo.setText("Quitar Artículo");
+        miBtnQuitarArticulo.setEnabled(false);
+        jMenu5.add(miBtnQuitarArticulo);
 
         menuOpciones.add(jMenu5);
 
@@ -855,6 +976,11 @@ public class Main extends javax.swing.JFrame {
 
         sMenuConsulNota.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/consultar notas icono.png"))); // NOI18N
         sMenuConsulNota.setText("Consultar Nota");
+        sMenuConsulNota.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sMenuConsulNotaActionPerformed(evt);
+            }
+        });
         menuNotas.add(sMenuConsulNota);
 
         jMenuBar1.add(menuNotas);
@@ -982,89 +1108,28 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_fechaEntregaMouseReleased
 
     private void btnQuitarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuitarClienteActionPerformed
-        cliente = null;
-        quitarCliente();
-        txtNombres.requestFocus();
+        insertarNuevoCliente();
     }//GEN-LAST:event_btnQuitarClienteActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-        TableModel modelo = (TableModel) tableArticulos.getModel();
-        listaArticulos = actualizarListaArticulos(modelo, numeroArticulos);
-        if (txtAbono.getText() != null && !txtAbono.getText().equals("")) {
-            anticipo = new Abono(1, Double.parseDouble(txtAbono.getText()), "","no", "");
-            conexionNota = new ConexionNotas();
-            String fecha = null;
-            if (fechaEntrega.getDate() != null) {
-                fecha = df.format(fechaEntrega.getDate());
-            }
-
-            if (!listaArticulos.isEmpty()) {
-                if (cliente != null) {
-                    conexionNota.guardarNota(txtNombres.getText(), txtApPaterno.getText(), txtApMaterno.getText(), txtTelefono.getText(), fecha, anticipo, cmbTipoPago.getSelectedIndex(),txtAreaObservaciones.getText(), cliente.getId(), listaArticulos, txtDomicilio.getText());
-                } else {
-                    System.out.println("aqui");
-                    conexionNota.guardarNota(txtNombres.getText(), txtApPaterno.getText(), txtApMaterno.getText(), txtTelefono.getText(), fecha, anticipo, cmbTipoPago.getSelectedIndex(),txtAreaObservaciones.getText(), 1, listaArticulos, txtDomicilio.getText());
-                }
-                try {
-                    //Runtime.getRuntime().exec("c:/Users/luis-pc/Documents/NetBeansProjects/js/fichero.pdf");
-                    File obj = new File("c:/Users/Toshiba/Documents/NetBeansProjects/js/fichero.pdf");
-                    Desktop.getDesktop().open(obj);
-                } catch (IOException ex) {
-                    JOptionPane.showMessageDialog(null, "No se pudo abrir el archivo");
-                    System.out.println(ex.getMessage());
-                }
-            } else {
-                JOptionPane.showMessageDialog(null, "Tienes que agregar al menos un artículo a la nota");
-            }
-
-        } else {
-            JOptionPane.showMessageDialog(null, "Debes ingresar un anticipo antes de continuar");
-        }
-//        conexionNota = new ConexionNotas();
-//        String fecha=null;
-//        if(fechaEntrega.getDate()!=null){
-//        fecha = df.format(fechaEntrega.getDate());
-//        }
-//        
-//        if (!listaArticulos.isEmpty()) {
-//            
-//            if (cliente != null) {
-//                 for (int i = 0; i < listaArticulos.size(); i++) {
-//                     System.out.println(i+1+".- "+listaArticulos.get(i));
-//                     System.out.println(doubleValue(modelo.getValueAt(modelo.getRowCount()-1, 3)));
-//                }
-////                conexionNota.guardarNota(txtNombres.getText(), txtApPaterno.getText(), txtApMaterno.getText(), txtTelefono.getText(), fecha, Double.parseDouble(txtAbono.getText()), txtAreaObservaciones.getText(), cliente.getId(), actualizarListaArticulos(modelo, numeroArticulos));
-//            } else {
-//                for (int i = 0; i < listaArticulos.size(); i++) {
-//                     System.out.println(i+1+".- "+listaArticulos.get(i));
-//                     System.out.println(doubleValue(modelo.getValueAt(modelo.getRowCount()-1, 3)));
-//                }
-////                conexionNota.guardarNota(txtNombres.getText(), txtApPaterno.getText(), txtApMaterno.getText(), txtTelefono.getText(), fecha, Double.parseDouble(txtAbono.getText()), txtAreaObservaciones.getText(), 1, actualizarListaArticulos(modelo, numeroArticulos));
-//            }
-//            try {
-//                    //Runtime.getRuntime().exec("c:/Users/luis-pc/Documents/NetBeansProjects/js/fichero.pdf");
-//                    File obj = new File("c:/Users/luis-pc/Documents/NetBeansProjects/js/fichero.pdf");
-//                    Desktop.getDesktop().open(obj);
-//                } catch (IOException ex) {
-//                    JOptionPane.showMessageDialog(null, "No se pudo abrir el archivo");
-//                    System.out.println(ex.getMessage());
-//                }
-//        } else {
-//            JOptionPane.showMessageDialog(null, "Tienes que agregar al menos un artículo a la nota");
-//        }
+        registrarNota();
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private void sMenuLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sMenuLogOutActionPerformed
-        // TODO add your handling code here:
+        if (JOptionPane.showConfirmDialog(null, "¿Esta seguro que desea cerrar sesión para el "+usuario+" ?") == 0){
+            Login nuevo = new Login();
+            nuevo.setVisible(true);
+            this.dispose();
+        }
     }//GEN-LAST:event_sMenuLogOutActionPerformed
 
     private void tableArticulosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableArticulosMouseClicked
         clickEnTabla = true;
     }//GEN-LAST:event_tableArticulosMouseClicked
 
-    private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
+    private void miBtnAddArticuloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miBtnAddArticuloActionPerformed
         ponerFocoEnCeldaNueva();
-    }//GEN-LAST:event_jMenuItem10ActionPerformed
+    }//GEN-LAST:event_miBtnAddArticuloActionPerformed
 
     private void sMenuCancelNotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sMenuCancelNotaActionPerformed
         cancelarNotaActual();
@@ -1097,8 +1162,32 @@ public class Main extends javax.swing.JFrame {
     private void btnClienteGenericoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClienteGenericoActionPerformed
         cliente = miembroGenerico;
         cambiarCliente(cliente);
-        btnQuitarCliente.setEnabled(true);
     }//GEN-LAST:event_btnClienteGenericoActionPerformed
+
+    private void sMenuConsulNotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sMenuConsulNotaActionPerformed
+        VerNotas nuevo = new VerNotas();
+        nuevo.setVisible(true);
+    }//GEN-LAST:event_sMenuConsulNotaActionPerformed
+
+    private void tBtnCancelNotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tBtnCancelNotaActionPerformed
+        cancelarNotaActual();
+    }//GEN-LAST:event_tBtnCancelNotaActionPerformed
+
+    private void tBtnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tBtnRegistrarActionPerformed
+        registrarNota();
+    }//GEN-LAST:event_tBtnRegistrarActionPerformed
+
+    private void sMenuRegNotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sMenuRegNotaActionPerformed
+        registrarNota();
+    }//GEN-LAST:event_sMenuRegNotaActionPerformed
+
+    private void tBtnQuitarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tBtnQuitarClienteActionPerformed
+        insertarNuevoCliente();
+    }//GEN-LAST:event_tBtnQuitarClienteActionPerformed
+
+    private void sMenuQuitClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sMenuQuitClienteActionPerformed
+        insertarNuevoCliente();
+    }//GEN-LAST:event_sMenuQuitClienteActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1159,8 +1248,6 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem10;
-    private javax.swing.JMenuItem jMenuItem11;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -1180,6 +1267,8 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JMenu menuCliente;
     private javax.swing.JMenu menuNotas;
     private javax.swing.JMenu menuOpciones;
+    private javax.swing.JMenuItem miBtnAddArticulo;
+    private javax.swing.JMenuItem miBtnQuitarArticulo;
     private javax.swing.JMenuItem sMenuAcerca;
     private javax.swing.JMenuItem sMenuAddCliente;
     private javax.swing.JMenuItem sMenuCancelNota;

@@ -195,8 +195,8 @@ public class ConexionNotas extends Conexion {
         }
         return notas;
     }
-    public void guardarAbono(Abono abono){
-        String query = "insert into detalleabono values(?,?,?,?,default)";
+    public boolean guardarAbono(Abono abono){
+        String query = "insert into detalleabono values(?,?,?,?,default, 1)";
         try {
             PreparedStatement st = this.getConexion().prepareStatement(query);
             st.setInt(1, abono.getId());
@@ -212,10 +212,11 @@ public class ConexionNotas extends Conexion {
              st2.executeUpdate();
              generarPdf(abono.getId());
             }
+            return true;
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al conectar a la base de datos");
+            return false;
         }
-        
     }
     public ArrayList<Abono> obtenerAbonosPorId(int idNota){
         ArrayList<Abono> abonos = new ArrayList();
@@ -233,15 +234,17 @@ public class ConexionNotas extends Conexion {
         
         return abonos;
     }
-    public void terminarNota(Nota nota){
+    public boolean terminarNota(Nota nota){
         String query = "update notas set terminado = ? where idnota=?";
         try {
             PreparedStatement st = this.getConexion().prepareStatement(query);
             st.setString(1, "si");
             st.setInt(2, nota.getIdNota());
             st.executeUpdate();
+            return true;
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al conectar a la base de datos");
+            return false;
         }
         
     }
