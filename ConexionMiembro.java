@@ -104,4 +104,23 @@ public class ConexionMiembro extends Conexion{
         }
         return miembro;
     }
+    
+    public boolean cargarSaldo(double saldo, int id){
+        String query = "update miembros set saldo=saldo+? where idMiembro=?";
+        String query2 = "insert into transaccionesmiembro values(?, 'Recarga', ?, default, 1)";
+        try{
+            PreparedStatement st = this.getConexion().prepareStatement(query);
+            st.setDouble(1, saldo);
+            st.setInt(2, id);
+            st.executeUpdate();
+            PreparedStatement staux = this.getConexion().prepareStatement(query2);
+            staux.setInt(1, id);
+            staux.setDouble(2, saldo);
+            staux.executeUpdate();
+            return true;
+        }catch (SQLException ex){
+            System.out.println(ex.getMessage());
+            return false;
+        }
+    }
 }

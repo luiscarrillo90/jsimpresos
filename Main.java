@@ -450,6 +450,36 @@ public class Main extends javax.swing.JFrame {
         SeleccionarCliente nuevo = new SeleccionarCliente(this);
         nuevo.setVisible(true);
     }
+    
+    public void cargarSaldo(){
+        VerMiembros nuevo = new VerMiembros("cargar");
+        nuevo.setVisible(true);
+    }
+    
+    public void realizarCorteDeCaja(){
+        int resp = JOptionPane.showConfirmDialog(null, "¿Está seguro que quiere realizar el corte de caja?");
+        if (resp == 0) {
+            new ConexionCorteCaja().hacerCorte();
+            File obj = new File("c:/corte.pdf");
+            try {
+                Desktop.getDesktop().open(obj);
+            } catch (IOException ex) {
+                System.out.println(ex.getMessage());
+                JOptionPane.showMessageDialog(null, "Error al abrir el pdf");
+            }
+        }
+    }
+    
+    public void acercaDe(){
+        jdAcercaDe a = new jdAcercaDe(this, true);
+        a.setVisible(true);
+    }
+    
+    public void insertarClienteGenerico(){
+        cliente = miembroGenerico;
+        cambiarCliente(cliente);
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -469,6 +499,7 @@ public class Main extends javax.swing.JFrame {
         tBtnQuitarArticulo = new javax.swing.JButton();
         tBtnSeleccCliente = new javax.swing.JButton();
         tBtnQuitarCliente = new javax.swing.JButton();
+        tBtnClienteGenerico = new javax.swing.JButton();
         jSeparator4 = new javax.swing.JToolBar.Separator();
         tBtnCorteCaja = new javax.swing.JButton();
         tBtnCargarSaldo = new javax.swing.JButton();
@@ -518,6 +549,7 @@ public class Main extends javax.swing.JFrame {
         jMenu4 = new javax.swing.JMenu();
         sMenuSeleccCliente = new javax.swing.JMenuItem();
         sMenuQuitCliente = new javax.swing.JMenuItem();
+        smBtnClienteGenerico = new javax.swing.JMenuItem();
         jMenu5 = new javax.swing.JMenu();
         miBtnAddArticulo = new javax.swing.JMenuItem();
         miBtnQuitarArticulo = new javax.swing.JMenuItem();
@@ -612,6 +644,18 @@ public class Main extends javax.swing.JFrame {
             }
         });
         jToolBar1.add(tBtnQuitarCliente);
+
+        tBtnClienteGenerico.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/cliente.png"))); // NOI18N
+        tBtnClienteGenerico.setToolTipText("Insertar un cliente generico");
+        tBtnClienteGenerico.setFocusable(false);
+        tBtnClienteGenerico.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        tBtnClienteGenerico.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        tBtnClienteGenerico.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tBtnClienteGenericoActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(tBtnClienteGenerico);
         jToolBar1.add(jSeparator4);
 
         tBtnCorteCaja.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/corte.png"))); // NOI18N
@@ -619,6 +663,11 @@ public class Main extends javax.swing.JFrame {
         tBtnCorteCaja.setFocusable(false);
         tBtnCorteCaja.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         tBtnCorteCaja.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        tBtnCorteCaja.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tBtnCorteCajaActionPerformed(evt);
+            }
+        });
         jToolBar1.add(tBtnCorteCaja);
 
         tBtnCargarSaldo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/cargar saldo cliente.png"))); // NOI18N
@@ -626,6 +675,11 @@ public class Main extends javax.swing.JFrame {
         tBtnCargarSaldo.setFocusable(false);
         tBtnCargarSaldo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         tBtnCargarSaldo.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        tBtnCargarSaldo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tBtnCargarSaldoActionPerformed(evt);
+            }
+        });
         jToolBar1.add(tBtnCargarSaldo);
         jToolBar1.add(jSeparator5);
 
@@ -634,6 +688,11 @@ public class Main extends javax.swing.JFrame {
         jButton4.setFocusable(false);
         jButton4.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton4.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
         jToolBar1.add(jButton4);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Datos del cliente"));
@@ -989,6 +1048,15 @@ public class Main extends javax.swing.JFrame {
         });
         jMenu4.add(sMenuQuitCliente);
 
+        smBtnClienteGenerico.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/cliente icono.png"))); // NOI18N
+        smBtnClienteGenerico.setText("Insertar cliente generico");
+        smBtnClienteGenerico.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                smBtnClienteGenericoActionPerformed(evt);
+            }
+        });
+        jMenu4.add(smBtnClienteGenerico);
+
         menuOpciones.add(jMenu4);
 
         jMenu5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/articulos icono.png"))); // NOI18N
@@ -1034,6 +1102,11 @@ public class Main extends javax.swing.JFrame {
 
         sMenuCargSaldo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/cargar saldo cliente icono.png"))); // NOI18N
         sMenuCargSaldo.setText("Cargar Saldo");
+        sMenuCargSaldo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sMenuCargSaldoActionPerformed(evt);
+            }
+        });
         menuCliente.add(sMenuCargSaldo);
 
         sMenuAddCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/agregar cliente icono.png"))); // NOI18N
@@ -1192,8 +1265,7 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_sMenuElimClienteActionPerformed
 
     private void btnClienteGenericoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClienteGenericoActionPerformed
-        cliente = miembroGenerico;
-        cambiarCliente(cliente);
+        
     }//GEN-LAST:event_btnClienteGenericoActionPerformed
 
     private void sMenuConsulNotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sMenuConsulNotaActionPerformed
@@ -1222,8 +1294,7 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_sMenuQuitClienteActionPerformed
 
     private void sMenuAcercaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sMenuAcercaActionPerformed
-        jdAcercaDe a = new jdAcercaDe(this, true);
-        a.setVisible(true);
+        acercaDe();
     }//GEN-LAST:event_sMenuAcercaActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
@@ -1232,17 +1303,7 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        int resp = JOptionPane.showConfirmDialog(null, "¿Está seguro que quiere realizar el corte de caja?");
-        if (resp == 0) {
-            new ConexionCorteCaja().hacerCorte();
-            File obj = new File("c:/corte.pdf");
-            try {
-                Desktop.getDesktop().open(obj);
-            } catch (IOException ex) {
-                System.out.println(ex.getMessage());
-                JOptionPane.showMessageDialog(null, "Error al abrir el pdf");
-            }
-        }
+        realizarCorteDeCaja();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void miBtnQuitarArticuloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miBtnQuitarArticuloActionPerformed
@@ -1252,6 +1313,30 @@ public class Main extends javax.swing.JFrame {
     private void sMenuSeleccClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sMenuSeleccClienteActionPerformed
         seleccionarClienteMiembro();
     }//GEN-LAST:event_sMenuSeleccClienteActionPerformed
+
+    private void sMenuCargSaldoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sMenuCargSaldoActionPerformed
+        cargarSaldo();
+    }//GEN-LAST:event_sMenuCargSaldoActionPerformed
+
+    private void tBtnCargarSaldoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tBtnCargarSaldoActionPerformed
+        cargarSaldo();
+    }//GEN-LAST:event_tBtnCargarSaldoActionPerformed
+
+    private void tBtnCorteCajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tBtnCorteCajaActionPerformed
+        realizarCorteDeCaja();
+    }//GEN-LAST:event_tBtnCorteCajaActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        acercaDe();
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void tBtnClienteGenericoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tBtnClienteGenericoActionPerformed
+        insertarClienteGenerico();
+    }//GEN-LAST:event_tBtnClienteGenericoActionPerformed
+
+    private void smBtnClienteGenericoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_smBtnClienteGenericoActionPerformed
+        insertarClienteGenerico();
+    }//GEN-LAST:event_smBtnClienteGenericoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1344,9 +1429,11 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JMenuItem sMenuQuitCliente;
     private javax.swing.JMenuItem sMenuRegNota;
     private javax.swing.JMenuItem sMenuSeleccCliente;
+    private javax.swing.JMenuItem smBtnClienteGenerico;
     private javax.swing.JButton tBtnAddArt;
     private javax.swing.JButton tBtnCancelNota;
     private javax.swing.JButton tBtnCargarSaldo;
+    private javax.swing.JButton tBtnClienteGenerico;
     private javax.swing.JButton tBtnCorteCaja;
     private javax.swing.JButton tBtnQuitarArticulo;
     private javax.swing.JButton tBtnQuitarCliente;

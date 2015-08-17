@@ -34,6 +34,8 @@ public class VerMiembros extends javax.swing.JFrame {
             btnAccion.setText("Editar Miembro");
         }else if (accion == "eliminar") {
             btnAccion.setText("Eliminar Miembro");
+        }else if (accion == "cargar"){
+            btnAccion.setText("Cargar Saldo");
         }
     }
 
@@ -222,7 +224,7 @@ public class VerMiembros extends javax.swing.JFrame {
         }else if (btnAccion.getText() == "Eliminar Miembro") {
             if(tableMiembros.getSelectedRow()>-1) {
             Miembro aux = null;
-            if(txtBuscar.getText().equals("")||txtBuscar.getText()!=null){
+            if(txtBuscar.getText().equals("")||txtBuscar.getText()==null){
                 aux = miembros.get(tableMiembros.getSelectedRow());
             }else{
                 aux = filtro.get(tableMiembros.getSelectedRow());
@@ -239,6 +241,23 @@ public class VerMiembros extends javax.swing.JFrame {
         }else{
             JOptionPane.showMessageDialog(null, "No has elegido ningún miembro de la tabla");
         }
+        }else if (btnAccion.getText() == "Cargar Saldo") {
+            Miembro aux = null;
+            if(txtBuscar.getText().equals("")||txtBuscar.getText()==null){
+                aux = miembros.get(tableMiembros.getSelectedRow());
+            }else{
+                aux = filtro.get(tableMiembros.getSelectedRow());
+            }
+            Double saldo = Double.parseDouble(JOptionPane.showInputDialog("¿Cuánto saldo desea cargar a la tarjeta del cliente "+aux.getNombres()+" "+aux.getApPaterno()+" ?"));
+            if ( saldo > 0 ) {
+                if(conexion.cargarSaldo(saldo, aux.getId())){
+                    JOptionPane.showMessageDialog(null, "El saldo ha sido agregado exitosamente");
+               }else{
+                    JOptionPane.showMessageDialog(null, "Ocurrió un error al agregar el saldo a la tajeta del cliente.");
+               }
+            }else{
+                JOptionPane.showMessageDialog(null, "Por favor introduzca una cantidad valida");
+            } 
         }
     }//GEN-LAST:event_btnAccionActionPerformed
 
