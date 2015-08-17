@@ -15,12 +15,14 @@ public class Abono {
     private String tipoPago;
     private String contabilizado;
     private String fecha;
-    public Abono(int id, double monto, String tipoPago, String contabilizado, String fecha) {
+    private int idCorte;
+    public Abono(int id, double monto, String tipoPago, String contabilizado, String fecha, int idCorte) {
         this.id = id;
         this.monto = monto;
         this.tipoPago = tipoPago;
         this.contabilizado = contabilizado;
         this.fecha = fecha;
+        this.idCorte = idCorte;
     }
     public String getFecha(){
         return fecha;
@@ -40,6 +42,10 @@ public class Abono {
     public String getContabilizado() {
         return contabilizado;
     }
+    
+    public int getIdCorte(){
+        return idCorte;
+    }
 
     public void setId(int id) {
         this.id = id;
@@ -55,6 +61,9 @@ public class Abono {
 
     public void setContabilizado(String contabilizado) {
         this.contabilizado = contabilizado;
+    }
+    public void setIdCorte(int idCorte){
+        this.idCorte = idCorte;
     }
     
 }

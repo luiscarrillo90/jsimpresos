@@ -110,7 +110,7 @@ public class ConexionNotas extends Conexion {
                     stAux.setInt(4, articulos.get(i).getCantidad());
                     stAux.executeUpdate();
                 }
-                String queryAbono = "insert into detalleabono values(?,?,?,default,default,1)";
+                String queryAbono = "insert into detalleabono values(?,?,?,default,default, default)";
                 PreparedStatement stAbono = this.getConexion().prepareStatement(queryAbono);
                 stAbono.setInt(1, clave);
                 stAbono.setDouble(2, anticipo.getMonto());
@@ -161,7 +161,7 @@ public class ConexionNotas extends Conexion {
             rs = st.executeQuery();
             ArrayList<Abono> abonos = new ArrayList();
             while (rs.next()) {
-                abonos.add(new Abono(rs.getInt(1), rs.getDouble(2), rs.getString(3), rs.getString(4), Fechas.convertirFecha(rs.getString(5))));
+                abonos.add(new Abono(rs.getInt(1), rs.getDouble(2), rs.getString(3), rs.getString(4), Fechas.convertirFecha(rs.getString(5)),rs.getInt(6)));
             }
             nota.setAbonos(abonos);
         } catch (SQLException ex) {
@@ -196,7 +196,7 @@ public class ConexionNotas extends Conexion {
         return notas;
     }
     public boolean guardarAbono(Abono abono){
-        String query = "insert into detalleabono values(?,?,?,?,default, 1)";
+        String query = "insert into detalleabono values(?,?,?,?,default, default)";
         try {
             PreparedStatement st = this.getConexion().prepareStatement(query);
             st.setInt(1, abono.getId());
@@ -226,7 +226,7 @@ public class ConexionNotas extends Conexion {
             st.setInt(1, idNota);
             ResultSet rs = st.executeQuery();
             while(rs.next()){
-                abonos.add(new Abono(rs.getInt(1), rs.getDouble(2), rs.getString(3), rs.getString(4), Fechas.convertirFecha(rs.getString(5))));
+                abonos.add(new Abono(rs.getInt(1), rs.getDouble(2), rs.getString(3), rs.getString(4), Fechas.convertirFecha(rs.getString(5)),rs.getInt(6)));
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al cargar los pagos");
@@ -253,7 +253,7 @@ public class ConexionNotas extends Conexion {
         Nota nota = this.getNotaPorId(idNota);
         FileOutputStream ficheroPdf;
         try {
-            ficheroPdf = new FileOutputStream("fichero.pdf");
+            ficheroPdf = new FileOutputStream("c:/fichero.pdf");
             PdfWriter.getInstance(documento, ficheroPdf).setInitialLeading(20);
             documento.setMargins(0, 0, 0, 0);
             documento.open();

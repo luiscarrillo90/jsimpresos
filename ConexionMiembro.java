@@ -34,6 +34,8 @@ public class ConexionMiembro extends Conexion{
     }
     public void guardarMiembro(Miembro miembro){
         String query = "insert into miembros values(default,?,?,?,?,?,?,200, default, ?,?)";
+        String query2 = "insert into transaccionesmiembro values(?, 'Registro', 200, default, 1)";
+        int clave = 0;
         try {
             PreparedStatement st = this.getConexion().prepareStatement(query);
             st.setString(1, miembro.getNumeroTarjeta());
@@ -45,6 +47,14 @@ public class ConexionMiembro extends Conexion{
             st.setString(7, miembro.getNombreUsuario());
             st.setString(8, miembro.getPassword());
             st.executeUpdate();
+            st = this.getConexion().prepareStatement("select last_insert_id()");
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                clave = rs.getInt("last_insert_id()");
+            }
+            PreparedStatement staux = this.getConexion().prepareStatement(query2);
+            staux.setInt(1, clave);
+            staux.executeUpdate();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al guardar al cliente");
         }

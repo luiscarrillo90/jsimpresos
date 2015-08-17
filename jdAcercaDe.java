@@ -43,7 +43,7 @@ public class jdAcercaDe extends javax.swing.JDialog {
         jLabel15 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Acerca de Vende-Soft.");
+        setTitle("Acerca de...");
 
         jPanel1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
 
@@ -69,7 +69,7 @@ public class jdAcercaDe extends javax.swing.JDialog {
 
         jLabel10.setText("Si detecta algun error o bug en el sistema, por favor, pongase en contacto con");
 
-        jLabel11.setText("medio de los datos que se encuentran situados en la parte de arriba");
+        jLabel11.setText("nosotros al telefono (044)6271328373 para el reporte de estos o para aclarar dudas.");
 
         jLabel12.setText("Todos los derechos reservados 2015 Weber Inc.");
 
@@ -128,7 +128,6 @@ public class jdAcercaDe extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel15)
                         .addGap(175, 175, 175)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel9)

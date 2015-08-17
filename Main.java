@@ -386,7 +386,7 @@ public class Main extends javax.swing.JFrame {
     
     public void registrarNota(){
         if (txtAbono.getText() != null && !txtAbono.getText().equals("")) {
-            anticipo = new Abono(1, Double.parseDouble(txtAbono.getText()), "","no", "");
+            anticipo = new Abono(1, Double.parseDouble(txtAbono.getText()), "","no", "", 1);
             conexionNota = new ConexionNotas();
             String fecha = null;
             if (fechaEntrega.getDate() != null) {
@@ -404,7 +404,7 @@ public class Main extends javax.swing.JFrame {
                 }
                 try {
                     //Runtime.getRuntime().exec("c:/Users/luis-pc/Documents/NetBeansProjects/js/fichero.pdf");
-                    File obj = new File("c:/Users/Toshiba/Documents/NetBeansProjects/js/fichero.pdf");
+                    File obj = new File("c:/fichero.pdf");
                     Desktop.getDesktop().open(obj);
                 } catch (IOException ex) {
                     JOptionPane.showMessageDialog(null, "No se pudo abrir el archivo");
@@ -423,6 +423,32 @@ public class Main extends javax.swing.JFrame {
         cliente = null;
         quitarCliente();
         txtNombres.requestFocus();
+    }
+    
+    public void quitarArticulo(){
+        TableModel modelo = (TableModel) tableArticulos.getModel();
+        
+        if(tableArticulos.getSelectedRow()+1 == tableArticulos.getRowCount()){
+            JOptionPane.showMessageDialog(null, "No puedes eliminar el articulo por que aun no ha sido añadido, intenta editarlo");
+            ponerFocoEnCeldaNueva();
+        }else if (((Number)modelo.getValueAt(tableArticulos.getRowCount()-1, 3)).doubleValue() != 0.0) {
+            JOptionPane.showMessageDialog(null, "No puedes eliminar el articulo seleccionado porque aun no ha sido añadido. Termina de agregarlo para poder eliminar articulos.");
+            ponerFocoEnCeldaNueva();
+        }
+        else{  
+                int borrar = JOptionPane.showConfirmDialog(null, "¿Estás seguro que deseas quitar el artículo de la lista?");
+                if (borrar == 0) {
+                    bandera = false;
+                    quitarArticulo(modelo, tableArticulos.getSelectedRow());
+                    model.removeRow(tableArticulos.getSelectedRow());
+                    ponerFocoEnCeldaNueva();
+                }
+        }
+    }
+    
+    public void seleccionarClienteMiembro(){
+        SeleccionarCliente nuevo = new SeleccionarCliente(this);
+        nuevo.setVisible(true);
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -922,10 +948,20 @@ public class Main extends javax.swing.JFrame {
 
         jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/corte icono.png"))); // NOI18N
         jMenuItem1.setText("Realizar corte de caja");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
         jMenu1.add(jMenuItem1);
 
         jMenuItem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/consultar cortes icono.png"))); // NOI18N
         jMenuItem2.setText("Consultar cortes de caja");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
         jMenu1.add(jMenuItem2);
 
         menuOpciones.add(jMenu1);
@@ -936,6 +972,11 @@ public class Main extends javax.swing.JFrame {
 
         sMenuSeleccCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/buscar cliente icono.png"))); // NOI18N
         sMenuSeleccCliente.setText("Seleccionar Cliente");
+        sMenuSeleccCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sMenuSeleccClienteActionPerformed(evt);
+            }
+        });
         jMenu4.add(sMenuSeleccCliente);
 
         sMenuQuitCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/insertar cliente icono.png"))); // NOI18N
@@ -965,6 +1006,11 @@ public class Main extends javax.swing.JFrame {
         miBtnQuitarArticulo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/quitar icono.png"))); // NOI18N
         miBtnQuitarArticulo.setText("Quitar Artículo");
         miBtnQuitarArticulo.setEnabled(false);
+        miBtnQuitarArticulo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miBtnQuitarArticuloActionPerformed(evt);
+            }
+        });
         jMenu5.add(miBtnQuitarArticulo);
 
         menuOpciones.add(jMenu5);
@@ -1075,32 +1121,14 @@ public class Main extends javax.swing.JFrame {
      que contiene una tabla con los cliente de la bd y un pequeño "buscar"
      */
     private void btnClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClienteActionPerformed
-        SeleccionarCliente nuevo = new SeleccionarCliente(this);
-        nuevo.setVisible(true);
+        seleccionarClienteMiembro();
     }//GEN-LAST:event_btnClienteActionPerformed
     /*
      Se invoca al presionar el botón de quitar artículo, cambia la bandera a falso
      la cual se utiliza en el evento de la tabla de artículos.
      */
     private void btnQuitarArticuloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuitarArticuloActionPerformed
-        TableModel modelo = (TableModel) tableArticulos.getModel();
-        
-        if(tableArticulos.getSelectedRow()+1 == tableArticulos.getRowCount()){
-            JOptionPane.showMessageDialog(null, "No puedes eliminar el articulo por que aun no ha sido añadido, intenta editarlo");
-            ponerFocoEnCeldaNueva();
-        }else if (((Number)modelo.getValueAt(tableArticulos.getRowCount()-1, 3)).doubleValue() != 0.0) {
-            JOptionPane.showMessageDialog(null, "No puedes eliminar el articulo seleccionado porque aun no ha sido añadido. Termina de agregarlo para poder eliminar articulos.");
-            ponerFocoEnCeldaNueva();
-        }
-        else{  
-                int borrar = JOptionPane.showConfirmDialog(null, "¿Estás seguro que deseas quitar el artículo de la lista?");
-                if (borrar == 0) {
-                    bandera = false;
-                    quitarArticulo(modelo, tableArticulos.getSelectedRow());
-                    model.removeRow(tableArticulos.getSelectedRow());
-                    ponerFocoEnCeldaNueva();
-                }
-        }
+        quitarArticulo();
     }//GEN-LAST:event_btnQuitarArticuloActionPerformed
 
     private void tableArticulosAncestorMoved(java.awt.event.HierarchyEvent evt) {//GEN-FIRST:event_tableArticulosAncestorMoved
@@ -1197,6 +1225,33 @@ public class Main extends javax.swing.JFrame {
         jdAcercaDe a = new jdAcercaDe(this, true);
         a.setVisible(true);
     }//GEN-LAST:event_sMenuAcercaActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        VerCortes nuevo = new VerCortes();
+        nuevo.setVisible(true);
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        int resp = JOptionPane.showConfirmDialog(null, "¿Está seguro que quiere realizar el corte de caja?");
+        if (resp == 0) {
+            new ConexionCorteCaja().hacerCorte();
+            File obj = new File("c:/corte.pdf");
+            try {
+                Desktop.getDesktop().open(obj);
+            } catch (IOException ex) {
+                System.out.println(ex.getMessage());
+                JOptionPane.showMessageDialog(null, "Error al abrir el pdf");
+            }
+        }
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void miBtnQuitarArticuloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miBtnQuitarArticuloActionPerformed
+        quitarArticulo();
+    }//GEN-LAST:event_miBtnQuitarArticuloActionPerformed
+
+    private void sMenuSeleccClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sMenuSeleccClienteActionPerformed
+        seleccionarClienteMiembro();
+    }//GEN-LAST:event_sMenuSeleccClienteActionPerformed
 
     /**
      * @param args the command line arguments

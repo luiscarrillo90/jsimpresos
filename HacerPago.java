@@ -256,12 +256,12 @@ public class HacerPago extends javax.swing.JFrame {
                 if(Double.parseDouble(txtCantidad.getText())<=saldoCuenta){
                     if(cmbTipoPago.getSelectedIndex()==1){
                         if(nota.getCliente().getSaldo()>=saldoCuenta){
-                            nuevo = new Abono(nota.getIdNota(), Double.parseDouble(txtCantidad.getText()),"Tarjeta","no","");
+                            nuevo = new Abono(nota.getIdNota(), Double.parseDouble(txtCantidad.getText()),"Tarjeta","no","", 1);
                         }else{
                             JOptionPane.showMessageDialog(null, "El saldo de la tarjeta no es suficiente");
                         }
                     }else{
-                        nuevo = new Abono(nota.getIdNota(), Double.parseDouble(txtCantidad.getText()),"Efectivo","no","");
+                        nuevo = new Abono(nota.getIdNota(), Double.parseDouble(txtCantidad.getText()),"Efectivo","no","", 1);
                     }
                     ConexionNotas conexion = new ConexionNotas();
                     if (conexion.guardarAbono(nuevo)) {
