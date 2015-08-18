@@ -37,6 +37,7 @@ public class ConexionMiembro extends Conexion{
         String query2 = "insert into transaccionesmiembro values(?, 'Registro', 200, default, 1)";
         int clave = 0;
         try {
+            this.getConexion().setAutoCommit(false);
             PreparedStatement st = this.getConexion().prepareStatement(query);
             st.setString(1, miembro.getNumeroTarjeta());
             st.setString(2, miembro.getNombres());
@@ -55,6 +56,7 @@ public class ConexionMiembro extends Conexion{
             PreparedStatement staux = this.getConexion().prepareStatement(query2);
             staux.setInt(1, clave);
             staux.executeUpdate();
+            this.getConexion().commit();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al guardar al cliente");
         }
@@ -109,6 +111,7 @@ public class ConexionMiembro extends Conexion{
         String query = "update miembros set saldo=saldo+? where idMiembro=?";
         String query2 = "insert into transaccionesmiembro values(?, 'Recarga', ?, default, 1)";
         try{
+            this.getConexion().setAutoCommit(false);
             PreparedStatement st = this.getConexion().prepareStatement(query);
             st.setDouble(1, saldo);
             st.setInt(2, id);
@@ -117,6 +120,7 @@ public class ConexionMiembro extends Conexion{
             staux.setInt(1, id);
             staux.setDouble(2, saldo);
             staux.executeUpdate();
+            this.getConexion().commit();
             return true;
         }catch (SQLException ex){
             System.out.println(ex.getMessage());

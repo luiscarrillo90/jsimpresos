@@ -34,6 +34,7 @@ public class ConexionCorteCaja extends Conexion {
     public void hacerCorte() {
         String query1 = "insert into cortesdecaja values(default, default)";
         try {
+            this.getConexion().setAutoCommit(false);
             PreparedStatement st1 = this.getConexion().prepareStatement(query1);
             st1.execute();
             st1 = this.getConexion().prepareStatement("select last_insert_id()");
@@ -50,6 +51,7 @@ public class ConexionCorteCaja extends Conexion {
             PreparedStatement st3 = this.getConexion().prepareStatement(query3);
             st3.setInt(1, clave);
             st3.executeUpdate();
+            this.getConexion().commit();
             crearPdf(clave);
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());

@@ -41,6 +41,7 @@ public class ConexionNotas extends Conexion {
         double resto = 0;
         String tipoPago = "Efectivo";
         try {
+            this.getConexion().setAutoCommit(false);
             if (tipoAbono == 1) {
                 tipoPago = "Tarjeta";
                 String consulta = "select * from miembros where idMiembro =?";
@@ -118,7 +119,7 @@ public class ConexionNotas extends Conexion {
                 stAbono.executeUpdate();
                 this.generarPdf(clave);
             }
-
+           this.getConexion().commit();     
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al conectar al servidor");
             System.out.println(ex.getMessage());
@@ -198,6 +199,7 @@ public class ConexionNotas extends Conexion {
     public boolean guardarAbono(Abono abono){
         String query = "insert into detalleabono values(?,?,?,?,default, default)";
         try {
+            this.getConexion().setAutoCommit(false);
             PreparedStatement st = this.getConexion().prepareStatement(query);
             st.setInt(1, abono.getId());
             st.setDouble(2, abono.getMonto());
@@ -212,6 +214,7 @@ public class ConexionNotas extends Conexion {
              st2.executeUpdate();
              generarPdf(abono.getId());
             }
+            this.getConexion().commit();
             return true;
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al conectar a la base de datos");

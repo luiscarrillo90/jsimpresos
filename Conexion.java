@@ -16,7 +16,10 @@ import javax.swing.JOptionPane;
  */
 public class Conexion {
     private String servidor = "jdbc:mysql://localhost/jsdb";
+//    private String servidor = "jdbc:mysql://sql2.freesqldatabase.com:3306/sql287245";
+//    private String usuario = "sql287245";
     private String usuario = "root";
+//    private String pass = "qQ5!rG5!";
     private String pass = "root";
     private String driver = "com.mysql.jdbc.Driver";
     private Connection conexion;
