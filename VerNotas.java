@@ -19,6 +19,8 @@ public class VerNotas extends javax.swing.JFrame {
 
     private ArrayList<Nota> notas;
     private ArrayList<Nota> filtro;
+    private int tipoFiltro = 0;
+
     /**
      * Creates new form VerNotas
      */
@@ -28,11 +30,8 @@ public class VerNotas extends javax.swing.JFrame {
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         notas = (new ConexionNotas()).obtenerVistaNotas();
         Collections.reverse(notas);
-        String[] columnas = {"Fecha", "Nombre del cliente", "Terminada"};
-        TableColumnModel modeloColumna = tableNotas.getColumnModel();
-        modeloColumna.getColumn(1).setPreferredWidth(100);
-        modeloColumna.getColumn(2).setPreferredWidth(200);
-        modeloColumna.getColumn(3).setPreferredWidth(50);
+        String[] columnas = {"Folio", "Fecha", "Nombre del cliente", "Terminada"};
+
         DefaultTableModel model1 = new DefaultTableModel(columnas, 0) {
             @Override
             public boolean isCellEditable(int row, int col) {
@@ -40,16 +39,19 @@ public class VerNotas extends javax.swing.JFrame {
             }
         };
         for (int i = 0; i < notas.size(); i++) {
-            Object[] obj = {notas.get(i).getFecha(), notas.get(i).getNombres() + " " + notas.get(i).getApPaterno() + " " + notas.get(i).getApMaterno(), notas.get(i).getTerminado()};
+            Object[] obj = {notas.get(i).getIdNota(), notas.get(i).getFecha(), notas.get(i).getNombres() + " " + notas.get(i).getApPaterno() + " " + notas.get(i).getApMaterno(), notas.get(i).getTerminado()};
             model1.addRow(obj);
         }
         tableNotas.setModel(model1);
-        modeloColumna.getColumn(0).setPreferredWidth(100);
-        modeloColumna.getColumn(1).setPreferredWidth(200);
-        modeloColumna.getColumn(2).setPreferredWidth(50);
+        TableColumnModel modeloColumna = tableNotas.getColumnModel();
+        modeloColumna.getColumn(0).setPreferredWidth(50);
+        modeloColumna.getColumn(1).setPreferredWidth(100);
+        modeloColumna.getColumn(2).setPreferredWidth(200);
+        modeloColumna.getColumn(3).setPreferredWidth(50);
     }
+
     public void buscar() {
-        String[] columnas = {"Fecha", "Cliente","Terminado"};
+        String[] columnas = {"Folio", "Fecha", "Cliente", "Terminado"};
         DefaultTableModel model1 = new DefaultTableModel(columnas, 0) {
             @Override
             public boolean isCellEditable(int row, int col) {
@@ -59,27 +61,51 @@ public class VerNotas extends javax.swing.JFrame {
         if (txtBuscar.getText().equals("") || txtBuscar.getText() == null) {
 
             for (int i = 0; i < notas.size(); i++) {
-                Object[] obj = {notas.get(i).getFecha(),notas.get(i).getNombres() + " " + notas.get(i).getApPaterno() + " " + notas.get(i).getApMaterno(), notas.get(i).getTerminado()};
+                Object[] obj = {notas.get(i).getIdNota(), notas.get(i).getFecha(), notas.get(i).getNombres() + " " + notas.get(i).getApPaterno() + " " + notas.get(i).getApMaterno(), notas.get(i).getTerminado()};
                 model1.addRow(obj);
             }
             tableNotas.setModel(model1);
         } else {
-            filtro = new ArrayList();
-            for (int i = 0; i < notas.size(); i++) {
-                String nombreCompleto = notas.get(i).getNombres() + " " + notas.get(i).getApPaterno() + " " + notas.get(i).getApMaterno();
-                if (nombreCompleto.length() >= txtBuscar.getText().length()) {
-                    String nombreAux = nombreCompleto.substring(0, txtBuscar.getText().length());
-                    if (nombreAux.compareToIgnoreCase(txtBuscar.getText()) == 0) {
-                        filtro.add(notas.get(i));
-                        Object[] obj = {notas.get(i).getFecha(),notas.get(i).getNombres() + " " + notas.get(i).getApPaterno() + " " + notas.get(i).getApMaterno(), notas.get(i).getTerminado()};
-                        model1.addRow(obj);
+            if (tipoFiltro == 0) {
+                filtro = new ArrayList();
+                for (int i = 0; i < notas.size(); i++) {
+                    String nombreCompleto = notas.get(i).getNombres() + " " + notas.get(i).getApPaterno() + " " + notas.get(i).getApMaterno();
+                    if (nombreCompleto.length() >= txtBuscar.getText().length()) {
+                        String nombreAux = nombreCompleto.substring(0, txtBuscar.getText().length());
+                        if (nombreAux.compareToIgnoreCase(txtBuscar.getText()) == 0) {
+                            filtro.add(notas.get(i));
+                            Object[] obj = {notas.get(i).getIdNota(), notas.get(i).getFecha(), notas.get(i).getNombres() + " " + notas.get(i).getApPaterno() + " " + notas.get(i).getApMaterno(), notas.get(i).getTerminado()};
+                            model1.addRow(obj);
+                        }
                     }
+
+                }
+            } else {
+                filtro = new ArrayList();
+                for (int i = 0; i < notas.size(); i++) {
+                    String folio = notas.get(i).getIdNota()+"";
+                    if (folio.length() >= txtBuscar.getText().length()) {
+                        String folioAux = folio.substring(0, txtBuscar.getText().length());
+                        if (folioAux.compareToIgnoreCase(txtBuscar.getText()) == 0) {
+                            filtro.add(notas.get(i));
+                            Object[] obj = {notas.get(i).getIdNota(), notas.get(i).getFecha(), notas.get(i).getNombres() + " " + notas.get(i).getApPaterno() + " " + notas.get(i).getApMaterno(), notas.get(i).getTerminado()};
+                            model1.addRow(obj);
+                        }
+                    }
+
                 }
 
             }
+
             tableNotas.setModel(model1);
         }
+        TableColumnModel modeloColumna = tableNotas.getColumnModel();
+        modeloColumna.getColumn(0).setPreferredWidth(50);
+        modeloColumna.getColumn(1).setPreferredWidth(100);
+        modeloColumna.getColumn(2).setPreferredWidth(200);
+        modeloColumna.getColumn(3).setPreferredWidth(50);
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -94,6 +120,8 @@ public class VerNotas extends javax.swing.JFrame {
         tableNotas = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         txtBuscar = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        cmbFiltro = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Consultar Notas");
@@ -118,11 +146,20 @@ public class VerNotas extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tableNotas);
 
-        jLabel1.setText("Buscar por cliente: ");
+        jLabel1.setText("Buscar: ");
 
         txtBuscar.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtBuscarKeyReleased(evt);
+            }
+        });
+
+        jLabel2.setText("Filtrar: ");
+
+        cmbFiltro.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Por nombre", "Por folio" }));
+        cmbFiltro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbFiltroActionPerformed(evt);
             }
         });
 
@@ -132,25 +169,36 @@ public class VerNotas extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 668, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtBuscar)))
+                        .addComponent(txtBuscar))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cmbFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(4, 4, 4)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cmbFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 22, Short.MAX_VALUE))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -166,8 +214,8 @@ public class VerNotas extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -178,16 +226,22 @@ public class VerNotas extends javax.swing.JFrame {
     }//GEN-LAST:event_txtBuscarKeyReleased
 
     private void tableNotasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableNotasMouseClicked
-        if(txtBuscar.getText().equals("")||txtBuscar.getText()==null){
-            System.out.println(notas.get(tableNotas.getSelectedRow()).getNombres()+" "+notas.get(tableNotas.getSelectedRow()).getIdNota());
+        if (txtBuscar.getText().equals("") || txtBuscar.getText() == null) {
+            System.out.println(notas.get(tableNotas.getSelectedRow()).getNombres() + " " + notas.get(tableNotas.getSelectedRow()).getIdNota());
             JFrame nuevo = new VerNota(notas.get(tableNotas.getSelectedRow()).getIdNota());
             nuevo.setVisible(true);
-        }else{
-            System.out.println(filtro.get(tableNotas.getSelectedRow()).getNombres()+" "+filtro.get(tableNotas.getSelectedRow()).getIdNota());
+        } else {
+            System.out.println(filtro.get(tableNotas.getSelectedRow()).getNombres() + " " + filtro.get(tableNotas.getSelectedRow()).getIdNota());
             JFrame nuevo = new VerNota(filtro.get(tableNotas.getSelectedRow()).getIdNota());
             nuevo.setVisible(true);
         }
     }//GEN-LAST:event_tableNotasMouseClicked
+
+    private void cmbFiltroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbFiltroActionPerformed
+        tipoFiltro = cmbFiltro.getSelectedIndex();
+        txtBuscar.setText("");
+        buscar();
+    }//GEN-LAST:event_cmbFiltroActionPerformed
 
     /**
      * @param args the command line arguments
@@ -226,7 +280,9 @@ public class VerNotas extends javax.swing.JFrame {
 //    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox cmbFiltro;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tableNotas;

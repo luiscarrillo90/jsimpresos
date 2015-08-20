@@ -342,8 +342,8 @@ public class Main extends javax.swing.JFrame {
         activarQuitarArticulo(false);
     }
     
-    public void cancelarNotaActual(boolean reiniciar){
-        if (reiniciar) {
+    public void cancelarNotaActual(){
+        if (JOptionPane.showConfirmDialog(null, "¿Esta seguro que desea cancelar la nota actual?") == 0) {
             listaArticulos = new <Articulo>ArrayList();
             numeroArticulos = 0;
             columnaFinal = false;
@@ -351,16 +351,6 @@ public class Main extends javax.swing.JFrame {
             quitarCliente();
             limpiarTablaArticulos();
             limpiarDatosExtraDeLaNota();
-        }else{
-            if (JOptionPane.showConfirmDialog(null, "¿Esta seguro que desea cancelar la nota actual?") == 0) {
-                listaArticulos = new <Articulo>ArrayList();
-                numeroArticulos = 0;
-                columnaFinal = false;
-                clickEnTabla = false;
-                quitarCliente();
-                limpiarTablaArticulos();
-                limpiarDatosExtraDeLaNota();
-            }
         }
     }
     
@@ -396,7 +386,8 @@ public class Main extends javax.swing.JFrame {
     
     public void registrarNota(){
         if (txtAbono.getText() != null && !txtAbono.getText().equals("")) {
-            anticipo = new Abono(1, Double.parseDouble(txtAbono.getText()), "","no", "", 1);
+            if(isNumber(txtAbono.getText())){
+                anticipo = new Abono(1, Double.parseDouble(txtAbono.getText()), "","no", "", 1);
             conexionNota = new ConexionNotas();
             String fecha = null;
             if (fechaEntrega.getDate() != null) {
@@ -407,10 +398,10 @@ public class Main extends javax.swing.JFrame {
             if (!listaArticulos.isEmpty()) {
                 if (cliente != null) {
                     conexionNota.guardarNota(txtNombres.getText(), txtApPaterno.getText(), txtApMaterno.getText(), txtTelefono.getText(), fecha, anticipo, cmbTipoPago.getSelectedIndex(),txtAreaObservaciones.getText(), cliente.getId(), listaArticulos, txtDomicilio.getText());
-                    cancelarNotaActual(true);
+                    cancelarNotaActual();
                 } else {
                     conexionNota.guardarNota(txtNombres.getText(), txtApPaterno.getText(), txtApMaterno.getText(), txtTelefono.getText(), fecha, anticipo, cmbTipoPago.getSelectedIndex(),txtAreaObservaciones.getText(), 1, listaArticulos, txtDomicilio.getText());
-                    cancelarNotaActual(true);
+                    cancelarNotaActual();
                 }
                 try {
                     //Runtime.getRuntime().exec("c:/Users/luis-pc/Documents/NetBeansProjects/js/fichero.pdf");
@@ -420,8 +411,13 @@ public class Main extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(null, "No se pudo abrir el archivo");
                     System.out.println(ex.getMessage());
                 }
-            } else {
+            }else{
                 JOptionPane.showMessageDialog(null, "Tienes que agregar al menos un artículo a la nota");
+            }
+            
+            
+            } else {
+                JOptionPane.showMessageDialog(null, "El campo de abono debe ser numérico");
             }
 
         } else {
@@ -470,7 +466,7 @@ public class Main extends javax.swing.JFrame {
         int resp = JOptionPane.showConfirmDialog(null, "¿Está seguro que quiere realizar el corte de caja?");
         if (resp == 0) {
             new ConexionCorteCaja().hacerCorte();
-            File obj = new File("c:/corte.pdf");
+            File obj = new File("c:/respaldo/corte.pdf");
             try {
                 Desktop.getDesktop().open(obj);
             } catch (IOException ex) {
@@ -489,7 +485,19 @@ public class Main extends javax.swing.JFrame {
         cliente = miembroGenerico;
         cambiarCliente(cliente);
     }
-    
+    private boolean isNumber(String cadena){
+         try {
+             Double.parseDouble(cadena.replace(",", ""));
+         } catch (NumberFormatException nfe){
+             String newCadena = cadena.replace(".", "").replace(',', '.');
+             try{
+                 Double.parseDouble(newCadena);
+             } catch (NumberFormatException nfe2){
+                 return false;
+             }
+        }
+         return true;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -1172,7 +1180,7 @@ public class Main extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(71, 71, 71)
                         .addComponent(lblNombreUsuario))
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1247,7 +1255,7 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_miBtnAddArticuloActionPerformed
 
     private void sMenuCancelNotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sMenuCancelNotaActionPerformed
-        cancelarNotaActual(false);
+        cancelarNotaActual();
     }//GEN-LAST:event_sMenuCancelNotaActionPerformed
 
     private void tBtnAddArtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tBtnAddArtActionPerformed
@@ -1284,7 +1292,7 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_sMenuConsulNotaActionPerformed
 
     private void tBtnCancelNotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tBtnCancelNotaActionPerformed
-        cancelarNotaActual(false);
+        cancelarNotaActual();
     }//GEN-LAST:event_tBtnCancelNotaActionPerformed
 
     private void tBtnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tBtnRegistrarActionPerformed
