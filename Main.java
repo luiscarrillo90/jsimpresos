@@ -60,7 +60,7 @@ public class Main extends javax.swing.JFrame {
      Recibimos en el constructor un nombre, solo se usa para saber el nombre de quién inició sesión
      */
 
-    public Main(String nombre) {
+    public Main(String nombre, String tipo) {
         this.setResizable(false);
         initComponents();
         this.setLocationRelativeTo(null); 
@@ -68,6 +68,10 @@ public class Main extends javax.swing.JFrame {
         fechaEntrega.setDate(new Date());
         //asigna nombre a etiqueta        
         lblNombreUsuario.setText(nombre);
+        if (tipo.equals("Administrador")) {
+            tBtnCorteCaja.setEnabled(true);
+            menuOpciones.setEnabled(true);
+        }
         miembroGenerico = new ConexionMiembro().obtenerMiembroGenerico();
         iniciarNota();
     }
@@ -686,6 +690,7 @@ public class Main extends javax.swing.JFrame {
 
         tBtnCorteCaja.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/corte.png"))); // NOI18N
         tBtnCorteCaja.setToolTipText("Corte de caja");
+        tBtnCorteCaja.setEnabled(false);
         tBtnCorteCaja.setFocusable(false);
         tBtnCorteCaja.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         tBtnCorteCaja.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -1030,6 +1035,7 @@ public class Main extends javax.swing.JFrame {
 
         jMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/caja icono.png"))); // NOI18N
         jMenu1.setText("Corte de Caja");
+        jMenu1.setEnabled(false);
 
         jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/corte icono.png"))); // NOI18N
         jMenuItem1.setText("Realizar corte de caja");

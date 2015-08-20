@@ -16,13 +16,16 @@ public class Usuario {
    private String apMaterno;
    private String nombreUsuario;
    private String password;
-   public Usuario(int id, String nombres, String apPaterno, String apMaterno, String nombreUsuario, String password){
+   private String tipoUsuario;
+   
+   public Usuario(int id, String nombres, String apPaterno, String apMaterno, String nombreUsuario, String password, String tipoUsuario){
        this.id = id;
        this.nombres = nombres;
        this.apPaterno = apPaterno;
        this.apMaterno = apMaterno;
        this.nombreUsuario = nombreUsuario;
        this.password = password;
+       this.tipoUsuario = tipoUsuario;
    }
    
    public int getId(){
@@ -43,6 +46,9 @@ public class Usuario {
    public String getPassword(){
        return password;
    }
+   public String getTipoUsuario(){
+       return tipoUsuario;
+   }
    public void setNombres(String nombres){
        this.nombres = nombres;
    }
@@ -57,5 +63,8 @@ public class Usuario {
    }
    public void setPassword(String password){
        this.password = password;
+   }
+   public void setTipoUsuario(String tipoUsuario){
+       this.tipoUsuario = tipoUsuario;
    }
 }

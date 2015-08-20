@@ -57,6 +57,7 @@
                   <Image iconType="3" name="/jsimpresos/imagenes/caja icono.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Corte de Caja"/>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <SubComponents>
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItem1">
@@ -444,6 +445,7 @@
               <Image iconType="3" name="/jsimpresos/imagenes/corte.png"/>
             </Property>
             <Property name="toolTipText" type="java.lang.String" value="Corte de caja"/>
+            <Property name="enabled" type="boolean" value="false"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>

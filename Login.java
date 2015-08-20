@@ -38,7 +38,7 @@ public class Login extends javax.swing.JFrame {
             if (user == null || !nombre.equals(user.getNombreUsuario()) || !pass.equals(user.getPassword())) {
                 JOptionPane.showMessageDialog(null, "El usuario y/o contraseña son incorrectos");
             } else {
-                Main nuevo = new Main("Usuario: " + user.getNombres() + " " + user.getApPaterno() + " " + user.getApMaterno());
+                Main nuevo = new Main("Usuario: " + user.getNombres() + " " + user.getApPaterno() + " " + user.getApMaterno(), user.getTipoUsuario());
                 nuevo.setVisible(true);
                 this.dispose();
             }

@@ -29,7 +29,7 @@ public class ConexionUsuario extends Conexion{
             st.setString(2, password);
             ResultSet rs = st.executeQuery();
             while(rs.next()){
-                user = new Usuario(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6));
+                user = new Usuario(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7));
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al conectar a la base de datos");
