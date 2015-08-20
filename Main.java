@@ -342,16 +342,24 @@ public class Main extends javax.swing.JFrame {
         activarQuitarArticulo(false);
     }
     
-    public void cancelarNotaActual(){
-        if (JOptionPane.showConfirmDialog(null, "¿Esta seguro que desea cancelar la nota actual?") == 0) {
-            listaArticulos = new <Articulo>ArrayList();
-            numeroArticulos = 0;
-            columnaFinal = false;
-            clickEnTabla = false;
-            quitarCliente();
-            limpiarTablaArticulos();
-            limpiarDatosExtraDeLaNota();
+    public void reiniciarNotaActual(boolean cancelar){
+        if (cancelar) {
+            if (JOptionPane.showConfirmDialog(null, "¿Esta seguro que desea cancelar la nota actual?") == 0) {
+                cancelarNotaActual();
+            }    
+        }else{
+            cancelarNotaActual();
         }
+    }
+    
+    public void cancelarNotaActual(){
+                listaArticulos = new <Articulo>ArrayList();
+                numeroArticulos = 0;
+                columnaFinal = false;
+                clickEnTabla = false;
+                quitarCliente();
+                limpiarTablaArticulos();
+                limpiarDatosExtraDeLaNota();
     }
     
     public void activarQuitarArticulo(boolean activar){
@@ -398,10 +406,10 @@ public class Main extends javax.swing.JFrame {
             if (!listaArticulos.isEmpty()) {
                 if (cliente != null) {
                     conexionNota.guardarNota(txtNombres.getText(), txtApPaterno.getText(), txtApMaterno.getText(), txtTelefono.getText(), fecha, anticipo, cmbTipoPago.getSelectedIndex(),txtAreaObservaciones.getText(), cliente.getId(), listaArticulos, txtDomicilio.getText());
-                    cancelarNotaActual();
+                    reiniciarNotaActual(false);
                 } else {
                     conexionNota.guardarNota(txtNombres.getText(), txtApPaterno.getText(), txtApMaterno.getText(), txtTelefono.getText(), fecha, anticipo, cmbTipoPago.getSelectedIndex(),txtAreaObservaciones.getText(), 1, listaArticulos, txtDomicilio.getText());
-                    cancelarNotaActual();
+                    reiniciarNotaActual(false);
                 }
                 try {
                     //Runtime.getRuntime().exec("c:/Users/luis-pc/Documents/NetBeansProjects/js/fichero.pdf");
@@ -1180,7 +1188,7 @@ public class Main extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(71, 71, 71)
+                        .addGap(18, 18, 18)
                         .addComponent(lblNombreUsuario))
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1255,7 +1263,7 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_miBtnAddArticuloActionPerformed
 
     private void sMenuCancelNotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sMenuCancelNotaActionPerformed
-        cancelarNotaActual();
+        reiniciarNotaActual(true);
     }//GEN-LAST:event_sMenuCancelNotaActionPerformed
 
     private void tBtnAddArtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tBtnAddArtActionPerformed
@@ -1292,7 +1300,7 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_sMenuConsulNotaActionPerformed
 
     private void tBtnCancelNotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tBtnCancelNotaActionPerformed
-        cancelarNotaActual();
+        reiniciarNotaActual(true);
     }//GEN-LAST:event_tBtnCancelNotaActionPerformed
 
     private void tBtnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tBtnRegistrarActionPerformed
