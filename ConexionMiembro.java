@@ -33,7 +33,7 @@ public class ConexionMiembro extends Conexion{
         return miembros;
     }
     public void guardarMiembro(Miembro miembro){
-        String query = "insert into miembros values(default,?,?,?,?,?,?,200, default, ?,?)";
+        String query = "insert into miembros values(default,?,?,?,?,?,?,200, default, ?,SHA(?))";
         String query2 = "insert into transaccionesmiembro values(?, 'Registro', 200, default, 1)";
         int clave = 0;
         try {
@@ -62,7 +62,7 @@ public class ConexionMiembro extends Conexion{
         }
     }
     public void actualizarMiembro(Miembro miembro, int id){
-        String query = "update miembros set nombres=?, appaterno=?, apmaterno=?, domicilio=?, telefono=?, nombreusuario=?, password=? where idMiembro=?";
+        String query = "update miembros set nombres=?, appaterno=?, apmaterno=?, domicilio=?, telefono=?, nombreusuario=?, password=SHA(?) where idMiembro=?";
         try {
             PreparedStatement st = this.getConexion().prepareStatement(query);
             st.setString(1, miembro.getNombres());

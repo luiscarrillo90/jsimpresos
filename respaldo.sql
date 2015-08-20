@@ -139,7 +139,7 @@ CREATE TABLE `miembros` (
   `saldo` double NOT NULL,
   `fechaRegistro` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `nombreUsuario` varchar(20) NOT NULL,
-  `password` varchar(20) NOT NULL,
+  `password` varchar(40) NOT NULL,
   PRIMARY KEY (`idMiembro`)
 ) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -150,7 +150,7 @@ CREATE TABLE `miembros` (
 
 LOCK TABLES `miembros` WRITE;
 /*!40000 ALTER TABLE `miembros` DISABLE KEYS */;
-INSERT INTO `miembros` VALUES (1,'no','no','no','no','no','no',-235,'2015-08-15 05:52:31','no','no'),(2,'Sin Tarjeta','Cliente','Mostrador','','Sin Domicilio','Sin Telefono',-126,'2015-08-15 05:52:31','generico','generico'),(3,'43215','Juan Roman','Perez','Diaz','Siempreviva no.264','52-3-12-43',5785.5,'2015-08-15 05:52:31','elsegundo','pass2'),(4,'123456789','Luis Alberto','Spinneta','Rodriguez','Barrio Loco No.333','52-2-32-12',765,'2015-08-15 05:52:31','eltercero','pass'),(5,'434224353','Lorenzo','Lamas','Cabas','Venezuela No.32','52-2-33-12',1265,'2015-08-15 05:52:31','elcuarto','pass'),(6,'434224353','Leonardo','Robles','Carmona','Cerro Balnco No.12','52-2-21-32',265,'2015-08-15 05:52:31','elquinto','pass'),(7,'3212345','Leonor','Herrera','Equiua','Calle del cerro No.122','52-3-56-74',4265,'2015-08-15 05:52:31','elsexto','pass'),(8,'3212345','Paola','Saenz','Lopez','Falsa No.122','52-4-23-12',965,'2015-08-15 05:52:31','elseptimo','pass'),(9,'12345532','Oscar','Madera','De la Cruz','Roble No.9','52-2-43-56',1000,'2015-08-15 05:52:31','eloctavio','pass'),(10,'12345532','Octavio','Mendez','Rosas','Arbol No.34','52-3-56-89',968,'2015-08-15 05:52:31','elnoveno','pass'),(11,'52536728','Maria','Lopez','Rios','Honduras No.123','52-3-56-89',1110,'2015-08-15 05:52:31','eldecimo','pass'),(12,'3456747','Liliana','Lago','Sosa','Estados Unidos No.123','52-3-56-82',3174,'2015-08-15 05:52:31','elundecimo','pass'),(13,'1231212','Andrea','Palma','Palma','Arrayan no. 12','52-3-12-23',54,'2015-08-15 05:52:31','andreita','pass'),(15,'3456747','Liliana Leonela','Lago','Sosa','Estados Unidos No.123','52-3-56-82',74,'2015-08-15 05:52:31','elundecimo','pass'),(16,'10410572','Luis Raúl','Martinez','Saenz','Rio Tamesis','23',24,'2015-08-15 07:24:38','rols.mart','rolspass'),(17,'102938','Gustavo','Ceratí','','Calle azul','123234',149,'2015-08-15 05:56:25','electrico','pass'),(19,'3456','New','Subject','','sd','34',150,'2015-08-17 07:00:44','nuevo','pass'),(20,'3459','New','Subject','','asd','34',150,'2015-08-17 07:02:18','nuevo','pass'),(21,'345','asd','asd','','asd','23',250,'2015-08-18 04:37:04','asd','pass');
+INSERT INTO `miembros` VALUES (1,'no','no','no','no','no','no',-235,'2015-08-15 05:52:31','no','fd1286353570c5703799ba76999323b7c7447b06'),(2,'Sin Tarjeta','Cliente','Mostrador','','Sin Domicilio','Sin Telefono',-126,'2015-08-15 05:52:31','generico','0d73694e519057b7743fe69cc925fd8cfae127cb'),(3,'43215','Juan Roman','Perez','Diaz','Siempreviva no.264','52-3-12-43',5785.5,'2015-08-15 05:52:31','elsegundo','8be52126a6fde450a7162a3651d589bb51e9579d'),(4,'123456789','Luis Alberto','Spinneta','Rodriguez','Barrio Loco No.333','52-2-32-12',765,'2015-08-15 05:52:31','eltercero','9d4e1e23bd5b727046a9e3b4b7db57bd8d6ee684'),(5,'434224353','Lorenzo','Lamas','Cabas','Venezuela No.32','52-2-33-12',1265,'2015-08-15 05:52:31','elcuarto','9d4e1e23bd5b727046a9e3b4b7db57bd8d6ee684'),(6,'434224353','Leonardo','Robles','Carmona','Cerro Balnco No.12','52-2-21-32',265,'2015-08-15 05:52:31','elquinto','9d4e1e23bd5b727046a9e3b4b7db57bd8d6ee684'),(7,'3212345','Leonor','Herrera','Equiua','Calle del cerro No.122','52-3-56-74',4265,'2015-08-15 05:52:31','elsexto','9d4e1e23bd5b727046a9e3b4b7db57bd8d6ee684'),(8,'3212345','Paola','Saenz','Lopez','Falsa No.122','52-4-23-12',965,'2015-08-15 05:52:31','elseptimo','9d4e1e23bd5b727046a9e3b4b7db57bd8d6ee684'),(9,'12345532','Oscar','Madera','De la Cruz','Roble No.9','52-2-43-56',1000,'2015-08-15 05:52:31','eloctavio','9d4e1e23bd5b727046a9e3b4b7db57bd8d6ee684'),(10,'12345532','Octavio','Mendez','Rosas','Arbol No.34','52-3-56-89',968,'2015-08-15 05:52:31','elnoveno','9d4e1e23bd5b727046a9e3b4b7db57bd8d6ee684'),(11,'52536728','Maria','Lopez','Rios','Honduras No.123','52-3-56-89',1110,'2015-08-15 05:52:31','eldecimo','9d4e1e23bd5b727046a9e3b4b7db57bd8d6ee684'),(12,'3456747','Liliana','Lago','Sosa','Estados Unidos No.123','52-3-56-82',3174,'2015-08-15 05:52:31','elundecimo','9d4e1e23bd5b727046a9e3b4b7db57bd8d6ee684'),(13,'1231212','Andrea','Palma','Palma','Arrayan no. 12','52-3-12-23',54,'2015-08-15 05:52:31','andreita','9d4e1e23bd5b727046a9e3b4b7db57bd8d6ee684'),(15,'3456747','Liliana Leonela','Lago','Sosa','Estados Unidos No.123','52-3-56-82',74,'2015-08-15 05:52:31','elundecimo','9d4e1e23bd5b727046a9e3b4b7db57bd8d6ee684'),(16,'10410572','Luis Raúl','Martinez','Saenz','Rio Tamesis','23',24,'2015-08-15 07:24:38','rols.mart','c0e827297f9a62f1bdb475d8a63cc054a1e96c6f'),(17,'102938','Gustavo','Ceratí','','Calle azul','123234',149,'2015-08-15 05:56:25','electrico','9d4e1e23bd5b727046a9e3b4b7db57bd8d6ee684'),(19,'3456','New','Subject','','sd','34',150,'2015-08-17 07:00:44','nuevo','9d4e1e23bd5b727046a9e3b4b7db57bd8d6ee684'),(20,'3459','New','Subject','','asd','34',150,'2015-08-17 07:02:18','nuevo','9d4e1e23bd5b727046a9e3b4b7db57bd8d6ee684'),(21,'345','asd','asd','','asd','23',250,'2015-08-18 04:37:04','asd','9d4e1e23bd5b727046a9e3b4b7db57bd8d6ee684');
 /*!40000 ALTER TABLE `miembros` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -233,7 +233,7 @@ CREATE TABLE `usuarios` (
   `apPaterno` varchar(20) NOT NULL,
   `apMaterno` varchar(20) DEFAULT NULL,
   `nombreUsuario` varchar(20) NOT NULL,
-  `password` varchar(20) NOT NULL,
+  `password` varchar(40) NOT NULL,
   `tipoUsuario` varchar(20) NOT NULL DEFAULT 'empleado',
   PRIMARY KEY (`idUsuario`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
@@ -245,7 +245,7 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (1,'Luis Federico','Carrillo','Ayala','luisin','pass','empleado'),(2,'Luis Raúl','Martínez','Sáenz','Rols','rolspass','empleado'),(3,'admin','root','','root','root','Administrador');
+INSERT INTO `usuarios` VALUES (1,'Luis Federico','Carrillo','Ayala','luisin','81b6f50734d17c2cfc160cfc07ec31b9bcd2a91e','empleado'),(2,'Luis Raúl','Martínez','Sáenz','Rols','e67f16d28ac3a4291e45c1300773450f0d8a11a9','empleado'),(3,'admin','root','','root','dc76e9f0c0006e8f919e0c515c66dbba3982f785','Administrador');
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -258,4 +258,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-08-20 12:50:52
+-- Dump completed on 2015-08-20 13:54:33

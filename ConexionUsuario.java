@@ -19,7 +19,7 @@ import javax.swing.JOptionPane;
  * @author luis-pc
  */
 public class ConexionUsuario extends Conexion{
-    private String query = "select * from usuarios where nombreUsuario = ? and password = ?";
+    private String query = "select * from usuarios where nombreUsuario = ? and password = SHA(?)";
     public Usuario getUsuario(String nombreUsuario, String password){
         PreparedStatement st ;
         Usuario user = null;

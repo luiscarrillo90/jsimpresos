@@ -35,7 +35,7 @@ public class Login extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Datos incompletos, por favor llena todos los campos");
         } else {
             user = (new ConexionUsuario()).getUsuario(nombre, pass);
-            if (user == null || !nombre.equals(user.getNombreUsuario()) || !pass.equals(user.getPassword())) {
+            if (user == null || !nombre.equals(user.getNombreUsuario())) {
                 JOptionPane.showMessageDialog(null, "El usuario y/o contraseña son incorrectos");
             } else {
                 Main nuevo = new Main("Usuario: " + user.getNombres() + " " + user.getApPaterno() + " " + user.getApMaterno(), user.getTipoUsuario());
