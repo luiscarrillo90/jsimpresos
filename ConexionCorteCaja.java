@@ -14,9 +14,12 @@ import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import java.awt.Desktop;
 import java.awt.Font;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -381,6 +384,7 @@ public class ConexionCorteCaja extends Conexion {
                 }
                 documento.add(tabla);
                 documento.close();
+                abrirPDF();
             } catch (FileNotFoundException ex) {
                 JOptionPane.showMessageDialog(null, "Error al generar el pdf");
             } catch (DocumentException ex) {
@@ -390,5 +394,15 @@ public class ConexionCorteCaja extends Conexion {
             System.out.println(ex.getMessage());
             JOptionPane.showMessageDialog(null, "Error al conectar a la base de datos");
         }
+    }
+    
+    public void abrirPDF(){
+        try {
+                File obj = new File("c:/corte.pdf");
+                Desktop.getDesktop().open(obj);
+            } catch (IOException ex) {
+                System.out.println(ex.getMessage());
+                JOptionPane.showMessageDialog(null, "Error al abrir el pdf");
+            }
     }
 }

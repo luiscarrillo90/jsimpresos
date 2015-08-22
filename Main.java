@@ -68,9 +68,11 @@ public class Main extends javax.swing.JFrame {
         fechaEntrega.setDate(new Date());
         //asigna nombre a etiqueta        
         lblNombreUsuario.setText(nombre);
-        if (tipo.equals("Administrador")) {
+        if (tipo.equals("administrador")) {
+            System.out.println("entra");
             tBtnCorteCaja.setEnabled(true);
-            menuOpciones.setEnabled(true);
+            smBtnCorteCaja.setEnabled(true);
+            smBtnConCorteCaja.setEnabled(true);
         }
         miembroGenerico = new ConexionMiembro().obtenerMiembroGenerico();
         iniciarNota();
@@ -415,14 +417,6 @@ public class Main extends javax.swing.JFrame {
                     conexionNota.guardarNota(txtNombres.getText(), txtApPaterno.getText(), txtApMaterno.getText(), txtTelefono.getText(), fecha, anticipo, cmbTipoPago.getSelectedIndex(),txtAreaObservaciones.getText(), 1, listaArticulos, txtDomicilio.getText());
                     reiniciarNotaActual(false);
                 }
-                try {
-                    //Runtime.getRuntime().exec("c:/Users/luis-pc/Documents/NetBeansProjects/js/fichero.pdf");
-                    File obj = new File("c:/fichero.pdf");
-                    Desktop.getDesktop().open(obj);
-                } catch (IOException ex) {
-                    JOptionPane.showMessageDialog(null, "No se pudo abrir el archivo");
-                    System.out.println(ex.getMessage());
-                }
             }else{
                 JOptionPane.showMessageDialog(null, "Tienes que agregar al menos un artículo a la nota");
             }
@@ -478,13 +472,6 @@ public class Main extends javax.swing.JFrame {
         int resp = JOptionPane.showConfirmDialog(null, "¿Está seguro que quiere realizar el corte de caja?");
         if (resp == 0) {
             new ConexionCorteCaja().hacerCorte();
-            File obj = new File("c:/respaldo/corte.pdf");
-            try {
-                Desktop.getDesktop().open(obj);
-            } catch (IOException ex) {
-                System.out.println(ex.getMessage());
-                JOptionPane.showMessageDialog(null, "Error al abrir el pdf");
-            }
         }
     }
     
@@ -573,8 +560,8 @@ public class Main extends javax.swing.JFrame {
         sMenuLogOut = new javax.swing.JMenuItem();
         menuOpciones = new javax.swing.JMenu();
         jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
+        smBtnCorteCaja = new javax.swing.JMenuItem();
+        smBtnConCorteCaja = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         jMenu4 = new javax.swing.JMenu();
         sMenuSeleccCliente = new javax.swing.JMenuItem();
@@ -1035,25 +1022,26 @@ public class Main extends javax.swing.JFrame {
 
         jMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/caja icono.png"))); // NOI18N
         jMenu1.setText("Corte de Caja");
-        jMenu1.setEnabled(false);
 
-        jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/corte icono.png"))); // NOI18N
-        jMenuItem1.setText("Realizar corte de caja");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        smBtnCorteCaja.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/corte icono.png"))); // NOI18N
+        smBtnCorteCaja.setText("Realizar corte de caja");
+        smBtnCorteCaja.setEnabled(false);
+        smBtnCorteCaja.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                smBtnCorteCajaActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem1);
+        jMenu1.add(smBtnCorteCaja);
 
-        jMenuItem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/consultar cortes icono.png"))); // NOI18N
-        jMenuItem2.setText("Consultar cortes de caja");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+        smBtnConCorteCaja.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/consultar cortes icono.png"))); // NOI18N
+        smBtnConCorteCaja.setText("Consultar cortes de caja");
+        smBtnConCorteCaja.setEnabled(false);
+        smBtnConCorteCaja.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
+                smBtnConCorteCajaActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem2);
+        jMenu1.add(smBtnConCorteCaja);
 
         menuOpciones.add(jMenu1);
         menuOpciones.add(jSeparator2);
@@ -1206,7 +1194,7 @@ public class Main extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
+                        .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
                         .addGap(13, 13, 13))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(lblNombreUsuario)
@@ -1329,14 +1317,14 @@ public class Main extends javax.swing.JFrame {
         acercaDe();
     }//GEN-LAST:event_sMenuAcercaActionPerformed
 
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+    private void smBtnConCorteCajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_smBtnConCorteCajaActionPerformed
         VerCortes nuevo = new VerCortes();
         nuevo.setVisible(true);
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
+    }//GEN-LAST:event_smBtnConCorteCajaActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void smBtnCorteCajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_smBtnCorteCajaActionPerformed
         realizarCorteDeCaja();
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_smBtnCorteCajaActionPerformed
 
     private void miBtnQuitarArticuloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miBtnQuitarArticuloActionPerformed
         quitarArticulo();
@@ -1428,8 +1416,6 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -1462,6 +1448,8 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JMenuItem sMenuRegNota;
     private javax.swing.JMenuItem sMenuSeleccCliente;
     private javax.swing.JMenuItem smBtnClienteGenerico;
+    private javax.swing.JMenuItem smBtnConCorteCaja;
+    private javax.swing.JMenuItem smBtnCorteCaja;
     private javax.swing.JButton tBtnAddArt;
     private javax.swing.JButton tBtnCancelNota;
     private javax.swing.JButton tBtnCargarSaldo;

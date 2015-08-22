@@ -18,7 +18,9 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.mysql.jdbc.Connection;
+import java.awt.Desktop;
 import java.awt.Font;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -430,6 +432,8 @@ public class ConexionNotas extends Conexion {
             documento.add(tabla4);
 
             documento.close();
+            
+            abrirPDF();
         } catch (FileNotFoundException ex) {
             JOptionPane.showMessageDialog(null, "Error con el pdf");
         } catch (DocumentException ex) {
@@ -438,7 +442,17 @@ public class ConexionNotas extends Conexion {
             JOptionPane.showMessageDialog(null, "Error con el pdf");
         }
     }
-
+    
+    public void abrirPDF(){
+        try {
+                    //Runtime.getRuntime().exec("c:/Users/luis-pc/Documents/NetBeansProjects/js/fichero.pdf");
+                    File obj = new File("c:/fichero.pdf");
+                    Desktop.getDesktop().open(obj);
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(null, "No se pudo abrir el archivo");
+                    System.out.println(ex.getMessage());
+                }
+    }
 }
 
 

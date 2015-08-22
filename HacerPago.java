@@ -276,6 +276,7 @@ public class HacerPago extends javax.swing.JFrame {
                             frameAnterior.dispose();
                         }
                     }
+                    new ConexionNotas().generarPdf(nota.getIdNota());
                     this.dispose();
                 }else{
                     JOptionPane.showMessageDialog(null, "La cantidad es mayor al saldo de la cuenta");

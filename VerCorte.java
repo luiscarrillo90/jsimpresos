@@ -444,13 +444,6 @@ public class VerCorte extends javax.swing.JFrame {
 
     private void btnImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprimirActionPerformed
         conexion.crearPdf(this.corte.getIdCorte());
-        File obj = new File("c:/corte.pdf");
-            try {
-                Desktop.getDesktop().open(obj);
-            } catch (IOException ex) {
-                System.out.println(ex.getMessage());
-                JOptionPane.showMessageDialog(null, "Error al abrir el pdf");
-            }
     }//GEN-LAST:event_btnImprimirActionPerformed
 
     /**
