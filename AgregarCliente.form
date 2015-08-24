@@ -229,6 +229,9 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JPasswordField" name="txtPassword">
+          <Properties>
+            <Property name="editable" type="boolean" value="false"/>
+          </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel11">
           <Properties>
@@ -236,6 +239,9 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JPasswordField" name="txtPasswordConf">
+          <Properties>
+            <Property name="editable" type="boolean" value="false"/>
+          </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="btnAceptar">
           <Properties>

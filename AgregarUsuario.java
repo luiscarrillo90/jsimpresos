@@ -159,18 +159,6 @@ public class AgregarUsuario extends javax.swing.JFrame {
                 }
             }
         }
-        
-        
-//        if (user == null) {
-//            conexion.guardarMiembro(new Miembro(1, txtTarjeta.getText(), txtNombres.getText(), txtApPaterno.getText(), txtApMaterno.getText(),
-//            txtDomicilio.getText(), txtTelefono.getText(), 0, "", txtNombreUsuario.getText(), new String(txtPassword.getPassword())));
-//
-//
-//        }else{
-//            conexion.actualizarMiembro(new Miembro(miembro.getId(), txtTarjeta.getText(), txtNombres.getText(), txtApPaterno.getText(), txtApMaterno.getText() ,
-//                    txtDomicilio.getText(), txtTelefono.getText(), 0, "", txtNombreUsuario.getText(), new String(txtPassword.getPassword())), idMiembro);
-//            anterior.actualizarMiembros(conexion.obtenerMiembros());
-//        }
         this.dispose();
     }
     /**
@@ -202,7 +190,7 @@ public class AgregarUsuario extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Administración de Miembros");
+        setTitle("Administración de Usuarios");
 
         pnlTitulo.setBorder(javax.swing.BorderFactory.createTitledBorder("Agregar Usuario"));
         pnlTitulo.setToolTipText("");
@@ -360,16 +348,6 @@ public class AgregarUsuario extends javax.swing.JFrame {
         }else{
             JOptionPane.showMessageDialog(null, "Todos los campos con * tienen que estar llenos");
         }
-        
-//        if (comprobarDatos()) {
-//            if (comprobarPassword()) {
-
-//            } else {
-//                JOptionPane.showMessageDialog(null, "La comprobación de contraseña no concuerda");
-//            }
-//        } else {
-//            JOptionPane.showMessageDialog(null, "Todos los campos con * tienen que estar llenos");
-//        }
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed

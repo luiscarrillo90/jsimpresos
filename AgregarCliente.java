@@ -7,6 +7,7 @@ package jsimpresos;
 
 import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
 import javax.swing.border.TitledBorder;
 
 /**
@@ -20,7 +21,8 @@ public class AgregarCliente extends javax.swing.JFrame {
     Miembro miembro;
     Main anteriorMain;
     int idMiembro;
-
+    //bandera para saber si ya pregunto si quiere contraseña en el evento focus (gained, lost)
+    boolean preguntara = false;
     /**
      * Creates new form AgregarCliente
      */
@@ -40,11 +42,36 @@ public class AgregarCliente extends javax.swing.JFrame {
             txtDomicilio.setText(miembro.getDomicilio());
             txtTelefono.setText(miembro.getTelefono());
             txtNombreUsuario.setText(miembro.getNombreUsuario());
-            txtPassword.setText(miembro.getPassword());
-            txtPasswordConf.setText(miembro.getPassword());
             btnAceptar.setText("Guardar");
             idMiembro = miembro.getId();
-        
+            
+            txtPassword.addFocusListener(new java.awt.event.FocusAdapter() {
+                public void focusGained(java.awt.event.FocusEvent evt) {
+                    if(!preguntara){
+                                if (!txtPassword.isEditable()) {
+                                    preguntara=true;
+                                    if (JOptionPane.showConfirmDialog(null, "¿Quieres modificar la contraseña para este miembro?") == 0) {
+                                        txtPassword.setEditable(true);
+                                    }else{
+                                        btnAceptar.requestFocus();
+                                    }
+                                }
+                            }
+                }
+                public void focusLost(java.awt.event.FocusEvent evt) {
+                    if (!sacarPass(txtPassword).equals("")) {
+                                txtPasswordConf.setEditable(true);
+                    }
+                }
+            });
+            
+            btnAceptar.addFocusListener(new java.awt.event.FocusAdapter() {
+                public void focusGained(java.awt.event.FocusEvent evt) {
+                    if (!txtPassword.isEditable()) {
+                            preguntara=false;
+                    }
+                }
+            });
     }
     public AgregarCliente(Main anterior, Miembro miembro) {
         initComponents();
@@ -52,6 +79,8 @@ public class AgregarCliente extends javax.swing.JFrame {
         this.anteriorMain = anterior;
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        txtPassword.setEditable(true);
+        txtPasswordConf.setEditable(true);
     }
 
     public boolean comprobarDatos() {
@@ -64,18 +93,49 @@ public class AgregarCliente extends javax.swing.JFrame {
         }
 
     }
-
-    public boolean comprobarPassword() {
+    
+    public String sacarPass(JPasswordField txtPassword){
         char c1[] = txtPassword.getPassword();
-        String pass1 = new String(c1);
-        char c2[] = txtPasswordConf.getPassword();
-        String pass2 = new String(c2);
-        if (!pass1.equals("") && pass1.equals(pass2)) {
-            return true;
-        } else {
-            return false;
+        String pass = new String(c1);
+        return pass;
+    }
+    
+    
+    public String comprobarPassword() {
+        if (txtPasswordConf.isEditable()) {
+           String pass1 = sacarPass(txtPassword);
+           String pass2 = sacarPass(txtPasswordConf);
+           if (!pass1.equals("") && pass1.equals(pass2)) {
+               return "iguales";
+           } else {
+               return "distintos";
+           }   
         }
-
+        return "No";
+    }
+    
+    public void accionBtnAceptar(Miembro miembro, boolean conPassword){
+        if (miembro == null) {
+            if (conexion.guardarMiembro(new Miembro(1, txtTarjeta.getText(), txtNombres.getText(), txtApPaterno.getText(), txtApMaterno.getText(),
+                    txtDomicilio.getText(), txtTelefono.getText(), 0, "", txtNombreUsuario.getText(), sacarPass(txtPassword)))) {
+                JOptionPane.showMessageDialog(null, "El miembro fue agregado correctamente");
+            }
+        }else{
+            if (conPassword) {
+                if (conexion.actualizarMiembro(new Miembro(miembro.getId(), txtTarjeta.getText(), txtNombres.getText(), txtApPaterno.getText(), txtApMaterno.getText() ,
+                            txtDomicilio.getText(), txtTelefono.getText(), 0, "", txtNombreUsuario.getText(), sacarPass(txtPassword)), idMiembro)) {
+                    JOptionPane.showMessageDialog(null, "El usuario fue modificado correctamente");
+                    anterior.actualizarMiembros(conexion.obtenerMiembros());
+                }
+            }else{
+                if (conexion.actualizarMiembroSinPassword(new Miembro(miembro.getId(), txtTarjeta.getText(), txtNombres.getText(), txtApPaterno.getText(), txtApMaterno.getText() ,
+                            txtDomicilio.getText(), txtTelefono.getText(), 0, "", txtNombreUsuario.getText(), sacarPass(txtPassword)), idMiembro)) {
+                    JOptionPane.showMessageDialog(null, "El usuario fue modificado correctamente");
+                    anterior.actualizarMiembros(conexion.obtenerMiembros());
+                }
+            }
+        }
+        this.dispose();
     }
 
     /**
@@ -140,7 +200,11 @@ public class AgregarCliente extends javax.swing.JFrame {
 
         jLabel10.setText("Contraseña:*");
 
+        txtPassword.setEditable(false);
+
         jLabel11.setText("Confirmar contraseña:*");
+
+        txtPasswordConf.setEditable(false);
 
         btnAceptar.setText("Aceptar");
         btnAceptar.addActionListener(new java.awt.event.ActionListener() {
@@ -273,22 +337,18 @@ public class AgregarCliente extends javax.swing.JFrame {
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         if (comprobarDatos()) {
-            if (comprobarPassword()) {
+            if (comprobarPassword().equals("iguales")) {
                 if (miembro == null) {
-                    conexion.guardarMiembro(new Miembro(1, txtTarjeta.getText(), txtNombres.getText(), txtApPaterno.getText(), txtApMaterno.getText(),
-                    txtDomicilio.getText(), txtTelefono.getText(), 0, "", txtNombreUsuario.getText(), new String(txtPassword.getPassword())));
-                    
-                    
+                    accionBtnAceptar(null, true);
                 }else{
-                    conexion.actualizarMiembro(new Miembro(miembro.getId(), txtTarjeta.getText(), txtNombres.getText(), txtApPaterno.getText(), txtApMaterno.getText() ,
-                            txtDomicilio.getText(), txtTelefono.getText(), 0, "", txtNombreUsuario.getText(), new String(txtPassword.getPassword())), idMiembro);
-                    anterior.actualizarMiembros(conexion.obtenerMiembros());
-                }
-                this.dispose();
-            } else {
+                    accionBtnAceptar(miembro, true);
+                } 
+            }else if (comprobarPassword().equals("No")){
+                accionBtnAceptar(miembro, false);
+            }else if (comprobarPassword().equals("distintos")) {
                 JOptionPane.showMessageDialog(null, "La comprobación de contraseña no concuerda");
             }
-        } else {
+        }else{
             JOptionPane.showMessageDialog(null, "Todos los campos con * tienen que estar llenos");
         }
     }//GEN-LAST:event_btnAceptarActionPerformed
@@ -300,38 +360,38 @@ public class AgregarCliente extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AgregarCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AgregarCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AgregarCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AgregarCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-
-            }
-        });
-    }
+//    public static void main(String args[]) {
+//        /* Set the Nimbus look and feel */
+//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+//         */
+//        try {
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                if ("Nimbus".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
+//            }
+//        } catch (ClassNotFoundException ex) {
+//            java.util.logging.Logger.getLogger(AgregarCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (InstantiationException ex) {
+//            java.util.logging.Logger.getLogger(AgregarCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (IllegalAccessException ex) {
+//            java.util.logging.Logger.getLogger(AgregarCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+//            java.util.logging.Logger.getLogger(AgregarCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+//        //</editor-fold>
+//        //</editor-fold>
+//
+//        /* Create and display the form */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//
+//            }
+//        });
+//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;

@@ -32,7 +32,7 @@ public class ConexionMiembro extends Conexion{
         }
         return miembros;
     }
-    public void guardarMiembro(Miembro miembro){
+    public boolean guardarMiembro(Miembro miembro){
         String query = "insert into miembros values(default,?,?,?,?,?,?,200, default, ?,SHA(?))";
         String query2 = "insert into transaccionesmiembro values(?, 'Registro', 200, default, 1)";
         int clave = 0;
@@ -57,11 +57,13 @@ public class ConexionMiembro extends Conexion{
             staux.setInt(1, clave);
             staux.executeUpdate();
             this.getConexion().commit();
+            return true;
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al guardar al cliente");
+            return false;
         }
     }
-    public void actualizarMiembro(Miembro miembro, int id){
+    public boolean actualizarMiembro(Miembro miembro, int id){
         String query = "update miembros set nombres=?, appaterno=?, apmaterno=?, domicilio=?, telefono=?, nombreusuario=?, password=SHA(?) where idMiembro=?";
         try {
             PreparedStatement st = this.getConexion().prepareStatement(query);
@@ -74,10 +76,32 @@ public class ConexionMiembro extends Conexion{
             st.setString(7, miembro.getPassword());
             st.setInt(8, id);
             st.executeUpdate();
+            return true;
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al actualizar la base de datos.");
+            return false;
         }
     }
+    
+    public boolean actualizarMiembroSinPassword(Miembro miembro, int id){
+        String query = "update miembros set nombres=?, appaterno=?, apmaterno=?, domicilio=?, telefono=?, nombreusuario=?, where idMiembro=?";
+        try {
+            PreparedStatement st = this.getConexion().prepareStatement(query);
+            st.setString(1, miembro.getNombres());
+            st.setString(2, miembro.getApPaterno());
+            st.setString(3, miembro.getApMaterno());
+            st.setString(4, miembro.getDomicilio());
+            st.setString(5, miembro.getTelefono());
+            st.setString(6, miembro.getNombreUsuario());
+            st.setInt(7, id);
+            st.executeUpdate();
+            return true;
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error al actualizar la base de datos.");
+            return false;
+        }
+    }
+    
     public boolean borrarMiembro(Miembro miembro){
         String query = "delete from miembros where idmiembro=?";
         try {
