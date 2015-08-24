@@ -35,6 +35,7 @@ public class Main extends javax.swing.JFrame {
     //Cliente al que asignaremos la nota, puede ser null, en caso de que éste no sea un
     //miembro del sistema(con tarjeta) y el usuario escribirá los datos del mismo
     Miembro cliente = null;
+    Usuario user = null;
     ArrayList<Articulo> listaArticulos = new ArrayList();
     String[] columnas = {"Artículo", "Precio Unitario", "Cantidad", "Total"};
     String[][] datos;
@@ -60,19 +61,23 @@ public class Main extends javax.swing.JFrame {
      Recibimos en el constructor un nombre, solo se usa para saber el nombre de quién inició sesión
      */
 
-    public Main(String nombre, String tipo) {
+    public Main(String nombre, String tipo, Usuario user) {
         this.setResizable(false);
         initComponents();
         this.setLocationRelativeTo(null); 
         usuario = nombre;
+        this.user = user;
         fechaEntrega.setDate(new Date());
         //asigna nombre a etiqueta        
         lblNombreUsuario.setText(nombre);
         if (tipo.equals("administrador")) {
-            System.out.println("entra");
             tBtnCorteCaja.setEnabled(true);
             smBtnCorteCaja.setEnabled(true);
             smBtnConCorteCaja.setEnabled(true);
+            smAgregarUsuario.setEnabled(true);
+            smEditarUsuario.setEnabled(true);
+            smEliminarUsuario.setEnabled(true);
+            smNombrarUsuario.setEnabled(true);
         }
         miembroGenerico = new ConexionMiembro().obtenerMiembroGenerico();
         iniciarNota();
@@ -577,12 +582,19 @@ public class Main extends javax.swing.JFrame {
         sMenuAddCliente = new javax.swing.JMenuItem();
         sMenuModCliente = new javax.swing.JMenuItem();
         sMenuElimCliente = new javax.swing.JMenuItem();
+        menuUsuarios = new javax.swing.JMenu();
+        jMenuItem3 = new javax.swing.JMenuItem();
+        smAgregarUsuario = new javax.swing.JMenuItem();
+        smEditarUsuario = new javax.swing.JMenuItem();
+        smEliminarUsuario = new javax.swing.JMenuItem();
+        smNombrarUsuario = new javax.swing.JMenuItem();
         menuAyuda = new javax.swing.JMenu();
         sMenuAcerca = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("JS Impresos y Diseños - Punto de Venta");
 
+        lblNombreUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/usuarios.png"))); // NOI18N
         lblNombreUsuario.setText("jLabel1");
 
         jToolBar1.setRollover(true);
@@ -1158,6 +1170,59 @@ public class Main extends javax.swing.JFrame {
 
         jMenuBar1.add(menuCliente);
 
+        menuUsuarios.setText("Usuarios");
+
+        jMenuItem3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/usuarios configurar icono.png"))); // NOI18N
+        jMenuItem3.setText("Configurar mi usuario");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        menuUsuarios.add(jMenuItem3);
+
+        smAgregarUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/usuarios agregar icono.png"))); // NOI18N
+        smAgregarUsuario.setText("Agregar Usuario");
+        smAgregarUsuario.setEnabled(false);
+        smAgregarUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                smAgregarUsuarioActionPerformed(evt);
+            }
+        });
+        menuUsuarios.add(smAgregarUsuario);
+
+        smEditarUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/usuarios modificar icono.png"))); // NOI18N
+        smEditarUsuario.setText("Modificar Usuario");
+        smEditarUsuario.setEnabled(false);
+        smEditarUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                smEditarUsuarioActionPerformed(evt);
+            }
+        });
+        menuUsuarios.add(smEditarUsuario);
+
+        smEliminarUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/usuarios eliminar icono.png"))); // NOI18N
+        smEliminarUsuario.setText("Eliminar Usuario");
+        smEliminarUsuario.setEnabled(false);
+        smEliminarUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                smEliminarUsuarioActionPerformed(evt);
+            }
+        });
+        menuUsuarios.add(smEliminarUsuario);
+
+        smNombrarUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/usuaris nombrar icono.png"))); // NOI18N
+        smNombrarUsuario.setText("Nombrar Administrador");
+        smNombrarUsuario.setEnabled(false);
+        smNombrarUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                smNombrarUsuarioActionPerformed(evt);
+            }
+        });
+        menuUsuarios.add(smNombrarUsuario);
+
+        jMenuBar1.add(menuUsuarios);
+
         menuAyuda.setText("Ayuda");
 
         sMenuAcerca.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jsimpresos/imagenes/ayuda icono.png"))); // NOI18N
@@ -1182,7 +1247,7 @@ public class Main extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addGap(32, 32, 32)
                         .addComponent(lblNombreUsuario))
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1358,6 +1423,31 @@ public class Main extends javax.swing.JFrame {
         insertarClienteGenerico();
     }//GEN-LAST:event_smBtnClienteGenericoActionPerformed
 
+    private void smEditarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_smEditarUsuarioActionPerformed
+        verUsuarios nuevo = new verUsuarios("editar");
+        nuevo.setVisible(true);
+    }//GEN-LAST:event_smEditarUsuarioActionPerformed
+
+    private void smEliminarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_smEliminarUsuarioActionPerformed
+        verUsuarios nuevo = new verUsuarios("eliminar");
+        nuevo.setVisible(true);
+    }//GEN-LAST:event_smEliminarUsuarioActionPerformed
+
+    private void smAgregarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_smAgregarUsuarioActionPerformed
+        AgregarUsuario nuevo = new AgregarUsuario(this, null);
+        nuevo.setVisible(true);
+    }//GEN-LAST:event_smAgregarUsuarioActionPerformed
+
+    private void smNombrarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_smNombrarUsuarioActionPerformed
+        verUsuarios nuevo = new verUsuarios("nombrar");
+        nuevo.setVisible(true);
+    }//GEN-LAST:event_smNombrarUsuarioActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        AgregarUsuario nuevo = new AgregarUsuario(this, user);
+        nuevo.setVisible(true);
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1416,6 +1506,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -1434,6 +1525,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JMenu menuCliente;
     private javax.swing.JMenu menuNotas;
     private javax.swing.JMenu menuOpciones;
+    private javax.swing.JMenu menuUsuarios;
     private javax.swing.JMenuItem miBtnAddArticulo;
     private javax.swing.JMenuItem miBtnQuitarArticulo;
     private javax.swing.JMenuItem sMenuAcerca;
@@ -1447,9 +1539,13 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JMenuItem sMenuQuitCliente;
     private javax.swing.JMenuItem sMenuRegNota;
     private javax.swing.JMenuItem sMenuSeleccCliente;
+    private javax.swing.JMenuItem smAgregarUsuario;
     private javax.swing.JMenuItem smBtnClienteGenerico;
     private javax.swing.JMenuItem smBtnConCorteCaja;
     private javax.swing.JMenuItem smBtnCorteCaja;
+    private javax.swing.JMenuItem smEditarUsuario;
+    private javax.swing.JMenuItem smEliminarUsuario;
+    private javax.swing.JMenuItem smNombrarUsuario;
     private javax.swing.JButton tBtnAddArt;
     private javax.swing.JButton tBtnCancelNota;
     private javax.swing.JButton tBtnCargarSaldo;

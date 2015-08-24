@@ -42,7 +42,7 @@ public class AgregarCliente extends javax.swing.JFrame {
             txtNombreUsuario.setText(miembro.getNombreUsuario());
             txtPassword.setText(miembro.getPassword());
             txtPasswordConf.setText(miembro.getPassword());
-            btnAceptar.setText("Guardar cambios");
+            btnAceptar.setText("Guardar");
             idMiembro = miembro.getId();
         
     }

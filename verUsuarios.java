@@ -16,59 +16,60 @@ import javax.swing.table.TableColumnModel;
  *
  * @author luis-pc
  */
-public class VerMiembros extends javax.swing.JFrame {
+public class verUsuarios extends javax.swing.JFrame {
 
-    ArrayList<Miembro> miembros;
-    ArrayList<Miembro> filtro;
-    ConexionMiembro conexion = new ConexionMiembro();
+    ArrayList<Usuario> usuarios;
+    ArrayList<Usuario> filtro;
+    ConexionUsuario conexion = new ConexionUsuario();
 
     /**
      * Creates new form VerMiembros
      */
-    public VerMiembros(String accion) {
+    public verUsuarios(String accion) {
         initComponents();
         this.setLocationRelativeTo(null);
-        actualizarMiembros(conexion.obtenerMiembros());
+        actualizarUsuarios(conexion.obtenerUsuariosEmpleados());
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         if (accion == "editar") {
-            btnAccion.setText("Editar Miembro");
+            btnAccion.setText("Editar Usuario");
         }else if (accion == "eliminar") {
-            btnAccion.setText("Eliminar Miembro");
-        }else if (accion == "cargar"){
-            btnAccion.setText("Cargar Saldo");
+            btnAccion.setText("Eliminar Usuario");
+        }else if (accion == "nombrar"){
+            btnAccion.setText("Nombrar administrador");
         }
     }
 
-    public void actualizarMiembros(ArrayList<Miembro> miembros) {
-        this.miembros = miembros;
-        Collections.sort(this.miembros, new Comparator() {
+    public void actualizarUsuarios(ArrayList<Usuario> usuarios) {
+        this.usuarios = usuarios;
+        Collections.sort(this.usuarios, new Comparator() {
             @Override
             public int compare(Object p1, Object p2) {
 
-                return new Integer(((Miembro) (p1)).getNombres().compareTo(((Miembro) (p2)).getNombres()));
+                return new Integer(((Usuario) (p1)).getNombres().compareTo(((Usuario) (p2)).getNombres()));
             }
 
         });
-        String[] columnas = {"Nombre", "Número de tarjeta"};
-        TableColumnModel modeloColumna = tableMiembros.getColumnModel();
+        String[] columnas = {"Nombre", "Nombre de usuario"};
+        TableColumnModel modeloColumna = tableUsuarios.getColumnModel();
         DefaultTableModel model1 = new DefaultTableModel(columnas, 0) {
             @Override
             public boolean isCellEditable(int row, int col) {
                 return false;
             }
         };
-        for (int i = 0; i < miembros.size(); i++) {
-            Object[] obj = {miembros.get(i).getNombres() + " " + miembros.get(i).getApPaterno() + " " + miembros.get(i).getApMaterno(), miembros.get(i).getNumeroTarjeta()};
+        for (int i = 0; i < usuarios.size(); i++) {
+            Object[] obj = {usuarios.get(i).getNombres() + " " + usuarios.get(i).getApPaterno() + " " + usuarios.get(i).getApMaterno(), usuarios.get(i).getNombreUsuario()};
             model1.addRow(obj);
         }
-        tableMiembros.setModel(model1);
+        tableUsuarios.setModel(model1);
         modeloColumna.getColumn(0).setPreferredWidth(200);
         modeloColumna.getColumn(1).setPreferredWidth(75);
-
+        
+        txtBuscar.setText(null);
     }
 
     public void buscar() {
-        String[] columnas = {"Nombre", "Número de tarjeta"};
+        String[] columnas = {"Nombre", "Nombre de usuario"};
         DefaultTableModel model1 = new DefaultTableModel(columnas, 0) {
             @Override
             public boolean isCellEditable(int row, int col) {
@@ -77,26 +78,26 @@ public class VerMiembros extends javax.swing.JFrame {
         };
         if (txtBuscar.getText().equals("") || txtBuscar.getText() == null) {
 
-            for (int i = 0; i < miembros.size(); i++) {
-                Object[] obj = {miembros.get(i).getNombres() + " " + miembros.get(i).getApPaterno() + " " + miembros.get(i).getApMaterno(), miembros.get(i).getNumeroTarjeta()};
+            for (int i = 0; i < usuarios.size(); i++) {
+                Object[] obj = {usuarios.get(i).getNombres() + " " + usuarios.get(i).getApPaterno() + " " + usuarios.get(i).getApMaterno(), usuarios.get(i).getNombreUsuario()};
                 model1.addRow(obj);
             }
-            tableMiembros.setModel(model1);
+            tableUsuarios.setModel(model1);
         } else {
             filtro = new ArrayList();
-            for (int i = 0; i < miembros.size(); i++) {
-                String nombreCompleto = miembros.get(i).getNombres() + " " + miembros.get(i).getApPaterno() + " " + miembros.get(i).getApMaterno();
+            for (int i = 0; i < usuarios.size(); i++) {
+                String nombreCompleto = usuarios.get(i).getNombres() + " " + usuarios.get(i).getApPaterno() + " " + usuarios.get(i).getApMaterno();
                 if (nombreCompleto.length() >= txtBuscar.getText().length()) {
                     String nombreAux = nombreCompleto.substring(0, txtBuscar.getText().length());
                     if (nombreAux.compareToIgnoreCase(txtBuscar.getText()) == 0) {
-                        filtro.add(miembros.get(i));
-                        Object[] obj = {miembros.get(i).getNombres() + " " + miembros.get(i).getApPaterno() + " " + miembros.get(i).getApMaterno(), miembros.get(i).getNumeroTarjeta()};
+                        filtro.add(usuarios.get(i));
+                        Object[] obj = {usuarios.get(i).getNombres() + " " + usuarios.get(i).getApPaterno() + " " + usuarios.get(i).getApMaterno(), usuarios.get(i).getNombreUsuario()};
                         model1.addRow(obj);
                     }
                 }
 
             }
-            tableMiembros.setModel(model1);
+            tableUsuarios.setModel(model1);
         }
     }
 
@@ -111,18 +112,18 @@ public class VerMiembros extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tableMiembros = new javax.swing.JTable();
+        tableUsuarios = new javax.swing.JTable();
         btnAccion = new javax.swing.JButton();
         txtBuscar = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Administración de Miembros");
+        setTitle("Administración de Usuarios");
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Administración de miembros"));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Administración de usuarios"));
         jPanel1.setToolTipText("");
 
-        tableMiembros.setModel(new javax.swing.table.DefaultTableModel(
+        tableUsuarios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -133,7 +134,7 @@ public class VerMiembros extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(tableMiembros);
+        jScrollPane1.setViewportView(tableUsuarios);
 
         btnAccion.setText("Aceptar");
         btnAccion.addActionListener(new java.awt.event.ActionListener() {
@@ -142,13 +143,18 @@ public class VerMiembros extends javax.swing.JFrame {
             }
         });
 
+        txtBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtBuscarActionPerformed(evt);
+            }
+        });
         txtBuscar.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtBuscarKeyReleased(evt);
             }
         });
 
-        jLabel1.setText("Buscar Miembro: ");
+        jLabel1.setText("Buscar Usuario: ");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -208,58 +214,61 @@ public class VerMiembros extends javax.swing.JFrame {
     }//GEN-LAST:event_txtBuscarKeyReleased
 
     private void btnAccionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAccionActionPerformed
-        if (btnAccion.getText().equals("Editar Miembro")) {
+        if (btnAccion.getText().equals("Editar Usuario")) {
             
-        if(tableMiembros.getSelectedRow()>-1) {
+        if(tableUsuarios.getSelectedRow()>-1) {
             if(txtBuscar.getText().equals("")||txtBuscar.getText()==null){
-                AgregarCliente nuevo = new AgregarCliente(this, miembros.get(tableMiembros.getSelectedRow()));
+                AgregarUsuario nuevo = new AgregarUsuario(this, usuarios.get(tableUsuarios.getSelectedRow()));
                 nuevo.setVisible(true);
             }else{
-                AgregarCliente nuevo = new AgregarCliente(this, filtro.get(tableMiembros.getSelectedRow()));
+                AgregarUsuario nuevo = new AgregarUsuario(this, filtro.get(tableUsuarios.getSelectedRow()));
                 nuevo.setVisible(true);
             }
             }else{
-                JOptionPane.showMessageDialog(null, "No has elegido ningún miembro de la tabla");
+                JOptionPane.showMessageDialog(null, "No has elegido ningún usuario de la tabla");
             }
-        }else if (btnAccion.getText().equals("Eliminar Miembro")) {
-            if(tableMiembros.getSelectedRow()>-1) {
-            Miembro aux = null;
+        }else if (btnAccion.getText().equals("Eliminar Usuario")) {
+            if(tableUsuarios.getSelectedRow()>-1) {
+            Usuario aux = null;
             if(txtBuscar.getText().equals("")||txtBuscar.getText()==null){
-                aux = miembros.get(tableMiembros.getSelectedRow());
+                aux = usuarios.get(tableUsuarios.getSelectedRow());
             }else{
-                aux = filtro.get(tableMiembros.getSelectedRow());
+                aux = filtro.get(tableUsuarios.getSelectedRow());
             }
             int a = JOptionPane.showConfirmDialog(null, "¿Está seguro que desea borrar a "+aux.getNombres()+" "+aux.getApPaterno()+"?");
             if(a==0){
-                if(conexion.borrarMiembro(aux)){
-                    JOptionPane.showMessageDialog(null, "Miembro borrado exitosamente");
+                if(conexion.borrarUsuario(aux)){
+                    JOptionPane.showMessageDialog(null, "Usuario borrado exitosamente");
                 }else{
-                    JOptionPane.showMessageDialog(null, "No se puede borrar el cliente por que tiene notas a su nombre.");
+                    JOptionPane.showMessageDialog(null, "No se pudó borrar al usuario.");
                 }
-                actualizarMiembros(conexion.obtenerMiembros());
+                actualizarUsuarios(conexion.obtenerUsuariosEmpleados());
             }
         }else{
             JOptionPane.showMessageDialog(null, "No has elegido ningún miembro de la tabla");
         }
-        }else if (btnAccion.getText().equals("Cargar Saldo")) {
-            Miembro aux = null;
+        }else if (btnAccion.getText() == "Nombrar administrador") {
+            Usuario aux = null;
             if(txtBuscar.getText().equals("")||txtBuscar.getText()==null){
-                aux = miembros.get(tableMiembros.getSelectedRow());
+                aux = usuarios.get(tableUsuarios.getSelectedRow());
             }else{
-                aux = filtro.get(tableMiembros.getSelectedRow());
+                aux = filtro.get(tableUsuarios.getSelectedRow());
             }
-            Double saldo = Double.parseDouble(JOptionPane.showInputDialog("¿Cuánto saldo desea cargar a la tarjeta del cliente "+aux.getNombres()+" "+aux.getApPaterno()+" ?"));
-            if ( saldo > 0 ) {
-                if(conexion.cargarSaldo(saldo, aux.getId())){
-                    JOptionPane.showMessageDialog(null, "El saldo ha sido agregado exitosamente");
+            int respuesta = JOptionPane.showConfirmDialog(null, "¿Esta seguro que desea nombrar administrador al usuario "+ aux.getNombres()+ " "+ aux.getApPaterno());
+            if ( respuesta == 0 ) {
+                if(conexion.hacerAdmin(aux.getId())){
+                    JOptionPane.showMessageDialog(null, "El usuario fue hecho administrador exitosamente");
+                    actualizarUsuarios(conexion.obtenerUsuariosEmpleados());
                }else{
-                    JOptionPane.showMessageDialog(null, "Ocurrió un error al agregar el saldo a la tajeta del cliente.");
+                    JOptionPane.showMessageDialog(null, "Ocurrió un error al actualizar el usuario");
                }
-            }else{
-                JOptionPane.showMessageDialog(null, "Por favor introduzca una cantidad valida");
-            } 
+            }
         }
     }//GEN-LAST:event_btnAccionActionPerformed
+
+    private void txtBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtBuscarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -302,7 +311,7 @@ public class VerMiembros extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tableMiembros;
+    private javax.swing.JTable tableUsuarios;
     private javax.swing.JTextField txtBuscar;
     // End of variables declaration//GEN-END:variables
 }
