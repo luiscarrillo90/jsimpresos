@@ -135,12 +135,12 @@ public class ConexionUsuario extends Conexion{
         return usuarios;
     }
     
-    public Usuario obtenerUsuario(){
+    public Usuario obtenerUsuario(int id){
         Usuario user=null;
         String query = "select * from usuarios where idusuario=?";
         try {
             PreparedStatement st = this.getConexion().prepareStatement(query);
-            st.setInt(1, user.getId());
+            st.setInt(1, id);
             ResultSet rs = st.executeQuery();
             while(rs.next()){
                 user = new Usuario(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7));

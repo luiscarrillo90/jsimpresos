@@ -22,12 +22,14 @@ public class Nota {
     private String hora;
     private String fechaEntrega;
     private String observaciones;
-    private String terminado;
+    private String estado;
     private String domicilio;
+    private int descuento;
+    private int usuario;
     ArrayList<Articulo> articulos;
     ArrayList<Abono> abonos;
     
-    public Nota(int idNota, String nombres, Miembro cliente, String apPaterno, String apMaterno, String telefono, String fecha,String fechaEntrega, String observaciones, ArrayList<Articulo> articulos, ArrayList<Abono> abonos, String terminado, String domicilio) {
+    public Nota(int idNota, String nombres, Miembro cliente, String apPaterno, String apMaterno, String telefono, String fecha,String fechaEntrega, String observaciones, ArrayList<Articulo> articulos, ArrayList<Abono> abonos, String estado, String domicilio, int descuento, int usuario) {
         this.idNota = idNota;
         this.nombres = nombres;
         this.cliente = cliente;
@@ -39,11 +41,22 @@ public class Nota {
         this.observaciones = observaciones;
         this.articulos = articulos;
         this.abonos = abonos;
-        this.terminado= terminado;
+        this.estado= estado;
         this.domicilio = domicilio;
+        this.descuento = descuento;
+        this.usuario = usuario;
     }
-    public String getTerminado(){
-        return terminado;
+    
+    public int getDescuento(){
+        return descuento;
+    }
+    
+    public int getUsuario(){
+        return usuario;
+    }
+    
+    public String getEstado(){
+        return estado;
     }
     public int getIdNota() {
         return idNota;
@@ -140,5 +153,21 @@ public class Nota {
     public void setDomicilio(String domicilio){
         this.domicilio = domicilio;
     }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public void setDescuento(int descuento) {
+        this.descuento = descuento;
+    }
+
+    public void setUsuario(int usuario) {
+        this.usuario = usuario;
+    }
     
+//    public Usuario generarUsuarioResponsable(){
+//        new ConexionUsuario.
+//        return Usuario;
+//    }
 }

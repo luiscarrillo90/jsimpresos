@@ -56,6 +56,7 @@ public class Main extends javax.swing.JFrame {
     Abono anticipo;
     //para obtener el miembro generico
     Miembro miembroGenerico;
+    Double total=0.0;
     
     /*
      Recibimos en el constructor un nombre, solo se usa para saber el nombre de quién inició sesión
@@ -176,19 +177,21 @@ public class Main extends javax.swing.JFrame {
                             1)).doubleValue();
                     double valorSegundaColumna = ((Number) modelo.getValueAt(fila,
                             2)).doubleValue();
-                    modelo.setValueAt(valorPrimeraColumna * valorSegundaColumna,
+//                    System.out.println(redondear(valorPrimeraColumna * valorSegundaColumna));
+                    modelo.setValueAt(redondear(valorPrimeraColumna * valorSegundaColumna),
                             fila, 3);
-                    double total = 0;
                     numeroArticulos = 0;
                     for (int i = 0; i < modelo.getRowCount(); i++) {
                         if (modelo.getValueAt(i, 3) != null) {
-                            total += ((Number) modelo.getValueAt(i, 3)).doubleValue();
+                            this.total += ((Number) modelo.getValueAt(i, 3)).doubleValue();
                             numeroArticulos++;
                         } else {
                             break;
                         }
                     }
-                    lblTotal.setText("Total: $" + total);
+//                    double descuento = this.total * (Double.parseDouble(txtDescuento.getText())/100);
+//                    totalDescuento = this.total - descuento;
+//                    lblTotal.setText("Total: $" + totalDescuento);
 
                 } catch (NullPointerException ex) {
 
@@ -204,7 +207,19 @@ public class Main extends javax.swing.JFrame {
      lee los totales de cada artículo y los escribe en la etiqueta
      lblTotal
      */
-
+    public double redondear(double numero){
+        int entero = (int)Math.abs(numero);
+        double num = (Math.rint(numero*10)/10);
+        int residuo = ((int)Math.abs((num - entero)*10));
+        if (residuo == 0) {
+            return entero;
+        }else if (residuo < 6) {
+            return entero+0.5;
+        }else{
+            return entero+1;
+        }   
+    }
+    
     public void cambiarTotal(boolean clickEnTabla) {
         TableModel modelo = (TableModel) tableArticulos.getModel();
         if (!clickEnTabla || ((Number) modelo.getValueAt(modelo.getRowCount()-1, 3)).doubleValue() != 0.0) {
@@ -250,15 +265,17 @@ public class Main extends javax.swing.JFrame {
     
     public double calcularTotal(TableModel modelo, int numeroArticulos){
         if (numeroArticulos > 0) {
-        double total = 0;
+        double totalDescuento = 0.0;
+        this.total = 0.0;
         for (int i = 0; i < numeroArticulos; i++) {
             if (modelo.getValueAt(i, 1) != null || modelo.getValueAt(i, 2) != null) {
-            total += ((Number) modelo.getValueAt(i, 3)).doubleValue();
+            this.total += ((Number) modelo.getValueAt(i, 3)).doubleValue();
             }
         }
             activarQuitarArticulo(true); 
-        
-        return total;
+        double descuento = this.total * (Double.parseDouble(txtDescuento.getText())/100);
+        totalDescuento = this.total - descuento;
+        return totalDescuento;
         }
         return 0;
     }
@@ -368,6 +385,8 @@ public class Main extends javax.swing.JFrame {
                 numeroArticulos = 0;
                 columnaFinal = false;
                 clickEnTabla = false;
+                lblTotal.setText("Total : $0.00");
+                this.total = 0.0;
                 quitarCliente();
                 limpiarTablaArticulos();
                 limpiarDatosExtraDeLaNota();
@@ -416,10 +435,10 @@ public class Main extends javax.swing.JFrame {
             listaArticulos = actualizarListaArticulos(modelo, numeroArticulos); 
             if (!listaArticulos.isEmpty()) {
                 if (cliente != null) {
-                    conexionNota.guardarNota(txtNombres.getText(), txtApPaterno.getText(), txtApMaterno.getText(), txtTelefono.getText(), fecha, anticipo, cmbTipoPago.getSelectedIndex(),txtAreaObservaciones.getText(), cliente.getId(), listaArticulos, txtDomicilio.getText());
+                    conexionNota.guardarNota(txtNombres.getText(), txtApPaterno.getText(), txtApMaterno.getText(), txtTelefono.getText(), fecha, anticipo, cmbTipoPago.getSelectedIndex(),txtAreaObservaciones.getText(), cliente.getId(), listaArticulos, txtDomicilio.getText(), Integer.parseInt(txtDescuento.getText()), user);
                     reiniciarNotaActual(false);
                 } else {
-                    conexionNota.guardarNota(txtNombres.getText(), txtApPaterno.getText(), txtApMaterno.getText(), txtTelefono.getText(), fecha, anticipo, cmbTipoPago.getSelectedIndex(),txtAreaObservaciones.getText(), 1, listaArticulos, txtDomicilio.getText());
+                    conexionNota.guardarNota(txtNombres.getText(), txtApPaterno.getText(), txtApMaterno.getText(), txtTelefono.getText(), fecha, anticipo, cmbTipoPago.getSelectedIndex(),txtAreaObservaciones.getText(), 1, listaArticulos, txtDomicilio.getText(), Integer.parseInt(txtDescuento.getText()), user);
                     reiniciarNotaActual(false);
                 }
             }else{
@@ -546,6 +565,8 @@ public class Main extends javax.swing.JFrame {
         tableArticulos = new javax.swing.JTable();
         btnQuitarArticulo = new javax.swing.JButton();
         lblTotal = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        txtDescuento = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         fechaEntrega = new com.toedter.calendar.JDateChooser();
@@ -880,6 +901,15 @@ public class Main extends javax.swing.JFrame {
         lblTotal.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblTotal.setText("Total : $0");
 
+        jLabel1.setText("Descuento: %");
+
+        txtDescuento.setText("0");
+        txtDescuento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtDescuentoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -892,7 +922,11 @@ public class Main extends javax.swing.JFrame {
                     .addComponent(btnQuitarArticulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(lblTotal)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtDescuento)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -902,7 +936,11 @@ public class Main extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(82, 82, 82)
                         .addComponent(btnQuitarArticulo)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1)
+                            .addComponent(txtDescuento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
                         .addComponent(lblTotal))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())
@@ -1259,7 +1297,7 @@ public class Main extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
+                        .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(13, 13, 13))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(lblNombreUsuario)
@@ -1448,6 +1486,19 @@ public class Main extends javax.swing.JFrame {
         nuevo.setVisible(true);
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
+    private void txtDescuentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDescuentoActionPerformed
+        try{
+            double descuento = this.total * Double.parseDouble(txtDescuento.getText())/100;
+            this.total = this.total - descuento;
+            lblTotal.setText("Total: $"+this.total);
+            System.out.println(descuento+"");
+        }catch(NumberFormatException ex){
+            JOptionPane.showMessageDialog(null, "introduzca un valor valido para el descuento");
+            txtDescuento.setText("");
+            txtDescuento.requestFocus();
+        }
+    }//GEN-LAST:event_txtDescuentoActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1493,6 +1544,7 @@ public class Main extends javax.swing.JFrame {
     private com.toedter.calendar.JDateChooser fechaEntrega;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton4;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
@@ -1560,6 +1612,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JTextField txtApMaterno;
     private javax.swing.JTextField txtApPaterno;
     private javax.swing.JTextArea txtAreaObservaciones;
+    private javax.swing.JTextField txtDescuento;
     private javax.swing.JTextField txtDomicilio;
     private javax.swing.JTextField txtNombres;
     private javax.swing.JTextField txtTelefono;

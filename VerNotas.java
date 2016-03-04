@@ -19,6 +19,7 @@ public class VerNotas extends javax.swing.JFrame {
 
     private ArrayList<Nota> notas;
     private ArrayList<Nota> filtro;
+    ConexionNotas conexion = new ConexionNotas();
     private int tipoFiltro = 0;
 
     /**
@@ -28,30 +29,11 @@ public class VerNotas extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        notas = (new ConexionNotas()).obtenerVistaNotas();
-        Collections.reverse(notas);
-        String[] columnas = {"Folio", "Fecha", "Nombre del cliente", "Terminada"};
-
-        DefaultTableModel model1 = new DefaultTableModel(columnas, 0) {
-            @Override
-            public boolean isCellEditable(int row, int col) {
-                return false;
-            }
-        };
-        for (int i = 0; i < notas.size(); i++) {
-            Object[] obj = {notas.get(i).getIdNota(), notas.get(i).getFecha(), notas.get(i).getNombres() + " " + notas.get(i).getApPaterno() + " " + notas.get(i).getApMaterno(), notas.get(i).getTerminado()};
-            model1.addRow(obj);
-        }
-        tableNotas.setModel(model1);
-        TableColumnModel modeloColumna = tableNotas.getColumnModel();
-        modeloColumna.getColumn(0).setPreferredWidth(50);
-        modeloColumna.getColumn(1).setPreferredWidth(100);
-        modeloColumna.getColumn(2).setPreferredWidth(200);
-        modeloColumna.getColumn(3).setPreferredWidth(50);
+        actualizarNotas(conexion.obtenerVistaNotas());
     }
 
     public void buscar() {
-        String[] columnas = {"Folio", "Fecha", "Cliente", "Terminado"};
+        String[] columnas = {"Folio", "Fecha", "Cliente", "Estado"};
         DefaultTableModel model1 = new DefaultTableModel(columnas, 0) {
             @Override
             public boolean isCellEditable(int row, int col) {
@@ -61,7 +43,7 @@ public class VerNotas extends javax.swing.JFrame {
         if (txtBuscar.getText().equals("") || txtBuscar.getText() == null) {
 
             for (int i = 0; i < notas.size(); i++) {
-                Object[] obj = {notas.get(i).getIdNota(), notas.get(i).getFecha(), notas.get(i).getNombres() + " " + notas.get(i).getApPaterno() + " " + notas.get(i).getApMaterno(), notas.get(i).getTerminado()};
+                Object[] obj = {notas.get(i).getIdNota(), notas.get(i).getFecha(), notas.get(i).getNombres() + " " + notas.get(i).getApPaterno() + " " + notas.get(i).getApMaterno(), notas.get(i).getEstado()};
                 model1.addRow(obj);
             }
             tableNotas.setModel(model1);
@@ -74,7 +56,7 @@ public class VerNotas extends javax.swing.JFrame {
                         String nombreAux = nombreCompleto.substring(0, txtBuscar.getText().length());
                         if (nombreAux.compareToIgnoreCase(txtBuscar.getText()) == 0) {
                             filtro.add(notas.get(i));
-                            Object[] obj = {notas.get(i).getIdNota(), notas.get(i).getFecha(), notas.get(i).getNombres() + " " + notas.get(i).getApPaterno() + " " + notas.get(i).getApMaterno(), notas.get(i).getTerminado()};
+                            Object[] obj = {notas.get(i).getIdNota(), notas.get(i).getFecha(), notas.get(i).getNombres() + " " + notas.get(i).getApPaterno() + " " + notas.get(i).getApMaterno(), notas.get(i).getEstado()};
                             model1.addRow(obj);
                         }
                     }
@@ -88,7 +70,7 @@ public class VerNotas extends javax.swing.JFrame {
                         String folioAux = folio.substring(0, txtBuscar.getText().length());
                         if (folioAux.compareToIgnoreCase(txtBuscar.getText()) == 0) {
                             filtro.add(notas.get(i));
-                            Object[] obj = {notas.get(i).getIdNota(), notas.get(i).getFecha(), notas.get(i).getNombres() + " " + notas.get(i).getApPaterno() + " " + notas.get(i).getApMaterno(), notas.get(i).getTerminado()};
+                            Object[] obj = {notas.get(i).getIdNota(), notas.get(i).getFecha(), notas.get(i).getNombres() + " " + notas.get(i).getApPaterno() + " " + notas.get(i).getApMaterno(), notas.get(i).getEstado()};
                             model1.addRow(obj);
                         }
                     }
@@ -104,6 +86,31 @@ public class VerNotas extends javax.swing.JFrame {
         modeloColumna.getColumn(1).setPreferredWidth(100);
         modeloColumna.getColumn(2).setPreferredWidth(200);
         modeloColumna.getColumn(3).setPreferredWidth(50);
+    }
+    
+    public void actualizarNotas(ArrayList<Nota> notas){
+        this.notas = notas;
+        Collections.reverse(this.notas);
+        String[] columnas = {"Folio", "Fecha", "Nombre del cliente", "Estado"};
+
+        DefaultTableModel model1 = new DefaultTableModel(columnas, 0) {
+            @Override
+            public boolean isCellEditable(int row, int col) {
+                return false;
+            }
+        };
+        
+        for (int i = 0; i < notas.size(); i++) {
+            Object[] obj = {notas.get(i).getIdNota(), notas.get(i).getFecha(), notas.get(i).getNombres() + " " + notas.get(i).getApPaterno() + " " + notas.get(i).getApMaterno(), notas.get(i).getEstado()};
+            model1.addRow(obj);
+        }
+        tableNotas.setModel(model1);
+        TableColumnModel modeloColumna = tableNotas.getColumnModel();
+        modeloColumna.getColumn(0).setPreferredWidth(50);
+        modeloColumna.getColumn(1).setPreferredWidth(100);
+        modeloColumna.getColumn(2).setPreferredWidth(200);
+        modeloColumna.getColumn(3).setPreferredWidth(50);
+        txtBuscar.setText(null);
     }
 
     /**
@@ -228,11 +235,11 @@ public class VerNotas extends javax.swing.JFrame {
     private void tableNotasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableNotasMouseClicked
         if (txtBuscar.getText().equals("") || txtBuscar.getText() == null) {
             System.out.println(notas.get(tableNotas.getSelectedRow()).getNombres() + " " + notas.get(tableNotas.getSelectedRow()).getIdNota());
-            JFrame nuevo = new VerNota(notas.get(tableNotas.getSelectedRow()).getIdNota());
+            JFrame nuevo = new VerNota(notas.get(tableNotas.getSelectedRow()).getIdNota(), this);
             nuevo.setVisible(true);
         } else {
             System.out.println(filtro.get(tableNotas.getSelectedRow()).getNombres() + " " + filtro.get(tableNotas.getSelectedRow()).getIdNota());
-            JFrame nuevo = new VerNota(filtro.get(tableNotas.getSelectedRow()).getIdNota());
+            JFrame nuevo = new VerNota(filtro.get(tableNotas.getSelectedRow()).getIdNota(), this);
             nuevo.setVisible(true);
         }
     }//GEN-LAST:event_tableNotasMouseClicked

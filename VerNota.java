@@ -20,12 +20,14 @@ public class VerNota extends javax.swing.JFrame {
     Nota nota;
     double total = 0;
     double totalAbonos = 0;
+    VerNotas frameVerNotas;
 
     /**
      * Creates new form VerNota
      */
-    public VerNota(int idNota) {
+    public VerNota(int idNota, VerNotas frameVerNotas) {
         initComponents();
+        this.frameVerNotas = frameVerNotas;
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         nota = (new ConexionNotas()).getNotaPorId(idNota);
@@ -76,7 +78,10 @@ public class VerNota extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(null, "Error al abrir nota");
         }
-
+        
+        if (nota.getEstado().equals("Terminada")) {
+            btnTerminar.setEnabled(false);
+        }
     }
     
     public void setNota(Nota nota){
@@ -102,6 +107,29 @@ public class VerNota extends javax.swing.JFrame {
         model2.addRow(objAbonos);
         model2.addRow(objSaldo);
         tableAbonos.setModel(model2);
+    }
+    
+    public void terminarNota(){
+        if (total > totalAbonos) {
+            int respuesta = JOptionPane.showConfirmDialog(null, "La cuenta tiene un saldo de $" + (total - totalAbonos) + " ¿Desea realizar ese pago en este instante?");
+            if (respuesta == 0) {
+                
+                HacerPago nuevo = new HacerPago(nota, this, true);
+                nuevo.setVisible(true);
+            } else {
+                int respuesta2 = JOptionPane.showConfirmDialog(null, "Se terminará la cuenta con un adeudo, ¿Desea continuar?");
+                if(respuesta2==0){
+                    (new ConexionNotas()).terminarNota(nota);
+                    this.dispose();
+                }
+            }
+        } else {
+            int respuesta2 = JOptionPane.showConfirmDialog(null, "¿Seguro que desea terminar la cuenta?");
+            if(respuesta2==0){
+                (new ConexionNotas()).terminarNota(nota);
+                this.dispose();
+            }
+        }
     }
 
     /**
@@ -137,6 +165,7 @@ public class VerNota extends javax.swing.JFrame {
         jPanel5 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         txtObservaciones = new javax.swing.JTextArea();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Ver Nota");
@@ -150,7 +179,7 @@ public class VerNota extends javax.swing.JFrame {
             }
         });
 
-        btnTerminar.setText("Terminar nota actual");
+        btnTerminar.setText("Cambiar estado de la nota");
         btnTerminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTerminarActionPerformed(evt);
@@ -336,6 +365,13 @@ public class VerNota extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        jButton1.setText("Imprimir nota");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlTituloLayout = new javax.swing.GroupLayout(pnlTitulo);
         pnlTitulo.setLayout(pnlTituloLayout);
         pnlTituloLayout.setHorizontalGroup(
@@ -347,18 +383,20 @@ public class VerNota extends javax.swing.JFrame {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 10, Short.MAX_VALUE))
             .addGroup(pnlTituloLayout.createSequentialGroup()
-                .addGap(176, 176, 176)
-                .addComponent(btnPago, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnTerminar, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(pnlTituloLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlTituloLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
+            .addGroup(pnlTituloLayout.createSequentialGroup()
+                .addGap(68, 68, 68)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnPago, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnTerminar, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnlTituloLayout.setVerticalGroup(
             pnlTituloLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -373,10 +411,14 @@ public class VerNota extends javax.swing.JFrame {
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(17, 17, 17)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlTituloLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnPago, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
-                    .addComponent(btnTerminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(pnlTituloLayout.createSequentialGroup()
+                        .addComponent(btnPago, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
+                        .addGap(1, 1, 1))
+                    .addComponent(btnTerminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -404,28 +446,13 @@ public class VerNota extends javax.swing.JFrame {
     }//GEN-LAST:event_btnPagoActionPerformed
 
     private void btnTerminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTerminarActionPerformed
-        
-        if (total > totalAbonos) {
-            int respuesta = JOptionPane.showConfirmDialog(null, "La cuenta tiene un saldo de $" + (total - totalAbonos) + " ¿Desea realizar ese pago en este instante?");
-            if (respuesta == 0) {
-                
-                HacerPago nuevo = new HacerPago(nota, this, true);
-                nuevo.setVisible(true);
-            } else {
-                int respuesta2 = JOptionPane.showConfirmDialog(null, "Se terminará la cuenta con un adeudo, ¿Desea continuar?");
-                if(respuesta2==0){
-                    (new ConexionNotas()).terminarNota(nota);
-                    this.dispose();
-                }
-            }
-        } else {
-            int respuesta2 = JOptionPane.showConfirmDialog(null, "¿Seguro que desea terminar la cuenta?");
-            if(respuesta2==0){
-                (new ConexionNotas()).terminarNota(nota);
-                this.dispose();
-            }
-        }
+        CambiarEstadoNota nuevo = new CambiarEstadoNota(nota, this, frameVerNotas);
+        nuevo.setVisible(true);
     }//GEN-LAST:event_btnTerminarActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        new ConexionNotas().generarPdf(nota.getIdNota(), "nota", 1);
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -466,6 +493,7 @@ public class VerNota extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnPago;
     private javax.swing.JButton btnTerminar;
+    private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

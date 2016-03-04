@@ -14,16 +14,16 @@ import javax.swing.border.TitledBorder;
  *
  * @author luis-pc
  */
-public class HacerPago extends javax.swing.JFrame {
+public class CambiarEstadoNota extends javax.swing.JFrame {
     Nota nota;
     double saldoCuenta =0;
-    Abono nuevo=null; 
     VerNota frameAnterior;
-    boolean terminar = false;
-    public HacerPago(Nota nota, VerNota frameAnterior, boolean terminar) {
+    VerNotas frameVerNotas;
+    
+    public CambiarEstadoNota(Nota nota, VerNota frameAnterior, VerNotas frameVerNotas) {
         initComponents();
         this.frameAnterior = frameAnterior;
-        this.terminar = terminar;
+        this.frameVerNotas = frameVerNotas;
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setLocationRelativeTo(null);
         this.nota = nota;
@@ -37,8 +37,6 @@ public class HacerPago extends javax.swing.JFrame {
                 lblMiembro.setText("Miembro : si");
                 lblTarjeta.setText("No. de tarjeta : "+ aux.getNumeroTarjeta());
                 lblSaldoTarjeta.setText("Saldo en tarjeta : $"+aux.getSaldo());
-                DefaultComboBoxModel modelo = (DefaultComboBoxModel) cmbTipoPago.getModel();
-                modelo.addElement("Tarjeta miembro");
             }else{
                 lblUsuario.setText("Cliente : "+nota.getCliente().getNombres()+ " "+nota.getCliente().getApPaterno()+" " + nota.getCliente().getApMaterno());
                 lblMiembro.setText("Este cliente no es un miembro");
@@ -62,24 +60,8 @@ public class HacerPago extends javax.swing.JFrame {
         }
         saldoCuenta = totalCuenta-totalPagos;
         lblSaldoCuenta.setText("Saldo de la cuenta : $"+saldoCuenta);
-        if(terminar){
-            btnAceptar.setText("Aceptar y terminar");
-            txtCantidad.setText(saldoCuenta+"");
-        }
     }
-    private boolean isNumber(String cadena){
-         try {
-             Double.parseDouble(cadena.replace(",", ""));
-         } catch (NumberFormatException nfe){
-             String newCadena = cadena.replace(".", "").replace(',', '.');
-             try{
-                 Double.parseDouble(newCadena);
-             } catch (NumberFormatException nfe2){
-                 return false;
-             }
-        }
-         return true;
-    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -89,6 +71,7 @@ public class HacerPago extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        btnGrupo = new javax.swing.ButtonGroup();
         btnAceptar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
         pnlTitulo = new javax.swing.JPanel();
@@ -99,13 +82,12 @@ public class HacerPago extends javax.swing.JFrame {
         lblSaldoCuenta = new javax.swing.JLabel();
         lblMiembro = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        cmbTipoPago = new javax.swing.JComboBox();
-        jLabel2 = new javax.swing.JLabel();
-        txtCantidad = new javax.swing.JTextField();
+        optUno = new javax.swing.JRadioButton();
+        optDos = new javax.swing.JRadioButton();
+        optTres = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Registro de pagos");
+        setTitle("Cambio de estado para nota");
 
         btnAceptar.setText("Aceptar");
         btnAceptar.addActionListener(new java.awt.event.ActionListener() {
@@ -165,40 +147,39 @@ public class HacerPago extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Pago"));
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Estado de nota"));
 
-        jLabel1.setText("Tipo de pago :");
+        btnGrupo.add(optUno);
+        optUno.setText("En Espera");
 
-        cmbTipoPago.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Efectivo" }));
+        btnGrupo.add(optDos);
+        optDos.setText("En Proceso");
 
-        jLabel2.setText("Cantidad :");
+        btnGrupo.add(optTres);
+        optTres.setText("Terminada");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(cmbTipoPago, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(54, 54, 54)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(optUno)
+                    .addComponent(optDos)
+                    .addComponent(optTres))
+                .addContainerGap(69, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(cmbTipoPago, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(38, Short.MAX_VALUE))
+                .addGap(16, 16, 16)
+                .addComponent(optUno)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(optDos)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(optTres)
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout pnlTituloLayout = new javax.swing.GroupLayout(pnlTitulo);
@@ -251,41 +232,26 @@ public class HacerPago extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-        if(!txtCantidad.getText().equals("")&&txtCantidad.getText()!=null){
-            if(isNumber(txtCantidad.getText())){
-                if(Double.parseDouble(txtCantidad.getText())<=saldoCuenta){
-                    if(cmbTipoPago.getSelectedIndex()==1){
-                        if(nota.getCliente().getSaldo()>=saldoCuenta){
-                            nuevo = new Abono(nota.getIdNota(), Double.parseDouble(txtCantidad.getText()),"Tarjeta","no","", 1);
-                        }else{
-                            JOptionPane.showMessageDialog(null, "El saldo de la tarjeta no es suficiente");
-                        }
-                    }else{
-                        nuevo = new Abono(nota.getIdNota(), Double.parseDouble(txtCantidad.getText()),"Efectivo","no","", 1);
-                    }
-                    ConexionNotas conexion = new ConexionNotas();
-                    if (conexion.guardarAbono(nuevo)) {
-                     frameAnterior.actualizarPagos(conexion.obtenerAbonosPorId(nuevo.getId()));
-                     JOptionPane.showMessageDialog(null, "El pago fue registrado con exito");
-                     nota = (new ConexionNotas()).getNotaPorId(nota.getIdNota());
-                     frameAnterior.setNota(nota);
-                    }
-                    if(terminar){
-                        if (conexion.terminarNota(nota)) {
-                            JOptionPane.showMessageDialog(null, "La nota fue terminada con exito");
-                            frameAnterior.dispose();
-                        }
-                    }
-                    new ConexionNotas().generarPdf(nota.getIdNota(), "nota", 1);
-                    this.dispose();
-                }else{
-                    JOptionPane.showMessageDialog(null, "La cantidad es mayor al saldo de la cuenta");
-                }
-            }else{
-                JOptionPane.showMessageDialog(null, "El campo Cantidad debe ser numérico");
+        if (optUno.isSelected()) {
+            if (new ConexionNotas().ponerEnEsperaNota(nota)) {
+                JOptionPane.showMessageDialog(null, "El estado de la nota fue actualizado correctamente");
+                frameVerNotas.actualizarNotas(new ConexionNotas().obtenerVistaNotas());
+                this.dispose();
+            }
+        }else if (optDos.isSelected()) {
+            if (new ConexionNotas().ponerEnProcesoNota(nota)) {
+                JOptionPane.showMessageDialog(null, "El estado de la nota fue actualizado correctamente");
+                frameVerNotas.actualizarNotas(new ConexionNotas().obtenerVistaNotas());
+                this.dispose();
+            }
+        }else if(optTres.isSelected()){
+            if (new ConexionNotas().terminarNota(nota)) {
+                JOptionPane.showMessageDialog(null, "El estado de la nota fue actualizado correctamente");
+                frameVerNotas.actualizarNotas(new ConexionNotas().obtenerVistaNotas());
+                this.dispose();
             }
         }else{
-            JOptionPane.showMessageDialog(null, "Debe rellenar todos los campos");
+            JOptionPane.showMessageDialog(null, "Tienes que seleccionar una opción");
         }
     }//GEN-LAST:event_btnAceptarActionPerformed
 
@@ -332,9 +298,7 @@ public class HacerPago extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
     private javax.swing.JButton btnCancelar;
-    private javax.swing.JComboBox cmbTipoPago;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.ButtonGroup btnGrupo;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lblMiembro;
@@ -342,7 +306,9 @@ public class HacerPago extends javax.swing.JFrame {
     private javax.swing.JLabel lblSaldoTarjeta;
     private javax.swing.JLabel lblTarjeta;
     private javax.swing.JLabel lblUsuario;
+    private javax.swing.JRadioButton optDos;
+    private javax.swing.JRadioButton optTres;
+    private javax.swing.JRadioButton optUno;
     private javax.swing.JPanel pnlTitulo;
-    private javax.swing.JTextField txtCantidad;
     // End of variables declaration//GEN-END:variables
 }

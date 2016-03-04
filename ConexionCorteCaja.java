@@ -186,7 +186,11 @@ public class ConexionCorteCaja extends Conexion {
             Document documento = new Document();
             FileOutputStream ficheroPdf;
             try {
-                ficheroPdf = new FileOutputStream("c:/corte.pdf");
+                File carpeta = new File("C:\\archivosPuntoDeVenta");
+                if (!carpeta.exists()){
+                    carpeta.mkdir();
+                }
+                ficheroPdf = new FileOutputStream("c:/archivosPuntoDeVenta/corte.pdf");
                 PdfWriter.getInstance(documento, ficheroPdf).setInitialLeading(20);
                 documento.setMargins(0, 0, 0, 0);
                 documento.open();
@@ -398,7 +402,7 @@ public class ConexionCorteCaja extends Conexion {
     
     public void abrirPDF(){
         try {
-                File obj = new File("c:/corte.pdf");
+                File obj = new File("c:/archivosPuntoDeVenta/corte.pdf");
                 Desktop.getDesktop().open(obj);
             } catch (IOException ex) {
                 System.out.println(ex.getMessage());

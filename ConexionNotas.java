@@ -38,7 +38,7 @@ import javax.swing.JOptionPane;
  */
 public class ConexionNotas extends Conexion {
 
-     public void guardarNota(String nombres, String apPaterno, String apMaterno, String telefono, String fechaEntrega, Abono anticipo, int tipoAbono, String observaciones, int idMiembro, ArrayList<Articulo> articulos, String domicilio) {
+     public void guardarNota(String nombres, String apPaterno, String apMaterno, String telefono, String fechaEntrega, Abono anticipo, int tipoAbono, String observaciones, int idMiembro, ArrayList<Articulo> articulos, String domicilio, int descuento, Usuario usuario) {
         boolean guardar = true;
         double resto = 0;
         String tipoPago = "Efectivo";
@@ -67,7 +67,8 @@ public class ConexionNotas extends Conexion {
 
             }
             if (guardar) {
-                String query = "insert into notas values(default,?,?,?,?, default, ?, ?, 1,?,'no', ?)";
+                String query = "insert into notas values(default,?,?,?,?, default, ?, ?, 1,?, ? , ?, ?, ?)";
+                System.out.println("insert notas");
                 PreparedStatement st;
                 int clave = 0;
                 st = this.getConexion().prepareStatement(query);
@@ -79,14 +80,34 @@ public class ConexionNotas extends Conexion {
                     st.setString(5, fechaEntrega);
                     st.setString(6, observaciones);
                     st.setInt(7, idMiembro);
-                    st.setString(8, domicilio);
+                    st.setString(8, "En Espera...");
+                    st.setString(9, domicilio);
+                    st.setInt(10, descuento);
+                    st.setInt(11, usuario.getId());
                     st.executeUpdate();
                     st = this.getConexion().prepareStatement("select last_insert_id()");
                     ResultSet rs = st.executeQuery();
                     while (rs.next()) {
                         clave = rs.getInt("last_insert_id()");
                     }
-
+                }else if(idMiembro == 2){
+                    st.setString(1, "no");
+                    st.setString(2, "no");
+                    st.setString(3, "no");
+                    st.setString(4, telefono);
+                    st.setString(5, fechaEntrega);
+                    st.setString(6, observaciones);
+                    st.setInt(7, idMiembro);
+                    st.setString(8, "Terminada");
+                    st.setString(9, domicilio);
+                    st.setInt(10, descuento);
+                    st.setInt(11, usuario.getId());
+                    st.executeUpdate();
+                    st = this.getConexion().prepareStatement("select last_insert_id()");
+                    ResultSet rs = st.executeQuery();
+                    while (rs.next()) {
+                        clave = rs.getInt("last_insert_id()");
+                    }
                 } else {
                     st.setString(1, "no");
                     st.setString(2, "no");
@@ -95,7 +116,10 @@ public class ConexionNotas extends Conexion {
                     st.setString(5, fechaEntrega);
                     st.setString(6, observaciones);
                     st.setInt(7, idMiembro);
-                    st.setString(8, domicilio);
+                    st.setString(8, "En Espera...");
+                    st.setString(9, domicilio);
+                    st.setInt(10, descuento);
+                    st.setInt(11, usuario.getId());
                     st.executeUpdate();
                     st = this.getConexion().prepareStatement("select last_insert_id()");
                     ResultSet rs = st.executeQuery();
@@ -104,7 +128,7 @@ public class ConexionNotas extends Conexion {
                     }
                 }
                 for (int i = 0; i < articulos.size(); i++) {
-                    String queryAux = "insert into detalleservicios values(?,?,?,?)";
+                    String queryAux = "insert into detalleservicios values(?,?,?,?, 1)";
                     PreparedStatement stAux;
                     stAux = this.getConexion().prepareStatement(queryAux);
                     stAux.setInt(1, clave);
@@ -119,7 +143,7 @@ public class ConexionNotas extends Conexion {
                 stAbono.setDouble(2, anticipo.getMonto());
                 stAbono.setString(3, tipoPago);
                 stAbono.executeUpdate();
-                this.generarPdf(clave);
+                this.generarPdf(clave, "nota", 1);
             }
            this.getConexion().commit();     
         } catch (SQLException ex) {
@@ -135,7 +159,8 @@ public class ConexionNotas extends Conexion {
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
-                nota = new Nota(rs.getInt(1), rs.getString(2), null, rs.getString(3), rs.getString(4), rs.getString(5), Fechas.convertirFecha(rs.getString(6)), rs.getString(7), rs.getString(8), null, null, rs.getString(11), rs.getString(12));
+                Usuario user = null;
+                nota = new Nota(rs.getInt(1), rs.getString(2), null, rs.getString(3), rs.getString(4), rs.getString(5), Fechas.convertirFecha(rs.getString(6)), rs.getString(7), rs.getString(8), null, null, rs.getString(11), rs.getString(12), rs.getInt(13), rs.getInt(14));
                 if (rs.getInt(10) != 1) {
                     query = "select * from miembros where idmiembro = ?";
                     PreparedStatement auxst = this.getConexion().prepareStatement(query);
@@ -181,14 +206,14 @@ public class ConexionNotas extends Conexion {
             ResultSet rs = st.executeQuery();
             while(rs.next()){
                 if(rs.getInt(10)==1){
-                    notas.add(new Nota(rs.getInt(1), rs.getString(2), null,rs.getString(3), rs.getString(4), rs.getString(5), Fechas.convertirFecha(rs.getString(6)), rs.getString(7), rs.getString(8), null, null, rs.getString(11),rs.getString(12)));
+                    notas.add(new Nota(rs.getInt(1), rs.getString(2), null, rs.getString(3), rs.getString(4), rs.getString(5), Fechas.convertirFecha(rs.getString(6)), rs.getString(7), rs.getString(8), null, null, rs.getString(11), rs.getString(12), rs.getInt(13), rs.getInt(14)));
                 }else{
                     String query2 = "select * from miembros where idmiembro=?";
                     PreparedStatement st2 = this.getConexion().prepareStatement(query2);
                     st2.setInt(1, rs.getInt(10));
                     ResultSet rs2 = st2.executeQuery();
                     while(rs2.next()){
-                        notas.add(new Nota(rs.getInt(1), rs2.getString(3), null,rs2.getString(4), rs2.getString(5), rs.getString(5), Fechas.convertirFecha(rs.getString(6)), rs.getString(7), rs.getString(8), null, null, rs.getString(11),rs.getString(12)));
+                        notas.add(new Nota(rs.getInt(1), rs2.getString(3), null,rs2.getString(4), rs2.getString(5), rs.getString(5), Fechas.convertirFecha(rs.getString(6)), rs.getString(7), rs.getString(8), null, null, rs.getString(11), rs.getString(12), rs.getInt(13), rs.getInt(14)));
                     }
                 }
             }
@@ -214,7 +239,7 @@ public class ConexionNotas extends Conexion {
              st2.setDouble(1, abono.getMonto());
              st2.setInt(2, abono.getId());
              st2.executeUpdate();
-             generarPdf(abono.getId());
+             generarPdf(abono.getId(), "nota", 1);
             }
             this.getConexion().commit();
             return true;
@@ -240,10 +265,10 @@ public class ConexionNotas extends Conexion {
         return abonos;
     }
     public boolean terminarNota(Nota nota){
-        String query = "update notas set terminado = ? where idnota=?";
+        String query = "update notas set estado = ? where idnota=?";
         try {
             PreparedStatement st = this.getConexion().prepareStatement(query);
-            st.setString(1, "si");
+            st.setString(1, "Terminada");
             st.setInt(2, nota.getIdNota());
             st.executeUpdate();
             return true;
@@ -251,18 +276,50 @@ public class ConexionNotas extends Conexion {
             JOptionPane.showMessageDialog(null, "Error al conectar a la base de datos");
             return false;
         }
-        
     }
-    public void generarPdf(int idNota) {
+    
+    public boolean ponerEnProcesoNota(Nota nota){
+        String query = "update notas set estado = ? where idnota=?";
+        try {
+            PreparedStatement st = this.getConexion().prepareStatement(query);
+            st.setString(1, "En Proceso");
+            st.setInt(2, nota.getIdNota());
+            st.executeUpdate();
+            return true;
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error al conectar a la base de datos");
+            return false;
+        }
+    }
+    
+    public boolean ponerEnEsperaNota(Nota nota){
+        String query = "update notas set estado = ? where idnota=?";
+        try {
+            PreparedStatement st = this.getConexion().prepareStatement(query);
+            st.setString(1, "En Espera...");
+            st.setInt(2, nota.getIdNota());
+            st.executeUpdate();
+            return true;
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error al conectar a la base de datos");
+            return false;
+        }
+    }
+    
+    public void generarPdf(int idNota, String nombre, int cuenta) {
         Document documento = new Document();
         Nota nota = this.getNotaPorId(idNota);
         FileOutputStream ficheroPdf;
         try {
-            ficheroPdf = new FileOutputStream("c:/fichero.pdf");
+            File carpeta = new File("C:\\archivosPuntoDeVenta");
+            if (!carpeta.exists()){
+                carpeta.mkdir();
+            }
+            ficheroPdf = new FileOutputStream("c:/archivosPuntoDeVenta/"+nombre+cuenta+".pdf");
             PdfWriter.getInstance(documento, ficheroPdf).setInitialLeading(20);
             documento.setMargins(0, 0, 0, 0);
             documento.open();
-            Image foto = Image.getInstance("logo.JPG");
+            Image foto = Image.getInstance("c:/archivosPuntoDeVenta/logo.JPG");
             foto.scaleToFit(80, 90);
             PdfPTable tabla = new PdfPTable(5);
             tabla.setWidths(new float[]{13, 12, 25, 25, 25});
@@ -273,6 +330,7 @@ public class ConexionNotas extends Conexion {
             celda.setRowspan(6);
             tabla.addCell(celda);
             PdfPCell celda2 = new PdfPCell(new Paragraph("NOTA DE PEDIDO", FontFactory.getFont("Arial", 15, Font.BOLD)));
+            System.out.println(nota.getUsuario());
             celda2.setColspan(3);
             celda2.setUseAscender(true);
             celda2.setBorder(Rectangle.NO_BORDER);
@@ -433,20 +491,25 @@ public class ConexionNotas extends Conexion {
 
             documento.close();
             
-            abrirPDF();
+            abrirPDF("c:/archivosPuntoDeVenta/"+nombre+cuenta+".pdf");
         } catch (FileNotFoundException ex) {
-            JOptionPane.showMessageDialog(null, "Error con el pdf");
+//            JOptionPane.showMessageDialog(null, "Error con el pdf");
+//            System.out.println(ex.getMessage());
+            cuenta++;
+            generarPdf(idNota,"nota",cuenta);
+            abrirPDF("c:/archivosPuntoDeVenta/"+nombre+cuenta+".pdf");
         } catch (DocumentException ex) {
             JOptionPane.showMessageDialog(null, "Error al guardar pdf");
+            System.out.println(ex.getMessage());
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null, "Error con el pdf");
         }
     }
     
-    public void abrirPDF(){
+    public void abrirPDF(String url){
         try {
                     //Runtime.getRuntime().exec("c:/Users/luis-pc/Documents/NetBeansProjects/js/fichero.pdf");
-                    File obj = new File("c:/fichero.pdf");
+                    File obj = new File(url);
                     Desktop.getDesktop().open(obj);
                 } catch (IOException ex) {
                     JOptionPane.showMessageDialog(null, "No se pudo abrir el archivo");

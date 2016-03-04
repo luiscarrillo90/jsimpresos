@@ -64,7 +64,7 @@ public class VerMiembros extends javax.swing.JFrame {
         tableMiembros.setModel(model1);
         modeloColumna.getColumn(0).setPreferredWidth(200);
         modeloColumna.getColumn(1).setPreferredWidth(75);
-
+        txtBuscar.setText(null);
     }
 
     public void buscar() {

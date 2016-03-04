@@ -78,13 +78,13 @@ public class ConexionMiembro extends Conexion{
             st.executeUpdate();
             return true;
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Error al actualizar la base de datos.");
+            JOptionPane.showMessageDialog(null, "Error al actualizar datos del cliente miembro.");
             return false;
         }
     }
     
     public boolean actualizarMiembroSinPassword(Miembro miembro, int id){
-        String query = "update miembros set nombres=?, appaterno=?, apmaterno=?, domicilio=?, telefono=?, nombreusuario=?, where idMiembro=?";
+        String query = "update miembros set nombres=?, appaterno=?, apmaterno=?, domicilio=?, telefono=?, nombreusuario=? where idMiembro=?";
         try {
             PreparedStatement st = this.getConexion().prepareStatement(query);
             st.setString(1, miembro.getNombres());
@@ -97,7 +97,7 @@ public class ConexionMiembro extends Conexion{
             st.executeUpdate();
             return true;
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Error al actualizar la base de datos.");
+            JOptionPane.showMessageDialog(null, "Error al actualizar datos del cliente miembro.");
             return false;
         }
     }
