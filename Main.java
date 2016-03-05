@@ -902,8 +902,11 @@ public class Main extends javax.swing.JFrame {
         lblTotal.setText("Total : $0");
 
         jLabel1.setText("Descuento: %");
+        jLabel1.setEnabled(false);
 
+        txtDescuento.setEditable(false);
         txtDescuento.setText("0");
+        txtDescuento.setEnabled(false);
         txtDescuento.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtDescuentoActionPerformed(evt);
@@ -934,7 +937,7 @@ public class Main extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(82, 82, 82)
+                        .addGap(91, 91, 91)
                         .addComponent(btnQuitarArticulo)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -959,6 +962,8 @@ public class Main extends javax.swing.JFrame {
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel9.setText("Abono :");
+
+        txtAbono.setText("0");
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel10.setText("Observaciones:");
