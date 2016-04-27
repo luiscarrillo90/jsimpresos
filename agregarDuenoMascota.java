@@ -270,21 +270,7 @@ public class agregarDuenoMascota extends javax.swing.JFrame {
     }//GEN-LAST:event_txtCorreoActionPerformed
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-        if (comprobarDatos()) {
-            if (comprobarPassword().equals("iguales")) {
-                if (miembro == null) {
-                    accionBtnAceptar(null, true);
-                }else{
-                    accionBtnAceptar(miembro, true);
-                }
-            }else if (comprobarPassword().equals("No")){
-                accionBtnAceptar(miembro, false);
-            }else if (comprobarPassword().equals("distintos")) {
-                JOptionPane.showMessageDialog(null, "La comprobación de contraseña no concuerda");
-            }
-        }else{
-            JOptionPane.showMessageDialog(null, "Todos los campos con * tienen que estar llenos");
-        }
+       
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
