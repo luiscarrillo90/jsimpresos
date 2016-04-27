@@ -53,5 +53,11 @@ public class Articulo {
     public int getCantidad() {
         return cantidad;
     }
+
+    @Override
+    public String toString() {
+        return "Articulo{" + "idNota=" + idNota + ", servicio=" + servicio + ", precio=" + precio + ", cantidad=" + cantidad + '}';
+    }
+    
     
 }
